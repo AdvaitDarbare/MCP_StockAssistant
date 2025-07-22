@@ -1,0 +1,20 @@
+entry_point: router
+
+nodes:
+  router:
+    import: app.graph.router_node:router_node
+    type: router
+
+  stock:
+    import: app.graph.stock_node:stock_node
+
+  fallback:
+    import: app.graph.fallback_node:fallback_node
+
+edges:
+  router:
+    stock: stock
+    fallback: fallback
+
+  stock: __end__
+  fallback: __end__

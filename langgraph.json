@@ -1,0 +1,6 @@
+{
+  "dependencies": ["./backend"],
+  "graphs": {
+    "main": "app.graph.build_graph:build_app_graph"
+  }
+}
