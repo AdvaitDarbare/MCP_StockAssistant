@@ -17,42 +17,83 @@ anthropic = AsyncAnthropic(api_key=os.getenv("CLAUDE_API_KEY"))
 
 app = FastAPI()
 
-async def analyze_query_with_llm(user_query: str) -> dict:
-    """Use Claude to analyze the query and determine what type of stock data is needed"""
-    system_prompt = """Analyze stock queries and return JSON:
+def get_tool_description(tool_name: str) -> str:
+    """Get human-readable description of stock market tools"""
+    descriptions = {
+        'get_stock_data': '📈 Get real-time quote and price data for a single stock',
+        'get_multiple_quotes': '📊 Compare multiple stocks side-by-side with prices and changes',
+        'get_price_history': '📉 Get historical price performance over time periods',
+        'get_market_movers': '🚀 Get top gainers, losers, or most active stocks by volume',
+        'get_market_hours': '🕐 Get trading schedules and market open/close status'
+    }
+    return descriptions.get(tool_name, f'🔧 Unknown tool: {tool_name}')
+
+async def plan_and_execute_stock_tools(user_query: str) -> dict:
+    """Use Claude to plan and execute stock market tools"""
+    system_prompt = """You are a stock market assistant with access to these tools:
+
+AVAILABLE TOOLS:
+1. get_stock_data(symbol) - Get real-time quote for one stock
+2. get_multiple_quotes(symbols) - Compare multiple stocks side-by-side  
+3. get_price_history(symbol, period_type, period, frequency_type, frequency) - Historical performance
+4. get_market_movers(index, sort, frequency) - Top gainers/losers/volume leaders
+5. get_market_hours(markets, date) - Trading schedules and market status
+
+Your job is to:
+1. Extract relevant parameters from the user query
+2. Determine what tools to call based on the request
+3. Return a plan with the tools to execute
+
+Return JSON:
 {
-  "query_type": "single_quote" | "multiple_quotes" | "price_history" | "market_movers" | "market_hours" | "unknown",
-  "symbols": ["TICKER"], 
-  "period": "1 month" | "3 months" | "6 months" | "1 year" | "YTD" | null,
-  "index": "$SPX" | "$DJI" | "$COMPX" | "NASDAQ" | "NYSE" | null,
-  "is_stock_related": true | false
+  "tools_to_call": [
+    {"tool": "get_market_movers", "params": {"index": "NASDAQ", "sort": "VOLUME", "frequency": 1}},
+    {"tool": "get_stock_data", "params": {"symbol": "AAPL"}}
+  ],
+  "reasoning": "User wants market movers and a specific stock quote"
 }
 
-Types:
-- single_quote: One stock price
-- multiple_quotes: Compare multiple stocks  
-- price_history: Historical data, trends, performance over time
-- market_movers: Top gainers/losers, trending stocks, market leaders
-- market_hours: Trading schedules, market open/close times
-- unknown: Not stock related
+EXAMPLES:
+- "AAPL stock price" → get_stock_data(AAPL)
+- "Compare AAPL vs TSLA" → get_multiple_quotes([AAPL, TSLA])
+- "NVDA performance last 6 months" → get_price_history(NVDA, month, 6, daily, 1)
+- "Top gainers in NASDAQ" → get_market_movers(NASDAQ, PERCENT_CHANGE_UP, 1)
+- "Most active stocks by volume" → get_market_movers($SPX, VOLUME, 1)
+- "Market hours today" → get_market_hours([equity, option])
 
-For market_movers: look for "gainers", "losers", "movers", "trending", "top stocks", "leaders", "volume", "most active"
-- Detect index: "S&P 500"->$SPX, "Dow Jones"->$DJI, "NASDAQ"->$COMPX, "NYSE"->NYSE, "NASDAQ"->NASDAQ
-- Detect sort: "volume"->VOLUME, "most active"->VOLUME, "gainers"->PERCENT_CHANGE_UP, "losers"->PERCENT_CHANGE_DOWN
-For market_hours: look for "hours", "schedule", "open", "close", "trading times" """
+Extract numbers, time periods, indices, and sort preferences intelligently."""
 
     try:
         response = await anthropic.messages.create(
             model="claude-3-haiku-20240307",
-            max_tokens=150,
+            max_tokens=300,  # Increased for tool planning
             temperature=0,
             system=system_prompt,
             messages=[{"role": "user", "content": user_query}],
         )
         
+        response_text = response.content[0].text.strip()
+        print(f"🔧 Stock LLM Response: {response_text}")
+        
         import json
-        result = json.loads(response.content[0].text.strip())
-        return result
+        import re
+        
+        # Try to extract JSON from the response even if there's extra text
+        json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+        if json_match:
+            json_str = json_match.group()
+            try:
+                result = json.loads(json_str)
+                return result
+            except json.JSONDecodeError as e:
+                print(f"❌ JSON decode error: {e}")
+        
+        # If no JSON found, try parsing the whole response
+        try:
+            result = json.loads(response_text)
+            return result
+        except json.JSONDecodeError:
+            print(f"❌ Could not extract valid JSON from response")
         
     except Exception as e:
         print(f"❌ Error analyzing query: {e}")
@@ -77,54 +118,48 @@ For market_hours: look for "hours", "schedule", "open", "close", "trading times"
                 not word.lower() in ["a", "i", "to", "is", "of", "in", "on", "at", "up", "it", "my", "me", "we", "be", "do", "go", "so", "no"]):
                 symbols.append(word)
         
-        # Determine query type based on keywords
+        # Simple fallback - create basic tool calls based on keywords
         query_lower = user_query.lower()
-        has_history_keywords = any(keyword in query_lower for keyword in [
-            "change", "performance", "history", "chart", "trend", "past", "last", 
-            "over the", "since", "during", "period", "month", "year", "ytd"
-        ])
+        tools_to_call = []
         
-        has_comparison_keywords = any(keyword in query_lower for keyword in [
-            "compare", "vs", "versus", "against", "and", ",", "portfolio"
-        ])
+        # Market hours
+        if any(keyword in query_lower for keyword in ["hours", "schedule", "open", "close", "trading times", "market open", "market close"]):
+            tools_to_call.append({
+                "tool": "get_market_hours",
+                "params": {"markets": ["equity", "option"]}
+            })
         
-        has_movers_keywords = any(keyword in query_lower for keyword in [
-            "gainers", "losers", "movers", "trending", "top stocks", "leaders", "winners",
-            "volume", "most active", "trades", "most traded", "biggest", "worst"
-        ])
+        # Market movers
+        elif any(keyword in query_lower for keyword in ["gainers", "losers", "movers", "trending", "top stocks", "leaders", "winners", "volume", "most active", "trades", "biggest", "worst"]):
+            sort_type = "VOLUME" if any(word in query_lower for word in ["volume", "most active"]) else "PERCENT_CHANGE_UP"
+            tools_to_call.append({
+                "tool": "get_market_movers", 
+                "params": {"index": "$SPX", "sort": sort_type, "frequency": 1}
+            })
         
-        has_hours_keywords = any(keyword in query_lower for keyword in [
-            "hours", "schedule", "open", "close", "trading times", "market open", "market close"
-        ])
+        # Stock comparison
+        elif len(symbols) > 1 or any(keyword in query_lower for keyword in ["compare", "vs", "versus", "against"]):
+            if symbols:
+                tools_to_call.append({
+                    "tool": "get_multiple_quotes",
+                    "params": {"symbols": symbols[:5]}
+                })
         
-        query_type = "unknown"
-        if has_movers_keywords:
-            query_type = "market_movers"
-        elif has_hours_keywords:
-            query_type = "market_hours"
-        elif symbols:
-            if has_history_keywords:
-                query_type = "price_history"
-            elif len(symbols) > 1 or has_comparison_keywords:
-                query_type = "multiple_quotes"
-            elif len(symbols) == 1:
-                query_type = "single_quote"
-            else:
-                query_type = "single_quote"  # Default to single quote if we have symbols
+        # Price history
+        elif any(keyword in query_lower for keyword in ["performance", "history", "chart", "trend", "past", "month", "year"]) and symbols:
+            tools_to_call.append({
+                "tool": "get_price_history",
+                "params": {"symbol": symbols[0], "period_type": "month", "period": 1, "frequency_type": "daily", "frequency": 1}
+            })
         
-        # Check if query seems stock-related even without clear symbols
-        is_stock_related = (len(symbols) > 0 or 
-                           any(keyword in query_lower for keyword in [
-                               "stock", "share", "ticker", "quote", "market", "trading", 
-                               "equity", "investment", "portfolio", "dividend"
-                           ]))
-                
-        return {
-            "query_type": query_type,
-            "symbols": symbols[:10],
-            "period": "1 month" if has_history_keywords else None,
-            "is_stock_related": is_stock_related
-        }
+        # Single stock quote
+        elif len(symbols) == 1:
+            tools_to_call.append({
+                "tool": "get_stock_data",
+                "params": {"symbol": symbols[0]}
+            })
+        
+        return {"tools_to_call": tools_to_call}
 
 
 class MCPRequest(BaseModel):
@@ -295,144 +330,90 @@ async def handle_mcp(request: Request):
     try:
         body = await request.json()
         mcp_input = MCPRequest(**body)
+        
+        print(f"🔧 STOCK AGENT - Input received: '{mcp_input.input}'")  # Enhanced debug logging
 
-        # Analyze the query to determine what type of data is needed
-        analysis = await analyze_query_with_llm(mcp_input.input)
+        # Plan and execute using available stock tools
+        plan = await plan_and_execute_stock_tools(mcp_input.input)
+        print(f"🔧 STOCK AGENT - Plan generated: {plan}")
         
-        if not analysis['is_stock_related']:
-            return JSONResponse(content={"output": "❌ This doesn't appear to be a stock-related query. Try asking about stock prices, comparisons, or historical performance."})
+        if not plan.get('tools_to_call'):
+            return JSONResponse(content={"output": "❌ I couldn't determine what stock information you're looking for. Try asking about stock prices, market data, or trading information."})
         
-        # Only require symbols for certain query types
-        if not analysis['symbols'] and analysis['query_type'] in ['single_quote', 'multiple_quotes', 'price_history']:
-            return JSONResponse(content={"output": "❌ No stock symbols found in your query. Please specify stock tickers or company names."})
+        # Execute the planned tools
+        results = []
         
-        # Handle different query types
-        if analysis['query_type'] == 'single_quote':
-            symbol = analysis['symbols'][0]
-            data = get_stock_data(symbol)
-            if not data:
-                return JSONResponse(content={"output": f"❌ Could not find data for symbol '{symbol}'. Please check if it's a valid stock ticker. Try searching for the company's official ticker symbol."})
-            output = format_single_quote(data)
+        for tool_call in plan['tools_to_call']:
+            tool_name = tool_call['tool']
+            params = tool_call['params']
             
-        elif analysis['query_type'] == 'multiple_quotes':
-            symbols = analysis['symbols']
-            data = get_multiple_quotes(symbols)
-            if not data:
-                return JSONResponse(content={"output": f"❌ Could not find data for any of these symbols: {', '.join(symbols)}. Please verify the ticker symbols are correct."})
+            print(f"🔧 STOCK AGENT - Executing TOOL: {tool_name}")
+            print(f"   📋 Tool Description: {get_tool_description(tool_name)}")
+            print(f"   ⚙️  Parameters: {params}")
             
-            # Show partial results if some symbols failed
-            failed_symbols = [s for s in symbols if s not in data]
-            if failed_symbols:
-                output = format_multiple_quotes(data)
-                output += f"\n\n⚠️  Could not find data for: {', '.join(failed_symbols)}"
-            else:
-                output = format_multiple_quotes(data)
-            
-        elif analysis['query_type'] == 'price_history':
-            symbol = analysis['symbols'][0]  # Use first symbol for history
-            api_params = convert_period_to_api_params(analysis['period'])
-            data = get_price_history(symbol, **api_params)
-            if not data:
-                return JSONResponse(content={"output": f"❌ Could not find historical data for symbol '{symbol}'. Please verify the ticker symbol is correct, or try a different time period."})
-            output = format_price_history(data)
-            
-        elif analysis['query_type'] == 'market_movers':
-            # Determine index and sort type from query
-            index = analysis.get('index') or '$SPX'
-            
-            # Enhanced keyword detection for sort type
-            query_lower = mcp_input.input.lower()
-            
-            # Determine sort type based on keywords
-            if any(word in query_lower for word in ['volume', 'most active', 'highest volume', 'trading volume']):
-                sort_type = "VOLUME"
-            elif any(word in query_lower for word in ['trades', 'most traded', 'trading activity']):
-                sort_type = "TRADES"
-            elif any(word in query_lower for word in ['loser', 'down', 'decline', 'drop', 'worst', 'falling']):
-                sort_type = "PERCENT_CHANGE_DOWN"
-            else:
-                sort_type = "PERCENT_CHANGE_UP"  # Default to gainers
-            
-            # Detect frequency hints in query (supports 0, 1, 5, 10, 30, 60)
-            frequency = 1  # Default
-            
-            # Check for explicit frequency values
-            import re
-            freq_match = re.search(r'\b(0|1|5|10|30|60)%?\b', query_lower)
-            if freq_match:
-                frequency = int(freq_match.group(1))
-            # Check for descriptive frequency hints
-            elif any(word in query_lower for word in ['major moves', 'big moves', 'significant moves']):
-                frequency = 10  # Major moves >= 10%
-            elif any(word in query_lower for word in ['moderate moves', 'medium moves']):
-                frequency = 5   # Moderate moves >= 5%
-            elif any(word in query_lower for word in ['all moves', 'any moves', 'small moves', 'minor moves']):
-                frequency = 0   # Show all moves
-            elif any(word in query_lower for word in ['substantial moves', 'huge moves']):
-                frequency = 30  # Substantial moves >= 30%
-            elif any(word in query_lower for word in ['extreme moves', 'massive moves']):
-                frequency = 60  # Extreme moves >= 60%
-            
-            # Debug output showing what parameters were detected/defaulted
-            debug_info = f"🔧 Parameters: Index='{index}' (detected: {analysis.get('index', 'None, defaulted to $SPX')}), Sort='{sort_type}', Frequency={frequency}"
-                
-            data = get_market_movers(index=index, sort=sort_type, frequency=frequency)
-            if not data or not data.get('movers'):
-                return JSONResponse(content={"output": f"❌ Could not find market movers data for {index}. Please try again later."})
-            
-            # Add debug info to output
-            output = format_market_movers(data) + f"\n\n{debug_info}"
-            
-        elif analysis['query_type'] == 'market_hours':
-            query_lower = mcp_input.input.lower()
-            
-            # Detect specific market types from query
-            detected_markets = []
-            single_market = None
-            
-            # Check for specific market mentions
-            if any(word in query_lower for word in ['equity', 'stock', 'stocks']):
-                detected_markets.append('equity')
-                single_market = 'equity' if len([w for w in query_lower.split() if w in ['equity', 'stock', 'stocks']]) == 1 else None
-                
-            if any(word in query_lower for word in ['option', 'options']):
-                detected_markets.append('option')
-                single_market = 'option' if 'option' in query_lower and len(detected_markets) == 0 else None
-                
-            if any(word in query_lower for word in ['bond', 'bonds']):
-                detected_markets.append('bond')
-                single_market = 'bond' if 'bond' in query_lower and len(detected_markets) == 0 else None
-                
-            if any(word in query_lower for word in ['future', 'futures']):
-                detected_markets.append('future')
-                single_market = 'future' if 'future' in query_lower and len(detected_markets) == 0 else None
-                
-            if any(word in query_lower for word in ['forex', 'fx', 'currency']):
-                detected_markets.append('forex')
-                single_market = 'forex' if any(w in query_lower for w in ['forex', 'fx']) and len(detected_markets) == 0 else None
-            
-            # Extract date if provided (format: YYYY-MM-DD)
-            import re
-            date_match = re.search(r'\b(\d{4}-\d{2}-\d{2})\b', mcp_input.input)
-            date = date_match.group(1) if date_match else None
-            
-            # Default to equity and options if no specific markets detected
-            if not detected_markets:
-                detected_markets = ['equity', 'option']
-            
-            # Use single market endpoint if only one market requested
-            if single_market:
-                data = get_market_hours(single_market=single_market, date=date)
-            else:
-                data = get_market_hours(markets=detected_markets, date=date)
-                
-            if not data:
-                return JSONResponse(content={"output": "❌ Could not find market hours data. Please try again later."})
-            output = format_market_hours(data)
-            
+            try:
+                if tool_name == 'get_stock_data':
+                    data = get_stock_data(params['symbol'])
+                    if data:
+                        results.append(format_single_quote(data))
+                        print(f"   ✅ Tool completed successfully - Got quote for {params['symbol']}")
+                        
+                elif tool_name == 'get_multiple_quotes':
+                    symbols = params['symbols']
+                    data = get_multiple_quotes(symbols)
+                    if data:
+                        results.append(format_multiple_quotes(data))
+                        print(f"   ✅ Tool completed successfully - Compared {len(symbols)} stocks: {symbols}")
+                        
+                elif tool_name == 'get_price_history':
+                    symbol = params['symbol']
+                    period_type = params.get('period_type', 'month')
+                    period = params.get('period', 1)
+                    frequency_type = params.get('frequency_type', 'daily')
+                    frequency = params.get('frequency', 1)
+                    
+                    data = get_price_history(symbol, period_type, period, frequency_type, frequency)
+                    if data:
+                        results.append(format_price_history(data))
+                        print(f"   ✅ Tool completed successfully - Got {period} {period_type}(s) history for {symbol}")
+                        
+                elif tool_name == 'get_market_movers':
+                    index = params.get('index', '$SPX')
+                    sort = params.get('sort', 'PERCENT_CHANGE_UP')
+                    frequency = params.get('frequency', 1)
+                    
+                    data = get_market_movers(index=index, sort=sort, frequency=frequency)
+                    if data and data.get('movers'):
+                        results.append(format_market_movers(data))
+                        print(f"   ✅ Tool completed successfully - Got {len(data.get('movers', []))} market movers from {index}")
+                        
+                elif tool_name == 'get_market_hours':
+                    markets = params.get('markets', ['equity', 'option'])
+                    date = params.get('date')
+                    
+                    data = get_market_hours(markets=markets, date=date)
+                    if data:
+                        results.append(format_market_hours(data))
+                        print(f"   ✅ Tool completed successfully - Got market hours for {len(markets)} market types")
+                        
+            except Exception as e:
+                error_msg = f"❌ Error calling {tool_name}: {str(e)}"
+                results.append(error_msg)
+                print(f"   🚨 Tool failed: {error_msg}")
+        
+        if not results:
+            return JSONResponse(content={"output": "❌ Could not retrieve any stock data. Please verify your request and try again."})
+        
+        # Combine all results
+        if len(results) == 1:
+            output = results[0]  # Single tool result, use as-is
         else:
-            return JSONResponse(content={"output": "❌ Unable to determine what stock information you're looking for. Try asking for specific stock prices, comparisons, historical data, market movers, or trading hours."})
+            # Multiple tools, combine with separators
+            output = "📊 Stock Market Analysis\n\n"
+            output += f"\n\n{'='*50}\n\n".join(results)
 
+        print(f"🔧 STOCK AGENT - Final output length: {len(output)} chars")
+        print(f"🎉 STOCK AGENT - Successfully processed query using {len(plan['tools_to_call'])} tool(s)")
         return {"output": output}
 
     except Exception as e:

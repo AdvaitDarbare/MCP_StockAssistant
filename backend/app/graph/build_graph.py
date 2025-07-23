@@ -2,9 +2,10 @@
 
 from typing import TypedDict
 from langgraph.graph import StateGraph, END
-from app.graph.router_node import router_node
-from app.graph.stock_node import stock_node
-from app.graph.fallback_node import fallback_node
+from .router_node import router_node
+from .stock_node import stock_node
+from .equity_insight_node import equity_insight_node
+from .fallback_node import fallback_node
 
 class GraphState(TypedDict):
     input: str
@@ -22,6 +23,7 @@ def build_app_graph():
 
     builder.add_node("router", router_node)
     builder.add_node("stock", stock_node)
+    builder.add_node("equity_insights", equity_insight_node)
     builder.add_node("fallback", fallback_node)
 
     builder.add_conditional_edges(
@@ -29,11 +31,13 @@ def build_app_graph():
         decide_route,
         {
             "stock": "stock",
+            "equity_insights": "equity_insights",
             "fallback": "fallback"
         }
     )
 
     builder.add_edge("stock", END)
+    builder.add_edge("equity_insights", END)
     builder.add_edge("fallback", END)
 
     return builder.compile()
