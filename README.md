@@ -60,6 +60,85 @@ Current: $212.48
 Data Points: 20 trading days
 ```
 
+#### **4. Market Movers**
+- **API Endpoint**: `/movers/{index}`
+- **Usage**: Get top 10 movers for major indices with advanced filtering
+- **Supported Indices**: 
+  - **$SPX** (S&P 500), **$DJI** (Dow Jones), **$COMPX** (NASDAQ Composite)
+  - **NYSE**, **NASDAQ**, **OTCBB** (exchanges)
+  - **INDEX_ALL**, **EQUITY_ALL**, **OPTION_ALL**, **OPTION_PUT**, **OPTION_CALL**
+- **Sort Options**:
+  - **PERCENT_CHANGE_UP** - Top gainers (default)
+  - **PERCENT_CHANGE_DOWN** - Top losers  
+  - **VOLUME** - Most active by volume
+  - **TRADES** - Most active by trade count
+- **Frequency Thresholds**: Filter by minimum change percentage
+  - **0** - Show all moves (no minimum)
+  - **1** - Show moves ≥ 1% (default)
+  - **5** - Show moves ≥ 5% (moderate moves)
+  - **10** - Show moves ≥ 10% (major moves)
+  - **30** - Show moves ≥ 30% (substantial moves)
+  - **60** - Show moves ≥ 60% (extreme moves)
+- **Example Queries**:
+  - "Show me top gainers in the S&P 500" → Biggest % winners
+  - "NASDAQ most active by volume" → Highest trading volume
+  - "Show me 5% movers" → Stocks with ≥5% change
+  - "Major moves today" → Stocks with ≥10% change
+  - "All NASDAQ movers" → All moves regardless of size
+
+**Sample Responses**:
+```
+🚀 Top Gainers ($SPX):
+1. 🟢 TSLA: $332.11 (+3.62) Vol: 77,130,475
+2. 🟢 AAPL: $214.40 (+1.92) Vol: 46,348,818
+
+📈 Most Active by Volume ($SPX):
+1. 🟢 NVDA: $167.03 (-4.35) Vol: 192,489,403  
+2. 🟢 WBD: $12.85 (+0.05) Vol: 89,947,116
+
+⚡ Most Active by Trades ($DJI):
+1. 🔴 NVDA: $167.03 (-4.35) Vol: 1,946,802 trades
+2. 🟢 TSLA: $332.11 (+3.62) Vol: 1,065,551 trades
+```
+
+#### **5. Market Hours**
+- **API Endpoints**: `/markets` (bulk) and `/markets/{market_id}` (single)
+- **Usage**: Get current trading schedules and market status with date support
+- **Supported Markets**: 
+  - **equity** - Stock market (pre-market, regular, post-market)
+  - **option** - Options trading (equity options, index options)
+  - **bond** - Bond markets
+  - **future** - Futures markets  
+  - **forex** - Foreign exchange markets
+- **Features**:
+  - **Single Market**: "What are equity market hours?"
+  - **Multiple Markets**: "Show me stock and options trading hours"
+  - **Date Specification**: "What are market hours for 2025-07-25?"
+  - **Live Status**: Shows if markets are currently open/closed
+- **Example Queries**:
+  - "What are equity market hours?" → Stock market schedule
+  - "Show me options trading hours" → Options market schedule  
+  - "What are bond market hours for tomorrow?" → Future date query
+  - "Are forex markets open now?" → Live status check
+
+**Sample Response**:
+```
+🕐 Market Hours:
+
+**Equity Market:**
+  Equity: 🟢 OPEN
+    Pre Market: 07:00 - 09:30
+    Regular Market: 09:30 - 16:00
+    Post Market: 16:00 - 20:00
+
+**Option Market:**
+  Equity Option: 🟢 OPEN
+    Regular Market: 09:30 - 16:00
+
+  Index Option: 🟢 OPEN
+    Regular Market: 09:30 - 16:15
+```
+
 ## 🧠 AI-Powered Query Understanding
 
 The assistant uses Claude AI to intelligently parse natural language queries and determine:
@@ -69,6 +148,37 @@ The assistant uses Claude AI to intelligently parse natural language queries and
 - **Time Periods**: Understands phrases like "past month", "this year", "6 months"
 - **Intent Recognition**: Distinguishes between price checks, comparisons, and performance analysis
 
+## 🛠️ Available Tools
+
+The stock agent has access to **5 specialized tools**, each corresponding to a Schwab API endpoint:
+
+### **Current Tools (5/9 implemented)**
+
+| Tool | Function | API Endpoint | Purpose |
+|------|----------|--------------|---------|
+| **Single Quote** | `get_stock_data(symbol)` | `/quotes/{symbol}` | Get real-time quote for one stock |
+| **Multi Quote** | `get_multiple_quotes(symbols)` | `/quotes` | Compare multiple stocks side-by-side |
+| **Price History** | `get_price_history(symbol, params)` | `/pricehistory` | Analyze historical performance |
+| **Market Movers** | `get_market_movers(index, sort, frequency)` | `/movers/{index}` | Find top gainers/losers/volume leaders |
+| **Market Hours** | `get_market_hours(markets, date)` | `/markets` | Get trading schedules and market status |
+
+### **How Tool Selection Works**
+
+1. **Query Analysis**: Claude AI analyzes the user's natural language input
+2. **Intent Classification**: Determines query type (`single_quote`, `multiple_quotes`, `price_history`, `market_movers`, `market_hours`)
+3. **Tool Routing**: Routes to the appropriate tool based on classified intent
+4. **Parameter Extraction**: Extracts symbols, time periods, indices, etc.
+5. **API Call**: Executes the selected tool with extracted parameters
+
+### **Future Tools (4 available for implementation)**
+
+| Tool | Function | API Endpoint | Purpose |
+|------|----------|--------------|---------|
+| **Option Chains** | `get_option_chains(symbol, params)` | `/chains` | Get options data with Greeks |
+| **Option Expirations** | `get_option_expirations(symbol)` | `/expirationchain` | Get available expiration dates |
+| **Instrument Search** | `search_instruments(query, type)` | `/instruments` | Search for securities by name/symbol |
+| **CUSIP Lookup** | `get_instruments_cusip(cusip)` | `/instruments/{cusip}` | Convert CUSIP to symbol/details |
+
 ### Smart Query Examples:
 ```
 ✅ "What's Apple doing?" → Single quote for AAPL
@@ -76,6 +186,13 @@ The assistant uses Claude AI to intelligently parse natural language queries and
 ✅ "How did GameStop perform last year?" → Price history for GME
 ✅ "PLTR vs SNOW performance" → Multi-quote comparison
 ✅ "Calculate SOFI percentage change over 3 months" → Historical analysis
+✅ "Show me top gainers today" → Market movers for S&P 500
+✅ "NASDAQ most active by volume" → Volume leaders in NASDAQ
+✅ "Show me 5% movers" → Market movers with ≥5% change
+✅ "Major moves in NASDAQ today" → Market movers with ≥10% change
+✅ "What are equity market hours?" → Stock market schedule
+✅ "Show me options trading hours for tomorrow" → Options schedule with date
+✅ "Are forex markets open now?" → Live market status
 ```
 
 ## 🏗️ Architecture
@@ -113,20 +230,20 @@ backend/
 4. **Data Retrieval** → Fetches real-time or historical data
 5. **Response Formatting** → Presents data in user-friendly format
 
-## 📊 API Coverage
+## 📊 Tool Coverage
 
-### Implemented (3/9 endpoints):
-- ✅ Single Stock Quotes
-- ✅ Multi-Stock Quotes  
-- ✅ Price History
+### **Implemented Tools (5/9 total)**:
+✅ **Single Quote Tool** - Real-time stock quotes  
+✅ **Multi Quote Tool** - Multi-stock comparisons  
+✅ **Price History Tool** - Historical performance analysis  
+✅ **Market Movers Tool** - Top gainers/losers with advanced filtering  
+✅ **Market Hours Tool** - Trading schedules across all markets  
 
-### Available for Future Implementation:
-- ⏳ Option Chains (calls/puts with Greeks)
-- ⏳ Market Movers (top gainers/losers)
-- ⏳ Market Hours (trading schedules)
-- ⏳ Option Expiration Dates
-- ⏳ Instrument Search
-- ⏳ CUSIP Lookup
+### **Available for Implementation (4/9 remaining)**:
+⏳ **Option Chains Tool** - Options data with Greeks (delta, gamma, theta, vega)  
+⏳ **Option Expirations Tool** - Available expiration dates for options  
+⏳ **Instrument Search Tool** - Search securities by name or description  
+⏳ **CUSIP Lookup Tool** - Convert CUSIP identifiers to symbols
 
 ## 🛠️ Technical Features
 
@@ -197,9 +314,10 @@ Send POST requests to `/mcp` with natural language stock queries:
 - Real-time quote updates
 - Historical performance tracking
 - Trend identification
+- Top gainers/losers tracking
+- Trading schedule awareness
 
 ---
 
-**Built with**: Python, FastAPI, Claude AI, Charles Schwab API, asyncio
+**Built with**: Python, LangGraph, MCP, FastAPI, Claude AI, Charles Schwab API, asyncio
 
-**Status**: ✅ Production Ready - Core functionality implemented and tested
