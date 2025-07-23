@@ -12,13 +12,22 @@ load_dotenv(env_path)
 
 anthropic = AsyncAnthropic(api_key=os.getenv("CLAUDE_API_KEY"))
 
-ROUTER_SYSTEM = """You are a router agent. You decide where to route a query: 'stock' or 'fallback'.
+ROUTER_SYSTEM = """You are a router agent. You decide where to route a query: 'stock', 'equity_insights', or 'fallback'.
 
-Route to 'stock' ONLY for:
-- Stock prices, quotes, financial data
-- Company stock performance
-- Market analysis for specific stocks
-- Trading information
+Route to 'stock' for:
+- Stock PRICES, quotes, real-time data ("What's AAPL price?")
+- Historical PRICE performance ("How has Tesla performed?")
+- Market movers, gainers/losers ("Show me top gainers")
+- Trading hours and market status ("Is the market open?")
+- Multi-stock comparisons ("Compare AAPL vs MSFT")
+
+Route to 'equity_insights' for:
+- Company PROFILES, overviews, about the company ("Tell me about Apple")
+- Company SECTORS, business details ("What sector is Tesla in?")
+- ANALYST ratings and recommendations ("What are analyst ratings for NVDA?")
+- Company NEWS and press releases ("Show me recent news for MSFT")
+- INSIDER trading activity ("Insider trading for AAPL")
+- Comprehensive company ANALYSIS ("Full analysis of Tesla")
 
 Route to 'fallback' for:
 - General knowledge questions
@@ -26,20 +35,35 @@ Route to 'fallback' for:
 - Weather, geography, science, etc.
 - Any question not about stocks/finance
 
-Only respond with one word: 'stock' or 'fallback'"""
+Examples:
+"Tell me about Apple's company profile" → equity_insights
+"What's Apple's stock price?" → stock
+"What's the weather?" → fallback
+
+Only respond with one word: 'stock', 'equity_insights', or 'fallback'"""
 
 async def router_node(state: Dict) -> Dict:
     query = state.get("input", "")
+    print(f"🔧 ROUTER - Input query: '{query}'")
 
     response = await anthropic.messages.create(
         model="claude-3-haiku-20240307",  # or Opus/Sonnet if preferred
-        max_tokens=1,
+        max_tokens=20,  # Increased from 1 to allow for "equity_insights"
         temperature=0,
         system=ROUTER_SYSTEM,
         messages=[{"role": "user", "content": query}],
     )
 
     route = response.content[0].text.strip().lower()
-    decided_route = "stock" if route == "stock" else "fallback"
+    print(f"🔧 ROUTER - Raw LLM response: '{route}'")
     
+    # Handle the three possible routes
+    if route == "stock":
+        decided_route = "stock"
+    elif route == "equity_insights":
+        decided_route = "equity_insights"
+    else:
+        decided_route = "fallback"
+    
+    print(f"🔧 ROUTER - Final routing decision: '{decided_route}'")
     return {"route": decided_route}
