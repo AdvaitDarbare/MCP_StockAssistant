@@ -145,6 +145,22 @@ Company Profile: Available through Finviz
 ### **Project Structure**
 ```
 ai-stock-assistant/
+├── frontend/                           # 🎨 React frontend application
+│   ├── src/
+│   │   ├── components/                 # React components
+│   │   │   ├── Header.tsx              # App header with branding
+│   │   │   ├── Message.tsx             # Chat message bubbles
+│   │   │   ├── MessageInput.tsx        # Text input component
+│   │   │   ├── QuickActions.tsx        # Suggested action buttons
+│   │   │   └── TypingIndicator.tsx     # Loading animation
+│   │   ├── hooks/
+│   │   │   └── useChat.ts              # Chat state management
+│   │   ├── utils/
+│   │   │   └── api.ts                  # API communication
+│   │   └── types/                      # TypeScript definitions
+│   ├── public/                         # Static assets
+│   ├── package.json                    # Frontend dependencies
+│   └── README.md                       # Frontend documentation
 ├── backend/
 │   ├── app/
 │   │   ├── agents/
@@ -231,11 +247,12 @@ cp .env.example .env
 
 This script automatically:
 - Starts Stock Agent (port 8020)
-- Starts Equity Insights Agent (port 8001)  
+- Starts Equity Insights Agent (port 8001)
+- Starts React Frontend (port 3000)
 - Starts LangGraph Development Server (port 2024)
 - Opens LangGraph Studio in your browser
 
-### **Manual Setup (3 Terminals)**
+### **Manual Setup (4 Terminals)**
 ```bash
 # Terminal 1 - Stock Agent
 cd backend
@@ -245,15 +262,20 @@ uvicorn app.agents.stock_agent:app --reload --port 8020
 cd backend
 uvicorn app.agents.equity_insight_agent:app --reload --port 8001
 
-# Terminal 3 - LangGraph Dev Server
+# Terminal 3 - Frontend
+cd frontend
+npm install && npm start
+
+# Terminal 4 - LangGraph Dev Server
 langgraph dev
 ```
 
 ### **Access Points**
-- **LangGraph Studio**: https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024
-- **API Endpoint**: http://127.0.0.1:2024/runs
-- **Stock Agent Direct**: http://127.0.0.1:8020
-- **Equity Agent Direct**: http://127.0.0.1:8001
+- **🎨 Frontend UI**: http://localhost:3000 (Main user interface)
+- **📊 LangGraph Studio**: https://smith.langchain.com/studio/?baseUrl=http://127.0.0.1:2024
+- **🔗 API Endpoint**: http://127.0.0.1:2024/runs
+- **📈 Stock Agent Direct**: http://127.0.0.1:8020
+- **🏢 Equity Agent Direct**: http://127.0.0.1:8001
 
 ## 🧪 **Test Queries**
 

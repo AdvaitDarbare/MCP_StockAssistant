@@ -1,42 +1,188 @@
 INFO:     Will watch for changes in these directories: ['/Users/advaitdarbare/Desktop/ai-stock-assistant/backend']
 INFO:     Uvicorn running on http://127.0.0.1:8020 (Press CTRL+C to quit)
-INFO:     Started reloader process [50815] using WatchFiles
-INFO:     Started server process [50820]
+INFO:     Started reloader process [14388] using WatchFiles
+INFO:     Started server process [14418]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-🔧 STOCK AGENT - Input received: '  Show me MSFT versus GOOGL'
-🔧 Stock LLM Response: Here is the plan to execute your request:
-
-{
+🔧 STOCK AGENT - Input received: 'What's AAPL stock price?'
+🔧 Stock LLM Response: {
   "tools_to_call": [
     {
-      "tool": "get_multiple_quotes",
+      "tool": "get_stock_data",
       "params": {
-        "symbols": ["MSFT", "GOOGL"]
+        "symbol": "AAPL"
       }
     }
   ],
-  "reasoning": "The user wants to compare the stock quotes for MSFT and GOOGL, so I will call the get_multiple_quotes tool with those two symbols."
+  "reasoning": "The user is requesting the current stock price for Apple (AAPL), so I will call the get_stock_data tool with the symbol 'AAPL'."
 }
-
-This will provide a side-by-side comparison of the real-time stock quotes for Microsoft (MSFT) and Alphabet (GOOGL).
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_multiple_quotes', 'params': {'symbols': ['MSFT', 'GOOGL']}}], 'reasoning': 'The user wants to compare the stock quotes for MSFT and GOOGL, so I will call the get_multiple_quotes tool with those two symbols.'}
-🔧 STOCK AGENT - Executing TOOL: get_multiple_quotes
-   📋 Tool Description: 📊 Compare multiple stocks side-by-side with prices and changes
-   ⚙️  Parameters: {'symbols': ['MSFT', 'GOOGL']}
-   ✅ Tool completed successfully - Compared 2 stocks: ['MSFT', 'GOOGL']
-🔧 STOCK AGENT - Final output length: 117 chars
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}], 'reasoning': "The user is requesting the current stock price for Apple (AAPL), so I will call the get_stock_data tool with the symbol 'AAPL'."}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'AAPL'}
+   ✅ Tool completed successfully - Got quote for AAPL
+🔧 STOCK AGENT - Final output length: 155 chars
 🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51874 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: '  Show me PLTR performance over the last 6 months'
-🔧 Stock LLM Response: Here is the plan to execute your request:
-
-{
+INFO:     127.0.0.1:58757 - "POST /mcp HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [14418]
+INFO:     Started server process [18279]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [18279]
+INFO:     Started server process [18885]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [18885]
+INFO:     Started server process [21237]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [21237]
+INFO:     Started server process [22179]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [22179]
+INFO:     Started server process [23337]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [23337]
+INFO:     Started server process [24123]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🔧 STOCK AGENT - Input received: 'What's AAPL stock price?'
+🔧 Stock LLM Response: {
+  "tools_to_call": [
+    {
+      "tool": "get_stock_data",
+      "params": {
+        "symbol": "AAPL"
+      }
+    }
+  ],
+  "reasoning": "The user is requesting the current stock price for Apple (AAPL), so I will call the get_stock_data tool with the symbol 'AAPL'."
+}
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}], 'reasoning': "The user is requesting the current stock price for Apple (AAPL), so I will call the get_stock_data tool with the symbol 'AAPL'."}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'AAPL'}
+   ✅ Tool completed successfully - Got quote for AAPL
+🔧 STOCK AGENT - Final output length: 314 chars
+🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
+INFO:     127.0.0.1:59534 - "POST /mcp HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24123]
+INFO:     Started server process [27260]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27260]
+INFO:     Started server process [27496]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27496]
+INFO:     Started server process [28048]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [28048]
+INFO:     Started server process [28317]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [28317]
+INFO:     Started server process [29863]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [29863]
+INFO:     Started server process [30124]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30124]
+INFO:     Started server process [30358]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30358]
+INFO:     Started server process [30600]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🔧 STOCK AGENT - Input received: 'What's AAPL stock price?'
+🔧 Stock LLM Response: {
+  "tools_to_call": [
+    {
+      "tool": "get_stock_data",
+      "params": {
+        "symbol": "AAPL"
+      }
+    }
+  ],
+  "reasoning": "The user is requesting the current stock price for Apple (AAPL), so I will call the get_stock_data tool with the symbol 'AAPL'."
+}
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}], 'reasoning': "The user is requesting the current stock price for Apple (AAPL), so I will call the get_stock_data tool with the symbol 'AAPL'."}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'AAPL'}
+   ✅ Tool completed successfully - Got quote for AAPL
+🔧 STOCK AGENT - Final output length: 413 chars
+🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
+INFO:     127.0.0.1:60028 - "POST /mcp HTTP/1.1" 200 OK
+🔧 STOCK AGENT - Input received: 'Show me 6 month price history for AAPL'
+🔧 Stock LLM Response: {
   "tools_to_call": [
     {
       "tool": "get_price_history",
       "params": {
-        "symbol": "PLTR",
+        "symbol": "AAPL",
         "period_type": "month",
         "period": 6,
         "frequency_type": "daily",
@@ -44,120 +190,94 @@ INFO:     127.0.0.1:51874 - "POST /mcp HTTP/1.1" 200 OK
       }
     }
   ],
-  "reasoning": "The user wants to see the price history of PLTR stock over the last 6 months, so I will call the get_price_history tool with the appropriate parameters."
+  "reasoning": "The user requested the 6 month price history for the AAPL stock, so I will call the get_price_history tool with the appropriate parameters."
+}
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AAPL', 'period_type': 'month', 'period': 6, 'frequency_type': 'daily', 'frequency': 1}}], 'reasoning': 'The user requested the 6 month price history for the AAPL stock, so I will call the get_price_history tool with the appropriate parameters.'}
+🔧 STOCK AGENT - Executing TOOL: get_price_history
+   📋 Tool Description: 📉 Get historical price performance over time periods
+   ⚙️  Parameters: {'symbol': 'AAPL', 'period_type': 'month', 'period': 6, 'frequency_type': 'daily', 'frequency': 1}
+   ✅ Tool completed successfully - Got 6 month(s) history for AAPL
+🔧 STOCK AGENT - Final output length: 318 chars
+🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
+INFO:     127.0.0.1:60035 - "POST /mcp HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30600]
+INFO:     Started server process [33935]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33935]
+INFO:     Started server process [34170]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34170]
+INFO:     Started server process [34299]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🔧 STOCK AGENT - Input received: 'Show me 1 year price history for AAPL'
+🔧 Stock LLM Response: Here is the plan to execute the request for 1 year price history for AAPL:
+
+{
+  "tools_to_call": [
+    {
+      "tool": "get_price_history",
+      "params": {
+        "symbol": "AAPL",
+        "period_type": "year",
+        "period": 1,
+        "frequency_type": "daily",
+        "frequency": 1
+      }
+    }
+  ],
+  "reasoning": "User wants 1 year of daily price history for the AAPL stock."
 }
 
 The key steps are:
-1. Extracted the stock symbol "PLTR" from the request.
-2. Determined the user wants to see the performance over the last 6 months, so set period_type to "month" and period to 6.
-3. Specified the frequency_type as "daily" and frequency as 1 to get the daily price history.
-4. Chose the get_price_history tool to retrieve the historical price data for PLTR.
 
-This will provide the user with the detailed price performance of PLTR stock over the last 6 months.
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'PLTR', 'period_type': 'month', 'period': 6, 'frequency_type': 'daily', 'frequency': 1}}], 'reasoning': 'The user wants to see the price history of PLTR stock over the last 6 months, so I will call the get_price_history tool with the appropriate parameters.'}
+1. Extracted the stock symbol "AAPL" from the request.
+2. Determined the appropriate parameters for the get_price_history tool:
+   - period_type = "year" to get 1 year of data
+   - period = 1 to specify 1 year
+   - frequency_type = "daily" to get daily price data
+   - frequency = 1 to get 1 data point per day
+
+This will retrieve the daily price history for Apple (AAPL) over the past 1 year period and return that data to the user.
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AAPL', 'period_type': 'year', 'period': 1, 'frequency_type': 'daily', 'frequency': 1}}], 'reasoning': 'User wants 1 year of daily price history for the AAPL stock.'}
 🔧 STOCK AGENT - Executing TOOL: get_price_history
    📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'PLTR', 'period_type': 'month', 'period': 6, 'frequency_type': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 6 month(s) history for PLTR
-🔧 STOCK AGENT - Final output length: 153 chars
+   ⚙️  Parameters: {'symbol': 'AAPL', 'period_type': 'year', 'period': 1, 'frequency_type': 'daily', 'frequency': 1}
+   ✅ Tool completed successfully - Got 1 year(s) history for AAPL
+🔧 STOCK AGENT - Final output length: 436 chars
 🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51889 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: '  Show me today's top gainers'
+INFO:     127.0.0.1:60168 - "POST /mcp HTTP/1.1" 200 OK
+🔧 STOCK AGENT - Input received: 'Compare AAPL vs GOOGL vs MSFT'
 🔧 Stock LLM Response: {
   "tools_to_call": [
     {
-      "tool": "get_market_movers",
+      "tool": "get_multiple_quotes",
       "params": {
-        "index": "NASDAQ",
-        "sort": "PERCENT_CHANGE_UP",
-        "frequency": 1
+        "symbols": ["AAPL", "GOOGL", "MSFT"]
       }
     }
   ],
-  "reasoning": "The user is requesting the top gainers in the NASDAQ market, so we will call the get_market_movers tool with the NASDAQ index, sorting by percent change up, and a frequency of 1 (to get the top results)."
+  "reasoning": "The user wants to compare the stock prices of Apple (AAPL), Google (GOOGL), and Microsoft (MSFT), so the get_multiple_quotes tool should be used with those three symbols."
 }
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_market_movers', 'params': {'index': 'NASDAQ', 'sort': 'PERCENT_CHANGE_UP', 'frequency': 1}}], 'reasoning': 'The user is requesting the top gainers in the NASDAQ market, so we will call the get_market_movers tool with the NASDAQ index, sorting by percent change up, and a frequency of 1 (to get the top results).'}
-🔧 STOCK AGENT - Executing TOOL: get_market_movers
-   📋 Tool Description: 🚀 Get top gainers, losers, or most active stocks by volume
-   ⚙️  Parameters: {'index': 'NASDAQ', 'sort': 'PERCENT_CHANGE_UP', 'frequency': 1}
-   ✅ Tool completed successfully - Got 10 market movers from NASDAQ
-🔧 STOCK AGENT - Final output length: 447 chars
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_multiple_quotes', 'params': {'symbols': ['AAPL', 'GOOGL', 'MSFT']}}], 'reasoning': 'The user wants to compare the stock prices of Apple (AAPL), Google (GOOGL), and Microsoft (MSFT), so the get_multiple_quotes tool should be used with those three symbols.'}
+🔧 STOCK AGENT - Executing TOOL: get_multiple_quotes
+   📋 Tool Description: 📊 Compare multiple stocks side-by-side with prices and changes
+   ⚙️  Parameters: {'symbols': ['AAPL', 'GOOGL', 'MSFT']}
+   ✅ Tool completed successfully - Compared 3 stocks: ['AAPL', 'GOOGL', 'MSFT']
+🔧 STOCK AGENT - Final output length: 351 chars
 🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51897 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: '  Give me the most active stocks by volume'
-🔧 Stock LLM Response: Here is the plan to execute your request for the most active stocks by volume:
-
-{
-  "tools_to_call": [
-    {
-      "tool": "get_market_movers",
-      "params": {
-        "index": "$SPX",
-        "sort": "VOLUME",
-        "frequency": 1
-      }
-    }
-  ],
-  "reasoning": "User wants the most active stocks by volume, so we will call the get_market_movers tool and sort by volume."
-}
-
-The key points are:
-
-1. Use the get_market_movers tool to retrieve the top movers.
-2. Set the index to $SPX to get the overall market data.
-3. Sort the results by VOLUME to get the most active stocks.
-4. Set the frequency to 1 to get the top results.
-
-This will provide the user with the most actively traded stocks by volume across the overall market.
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_market_movers', 'params': {'index': '$SPX', 'sort': 'VOLUME', 'frequency': 1}}], 'reasoning': 'User wants the most active stocks by volume, so we will call the get_market_movers tool and sort by volume.'}
-🔧 STOCK AGENT - Executing TOOL: get_market_movers
-   📋 Tool Description: 🚀 Get top gainers, losers, or most active stocks by volume
-   ⚙️  Parameters: {'index': '$SPX', 'sort': 'VOLUME', 'frequency': 1}
-   ✅ Tool completed successfully - Got 10 market movers from $SPX
-🔧 STOCK AGENT - Final output length: 453 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51911 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: '  What are the market hours today?'
-🔧 Stock LLM Response: Here is the plan to get the market hours for today:
-
-{
-  "tools_to_call": [
-    {
-      "tool": "get_market_hours",
-      "params": {
-        "markets": ["equity", "option"],
-        "date": "today"
-      }
-    }
-  ],
-  "reasoning": "The user is requesting the market hours for today, so we will call the get_market_hours tool with the equity and option markets for the current date."
-}
-
-This will retrieve the trading schedules and market status for the equity and options markets for the current date.
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_market_hours', 'params': {'markets': ['equity', 'option'], 'date': 'today'}}], 'reasoning': 'The user is requesting the market hours for today, so we will call the get_market_hours tool with the equity and option markets for the current date.'}
-🔧 STOCK AGENT - Executing TOOL: get_market_hours
-   📋 Tool Description: 🕐 Get trading schedules and market open/close status
-   ⚙️  Parameters: {'markets': ['equity', 'option'], 'date': 'today'}
-🔧 Calling get_market_hours with params: {'markets': ['equity', 'option'], 'date': 'today'}
-❌ Error fetching market hours: expected type 'datetime.date' for date, got 'builtins.str'
-   ✅ Tool completed successfully - Got market hours for 2 market types
-🔧 STOCK AGENT - Final output length: 138 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51924 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: '  When does the market close?'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {"tool": "get_market_hours", "params": {"markets": ["equity", "option"], "date": "today"}}
-  ],
-  "reasoning": "The user is asking about the market closing hours, so we need to call the get_market_hours tool to retrieve the trading schedule and market status for today."
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_market_hours', 'params': {'markets': ['equity', 'option'], 'date': 'today'}}], 'reasoning': 'The user is asking about the market closing hours, so we need to call the get_market_hours tool to retrieve the trading schedule and market status for today.'}
-🔧 STOCK AGENT - Executing TOOL: get_market_hours
-   📋 Tool Description: 🕐 Get trading schedules and market open/close status
-   ⚙️  Parameters: {'markets': ['equity', 'option'], 'date': 'today'}
-🔧 Calling get_market_hours with params: {'markets': ['equity', 'option'], 'date': 'today'}
-❌ Error fetching market hours: expected type 'datetime.date' for date, got 'builtins.str'
-   ✅ Tool completed successfully - Got market hours for 2 market types
-🔧 STOCK AGENT - Final output length: 138 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51936 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60276 - "POST /mcp HTTP/1.1" 200 OK

@@ -8,13 +8,18 @@ nodes:
   stock:
     import: app.graph.stock_node:stock_node
 
+  equity_insights:
+    import: app.graph.equity_insight_node:equity_insight_node
+
   fallback:
     import: app.graph.fallback_node:fallback_node
 
 edges:
   router:
     stock: stock
+    equity_insights: equity_insights
     fallback: fallback
 
   stock: __end__
+  equity_insights: __end__
   fallback: __end__

@@ -28,6 +28,113 @@ def get_tool_description(tool_name: str) -> str:
     }
     return descriptions.get(tool_name, f'🔧 Unknown tool: {tool_name}')
 
+async def generate_stock_follow_up_suggestions(tools_used: list, symbols: list = None, user_query: str = "") -> str:
+    """Generate intelligent follow-up question suggestions for stock queries with LLM validation"""
+    # All available stock tools
+    stock_tools = {
+        'get_stock_data': 'Get current stock price and quote',
+        'get_multiple_quotes': 'Compare multiple stocks side-by-side',
+        'get_price_history': 'Get historical price performance',
+        'get_market_movers': 'Get top gainers, losers, most active',
+        'get_market_hours': 'Get trading hours and schedules'
+    }
+    
+    # Find unused stock tools
+    unused_tools = [tool for tool in stock_tools.keys() if tool not in tools_used]
+    primary_symbol = symbols[0] if symbols and len(symbols) > 0 else "AAPL"
+    
+    # Create base suggestions
+    base_suggestions = []
+    
+    # Add unused stock tool suggestions
+    for tool in unused_tools[:2]:  # Limit to 2 stock suggestions
+        if tool == 'get_stock_data' and symbols and len(symbols) > 1:
+            base_suggestions.append(f"What's {primary_symbol} current stock price?")
+        elif tool == 'get_multiple_quotes' and symbols and len(symbols) == 1:
+            base_suggestions.append(f"Compare {primary_symbol} vs GOOGL vs MSFT")
+        elif tool == 'get_price_history':
+            base_suggestions.append(f"Show me 6 month price history for {primary_symbol}")
+        elif tool == 'get_market_movers':
+            base_suggestions.append(f"Show me today's top market gainers")
+        elif tool == 'get_market_hours':
+            base_suggestions.append(f"What are market hours today?")
+    
+    # Add cross-domain suggestions (equity insights)
+    if symbols and len(symbols) > 0:
+        base_suggestions.extend([
+            f"Tell me about {primary_symbol} company",
+            f"Recent news for {primary_symbol}",
+            f"Analyst ratings for {primary_symbol}"
+        ])
+    
+    # Use LLM to validate and refine suggestions  
+    try:
+        validation_prompt = f"""Given this stock market query: "{user_query}"
+And the tools already used: {tools_used}
+For symbols: {symbols or ['general market']}
+
+From these potential follow-up suggestions:
+{chr(10).join([f"- {s}" for s in base_suggestions])}
+
+Select and refine the 3-4 most relevant, natural follow-up questions that:
+1. Are directly answerable by our stock market and equity analysis tools
+2. Provide complementary information to what was already shown  
+3. Sound natural and conversational
+4. Are relevant to the user's trading/investment interests
+
+Return ONLY a numbered list with emojis, like:
+1. 📊 Compare {primary_symbol} vs GOOGL vs MSFT
+2. 📉 Show me 6 month history for {primary_symbol}
+3. 🏢 Tell me about {primary_symbol} company"""
+
+        response = await anthropic.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=200,
+            temperature=0.3,
+            messages=[{"role": "user", "content": validation_prompt}]
+        )
+        
+        llm_suggestions = response.content[0].text.strip()
+        
+        # Validate that LLM returned a proper numbered list
+        if any(char.isdigit() and '. ' in llm_suggestions for char in llm_suggestions):
+            return f"\n\n__FOLLOW_UPS_START__\n{llm_suggestions}\n__FOLLOW_UPS_END__"
+            
+    except Exception as e:
+        print(f"⚠️ LLM validation failed, using fallback suggestions: {e}")
+    
+    # Fallback to hardcoded suggestions if LLM fails
+    if not base_suggestions:
+        return ""
+    
+    # Format for frontend parsing
+    formatted_suggestions = []
+    for i, suggestion in enumerate(base_suggestions[:4], 1):
+        # Add appropriate emoji based on content
+        if 'price' in suggestion.lower() and 'history' not in suggestion.lower():
+            emoji = "📈"
+        elif 'compare' in suggestion.lower():
+            emoji = "📊"
+        elif 'history' in suggestion.lower():
+            emoji = "📉"
+        elif 'movers' in suggestion.lower() or 'gainers' in suggestion.lower():
+            emoji = "🚀"
+        elif 'hours' in suggestion.lower():
+            emoji = "🕐"
+        elif 'company' in suggestion.lower():
+            emoji = "🏢"
+        elif 'news' in suggestion.lower():
+            emoji = "📰"
+        elif 'analyst' in suggestion.lower():
+            emoji = "📊"
+        else:
+            emoji = "🔍"
+        
+        formatted_suggestions.append(f"{i}. {emoji} {suggestion}")
+    
+    suggestions_text = "\n".join(formatted_suggestions)
+    return f"\n\n__FOLLOW_UPS_START__\n{suggestions_text}\n__FOLLOW_UPS_END__"
+
 async def plan_and_execute_stock_tools(user_query: str) -> dict:
     """Use Claude to plan and execute stock market tools"""
     system_prompt = """You are a stock market assistant with access to these tools:
@@ -411,6 +518,20 @@ async def handle_mcp(request: Request):
             # Multiple tools, combine with separators
             output = "📊 Stock Market Analysis\n\n"
             output += f"\n\n{'='*50}\n\n".join(results)
+
+        # Extract symbols for follow-up suggestions
+        symbols = []
+        for tool_call in plan['tools_to_call']:
+            params = tool_call.get('params', {})
+            if 'symbol' in params:
+                symbols.append(params['symbol'])
+            elif 'symbols' in params:
+                symbols.extend(params['symbols'])
+        
+        # Add intelligent follow-up suggestions
+        tools_used = [tool_call['tool'] for tool_call in plan['tools_to_call']]
+        follow_ups = await generate_stock_follow_up_suggestions(tools_used, symbols, mcp_input.input)
+        output += follow_ups
 
         print(f"🔧 STOCK AGENT - Final output length: {len(output)} chars")
         print(f"🎉 STOCK AGENT - Successfully processed query using {len(plan['tools_to_call'])} tool(s)")

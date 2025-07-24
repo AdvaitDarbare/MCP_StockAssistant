@@ -46,15 +46,18 @@ async def router_node(state: Dict) -> Dict:
     query = state.get("input", "")
     print(f"🔧 ROUTER - Input query: '{query}'")
 
-    response = await anthropic.messages.create(
-        model="claude-3-haiku-20240307",  # or Opus/Sonnet if preferred
-        max_tokens=20,  # Increased from 1 to allow for "equity_insights"
-        temperature=0,
-        system=ROUTER_SYSTEM,
-        messages=[{"role": "user", "content": query}],
-    )
-
-    route = response.content[0].text.strip().lower()
+    try:
+        response = await anthropic.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=20,
+            temperature=0,
+            system=ROUTER_SYSTEM,
+            messages=[{"role": "user", "content": query}],
+        )
+        route = response.content[0].text.strip().lower()
+    except Exception as e:
+        print(f"❌ ROUTER - Error calling Anthropic API: {e}")
+        route = "fallback"  # Default to fallback on error
     print(f"🔧 ROUTER - Raw LLM response: '{route}'")
     
     # Handle the three possible routes
