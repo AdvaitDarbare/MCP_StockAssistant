@@ -1,142 +1,86 @@
 INFO:     Will watch for changes in these directories: ['/Users/advaitdarbare/Desktop/ai-stock-assistant/backend']
 INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
-INFO:     Started reloader process [14386] using WatchFiles
-INFO:     Started server process [14416]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [14416]
-INFO:     Started server process [18276]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [18276]
-INFO:     Started server process [18883]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [18883]
-INFO:     Started server process [21236]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [21236]
-INFO:     Started server process [22177]
+INFO:     Started reloader process [36749] using WatchFiles
+INFO:     Started server process [36760]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [22177]
-INFO:     Started server process [23338]
+INFO:     Finished server process [36760]
+INFO:     Started server process [38661]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [23338]
-INFO:     Started server process [24124]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [24124]
-INFO:     Started server process [27262]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [27262]
-INFO:     Started server process [27494]
+INFO:     Finished server process [38661]
+INFO:     Started server process [39107]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [27494]
-INFO:     Started server process [28047]
+INFO:     Finished server process [39107]
+INFO:     Started server process [42355]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [28047]
-INFO:     Started server process [28315]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [28315]
-INFO:     Started server process [29862]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [29862]
-INFO:     Started server process [30125]
+INFO:     Finished server process [42355]
+INFO:     Started server process [42716]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [30125]
-INFO:     Started server process [30359]
+INFO:     Finished server process [42716]
+INFO:     Started server process [44844]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [30359]
-INFO:     Started server process [30598]
+INFO:     Finished server process [44844]
+INFO:     Started server process [44927]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [30598]
-INFO:     Started server process [33937]
+INFO:     Finished server process [44927]
+INFO:     Started server process [45110]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [33937]
-INFO:     Started server process [34172]
+INFO:     Finished server process [45110]
+INFO:     Started server process [45272]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/equity_insight_agent.py'. Reloading...
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [34172]
-INFO:     Started server process [34300]
+INFO:     Finished server process [45272]
+INFO:     Started server process [51619]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51619]
+INFO:     Started server process [51649]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.

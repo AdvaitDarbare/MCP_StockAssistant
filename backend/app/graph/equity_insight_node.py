@@ -7,12 +7,13 @@ import json
 EQUITY_INSIGHT_MCP_URL = "http://localhost:8001/mcp"  # EquityInsightAgent endpoint
 
 async def equity_insight_node(state: Dict) -> Dict:
-    """Node to handle equity insights queries by calling the EquityInsightAgent MCP endpoint"""
-    
+    """Equity insights node that handles company information, news, and analysis"""
     query = state.get("input", "")
+    accumulated_results = state.get("accumulated_results", {})
+    
+    print(f"🏢 EQUITY_INSIGHTS - Processing: '{query}'")
     
     try:
-        # Call the EquityInsightAgent MCP endpoint
         async with httpx.AsyncClient() as client:
             response = await client.post(
                 EQUITY_INSIGHT_MCP_URL,
@@ -22,15 +23,17 @@ async def equity_insight_node(state: Dict) -> Dict:
             
             if response.status_code == 200:
                 result = response.json()
-                output = result.get("output", "❌ No response from equity insights service")
+                equity_output = result.get("output", "❌ No response from equity insights service")
             else:
-                output = f"❌ Equity insights service error (status: {response.status_code})"
+                equity_output = f"❌ Equity insights service error (status: {response.status_code})"
                 
-    except httpx.RequestError as e:
-        output = f"❌ Failed to connect to equity insights service: {str(e)}"
-    except json.JSONDecodeError:
-        output = "❌ Invalid response from equity insights service"
     except Exception as e:
-        output = f"❌ Unexpected error calling equity insights service: {str(e)}"
+        equity_output = f"❌ Equity insights error: {str(e)}"
     
-    return {"output": output}
+    # Store result
+    updated_results = accumulated_results.copy()
+    updated_results["equity_insights"] = equity_output
+    
+    return {
+        "accumulated_results": updated_results
+    }

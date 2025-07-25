@@ -12,8 +12,9 @@ load_dotenv(env_path)
 
 anthropic = AsyncAnthropic(api_key=os.getenv("CLAUDE_API_KEY"))
 
-ROUTER_SYSTEM = """You are a router agent. You decide where to route a query: 'stock', 'equity_insights', or 'fallback'.
+ROUTER_SYSTEM = """You are an intelligent task detection and routing agent. You analyze queries to identify multiple tasks and route them appropriately.
 
+TASK DETECTION RULES:
 Route to 'stock' for:
 - Stock PRICES, quotes, real-time data ("What's AAPL price?")
 - Historical PRICE performance ("How has Tesla performed?")
@@ -27,7 +28,7 @@ Route to 'equity_insights' for:
 - ANALYST ratings and recommendations ("What are analyst ratings for NVDA?")
 - Company NEWS and press releases ("Show me recent news for MSFT")
 - INSIDER trading activity ("Insider trading for AAPL")
-- Comprehensive company ANALYSIS ("Full analysis of Tesla")
+
 
 Route to 'fallback' for:
 - General knowledge questions
@@ -35,38 +36,62 @@ Route to 'fallback' for:
 - Weather, geography, science, etc.
 - Any question not about stocks/finance
 
-Examples:
-"Tell me about Apple's company profile" → equity_insights
-"What's Apple's stock price?" → stock
-"What's the weather?" → fallback
+PLANNING RULES:
+- Analyze the FULL query and identify ALL tasks needed
+- Return tasks as a comma-separated list in priority order
+- Example: "What is the price of AAPL and give me news" → "stock,equity_insights"
+- Example: "Tell me about Apple's stock price" → "stock"
+- Example: "Give me Tesla news and price" → "equity_insights,stock"
+- Example: "Show me insider trading for NVDA and compare with AMD" → "equity_insights,stock"
 
-Only respond with one word: 'stock', 'equity_insights', or 'fallback'"""
+Only respond with: 'stock', 'equity_insights', 'fallback', or comma-separated combinations"""
 
 async def router_node(state: Dict) -> Dict:
     query = state.get("input", "")
-    print(f"🔧 ROUTER - Input query: '{query}'")
-
-    try:
-        response = await anthropic.messages.create(
-            model="claude-3-haiku-20240307",
-            max_tokens=20,
-            temperature=0,
-            system=ROUTER_SYSTEM,
-            messages=[{"role": "user", "content": query}],
-        )
-        route = response.content[0].text.strip().lower()
-    except Exception as e:
-        print(f"❌ ROUTER - Error calling Anthropic API: {e}")
-        route = "fallback"  # Default to fallback on error
-    print(f"🔧 ROUTER - Raw LLM response: '{route}'")
+    pending_tasks = state.get("pending_tasks", [])
+    accumulated_results = state.get("accumulated_results", {})
     
-    # Handle the three possible routes
-    if route == "stock":
-        decided_route = "stock"
-    elif route == "equity_insights":
-        decided_route = "equity_insights"
+    print(f"🔧 ROUTER - Query: '{query}', Pending: {pending_tasks}")
+    
+    # If no pending tasks, this is first time - plan the tasks
+    if not pending_tasks:
+        try:
+            response = await anthropic.messages.create(
+                model="claude-3-haiku-20240307",
+                max_tokens=50,
+                temperature=0,
+                system=ROUTER_SYSTEM,
+                messages=[{"role": "user", "content": f"Plan tasks for: {query}"}],
+            )
+            router_response = response.content[0].text.strip().lower()
+            print(f"🔧 ROUTER - Planned tasks: '{router_response}'")
+            
+            # Parse tasks (comma-separated or single)
+            if "," in router_response:
+                all_tasks = [task.strip() for task in router_response.split(",")]
+                first_task = all_tasks[0]
+                remaining_tasks = all_tasks[1:]
+            else:
+                first_task = router_response
+                remaining_tasks = []
+            
+            return {
+                "route": first_task,
+                "pending_tasks": remaining_tasks,
+                "accumulated_results": accumulated_results
+            }
+            
+        except Exception as e:
+            print(f"❌ ROUTER - Error: {e}")
+            return {"route": "fallback", "pending_tasks": [], "accumulated_results": accumulated_results}
+    
+    # Have pending tasks - execute next one
     else:
-        decided_route = "fallback"
-    
-    print(f"🔧 ROUTER - Final routing decision: '{decided_route}'")
-    return {"route": decided_route}
+        next_task = pending_tasks[0]
+        remaining_tasks = pending_tasks[1:]
+        print(f"🔧 ROUTER - Next: {next_task}, Remaining: {remaining_tasks}")
+        
+        return {
+            "route": next_task,
+            "pending_tasks": remaining_tasks
+        }

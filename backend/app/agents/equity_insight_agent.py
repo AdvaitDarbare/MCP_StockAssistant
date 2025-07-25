@@ -34,38 +34,36 @@ def get_tool_description(tool_name: str) -> str:
 
 async def plan_and_execute_with_tools(user_query: str) -> dict:
     """Use Claude to plan and execute using available tools"""
-    system_prompt = """You are an equity research assistant with access to these tools:
+    system_prompt = """You are an equity research assistant. Extract the ticker and return ONLY the ONE tool that matches the specific request.
 
 AVAILABLE TOOLS:
-1. get_company_overview(ticker) - Get basic company info, sectors, exchange
-2. get_analyst_ratings(ticker) - Get analyst recommendations and price targets  
-3. get_company_news(ticker, limit=8) - Get recent news articles (specify number)
-4. get_insider_trading(ticker, limit=8) - Get insider trading activity (specify number)
+1. get_company_overview(ticker) - Basic company info, sectors, exchange
+2. get_analyst_ratings(ticker) - Analyst recommendations and price targets  
+3. get_company_news(ticker, limit=8) - Recent news articles
+4. get_insider_trading(ticker, limit=8) - Insider buy/sell transactions
 
-Your job is to:
-1. Extract the ticker symbol from the user query
-2. Determine what tools to call based on the user's request
-3. Return a plan with the tools to execute
+CRITICAL RULES:
+- Return ONLY ONE tool that matches the request
+- Extract numbers from requests (e.g., "top 5" → limit: 5)
+- Do NOT add company overview unless specifically asked
 
 Return JSON:
 {
   "ticker": "SYMBOL",
   "tools_to_call": [
-    {"tool": "get_company_news", "params": {"ticker": "SYMBOL", "limit": 5}},
-    {"tool": "get_analyst_ratings", "params": {"ticker": "SYMBOL"}}
-  ],
-  "reasoning": "User wants news and ratings for this company"
+    {"tool": "tool_name", "params": {"ticker": "SYMBOL", "limit": X}}
+  ]
 }
 
-EXAMPLES:
-- "Tell me about Apple" → get_company_overview(AAPL)
-- "What are analyst ratings for Tesla?" → get_analyst_ratings(TSLA) 
-- "Show me 10 recent news for NVDA" → get_company_news(NVDA, limit=10)
-- "Insider trading for Microsoft" → get_insider_trading(MSFT)
-- "Full analysis of Google" → ALL tools for GOOGL
-- "Get me 5 insider trades for Apple" → get_insider_trading(AAPL, limit=5)
+CORRECT EXAMPLES:
+- "Show me top 5 insider tradings for NVDA" → get_insider_trading(NVDA, limit=5)
+- "Tesla news" → get_company_news(TSLA, limit=8)
+- "Apple analyst ratings" → get_analyst_ratings(AAPL)
+- "Tell me about Microsoft" → get_company_overview(MSFT)
 
-Be smart about extracting numbers from requests like "show me 10 articles" or "get 5 insider trades"."""
+WRONG - Do NOT do this:
+- Do NOT add multiple tools unless explicitly requested
+- Do NOT add company overview automatically"""
 
     try:
         response = await anthropic.messages.create(
@@ -133,7 +131,7 @@ Be smart about extracting numbers from requests like "show me 10 articles" or "g
         elif any(keyword in query_lower for keyword in ["analysis", "report", "everything", "all", "comprehensive"]):
             query_type = "all_insights"
         else:
-            query_type = "company_overview"  # Default
+            query_type = "unknown"  # Don't default to company overview
         
         # Check if query seems equity-related
         is_equity_related = (len(symbols) > 0 or 
@@ -673,10 +671,7 @@ async def handle_mcp(request: Request):
             output += "\n\n" + "="*50 + "\n\n"
             output += f"\n\n{'='*50}\n\n".join(results)
 
-        # Add intelligent follow-up suggestions
-        tools_used = [tool_call['tool'] for tool_call in plan['tools_to_call']]
-        follow_ups = await generate_follow_up_suggestions(tools_used, symbol, mcp_input.input)
-        output += follow_ups
+        # Note: Follow-up suggestions are handled by the frontend separately
 
         print(f"🔧 EQUITY AGENT - Final output length: {len(output)} chars")
         print(f"🎉 EQUITY AGENT - Successfully processed query using {len(plan['tools_to_call'])} tool(s)")
