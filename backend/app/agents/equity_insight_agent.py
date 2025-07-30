@@ -34,43 +34,41 @@ def get_tool_description(tool_name: str) -> str:
 
 async def plan_and_execute_with_tools(user_query: str) -> dict:
     """Use Claude to plan and execute using available tools"""
-    system_prompt = """You are an equity research assistant with access to these tools:
+    system_prompt = """You are an equity research assistant. Extract the ticker and return ONLY the ONE tool that matches the specific request.
 
 AVAILABLE TOOLS:
-1. get_company_overview(ticker) - Get basic company info, sectors, exchange
-2. get_analyst_ratings(ticker) - Get analyst recommendations and price targets  
-3. get_company_news(ticker, limit=8) - Get recent news articles (specify number)
-4. get_insider_trading(ticker, limit=8) - Get insider trading activity (specify number)
+1. get_company_overview(ticker) - Basic company info, sectors, exchange
+2. get_analyst_ratings(ticker) - Analyst recommendations and price targets  
+3. get_company_news(ticker, limit=8) - Recent news articles
+4. get_insider_trading(ticker, limit=8) - Insider buy/sell transactions
 
-Your job is to:
-1. Extract the ticker symbol from the user query
-2. Determine what tools to call based on the user's request
-3. Return a plan with the tools to execute
+CRITICAL RULES:
+- Return ONLY ONE tool that matches the request
+- Extract numbers from requests (e.g., "top 5" → limit: 5)
+- Do NOT add company overview unless specifically asked
 
 Return JSON:
 {
   "ticker": "SYMBOL",
   "tools_to_call": [
-    {"tool": "get_company_news", "params": {"ticker": "SYMBOL", "limit": 5}},
-    {"tool": "get_analyst_ratings", "params": {"ticker": "SYMBOL"}}
-  ],
-  "reasoning": "User wants news and ratings for this company"
+    {"tool": "tool_name", "params": {"ticker": "SYMBOL", "limit": X}}
+  ]
 }
 
-EXAMPLES:
-- "Tell me about Apple" → get_company_overview(AAPL)
-- "What are analyst ratings for Tesla?" → get_analyst_ratings(TSLA) 
-- "Show me 10 recent news for NVDA" → get_company_news(NVDA, limit=10)
-- "Insider trading for Microsoft" → get_insider_trading(MSFT)
-- "Full analysis of Google" → ALL tools for GOOGL
-- "Get me 5 insider trades for Apple" → get_insider_trading(AAPL, limit=5)
+CORRECT EXAMPLES:
+- "Show me top 5 insider tradings for NVDA" → get_insider_trading(NVDA, limit=5)
+- "Tesla news" → get_company_news(TSLA, limit=8)
+- "Apple analyst ratings" → get_analyst_ratings(AAPL)
+- "Tell me about Microsoft" → get_company_overview(MSFT)
 
-Be smart about extracting numbers from requests like "show me 10 articles" or "get 5 insider trades"."""
+WRONG - Do NOT do this:
+- Do NOT add multiple tools unless explicitly requested
+- Do NOT add company overview automatically"""
 
     try:
         response = await anthropic.messages.create(
             model="claude-3-haiku-20240307",
-            max_tokens=150,
+            max_tokens=300,
             temperature=0,
             system=system_prompt,
             messages=[{"role": "user", "content": user_query}],
@@ -133,7 +131,7 @@ Be smart about extracting numbers from requests like "show me 10 articles" or "g
         elif any(keyword in query_lower for keyword in ["analysis", "report", "everything", "all", "comprehensive"]):
             query_type = "all_insights"
         else:
-            query_type = "company_overview"  # Default
+            query_type = "unknown"  # Don't default to company overview
         
         # Check if query seems equity-related
         is_equity_related = (len(symbols) > 0 or 
@@ -158,12 +156,20 @@ def format_company_overview(data: dict) -> str:
     """Format company overview data"""
     if not data:
         return "❌ No company overview data available"
+    
+    # Format sectors nicely
+    sectors = data['sectors']
+    if isinstance(sectors, list):
+        sector_str = " • ".join(sectors)
+    else:
+        sector_str = str(sectors)
         
     return (
-        f"🏢 {data['ticker']} - {data['company_name']}\n"
-        f"Exchange: {data['exchange']}\n"
-        f"Sector: {data['sectors']}\n"
-        f"Company Profile: Available through Finviz\n"
+        f"🏢 **{data['ticker']} - {data['company_name']}**\n\n"
+        f"📈 **Exchange:** {data['exchange']}\n"
+        f"🏭 **Sectors:** {sector_str}\n"
+        f"📊 **Profile Status:** Available through Finviz\n"
+        f"✅ **Data Verified:** Company exists and trading"
     )
 
 def format_analyst_ratings(df, ticker: str = "Unknown") -> str:
@@ -464,6 +470,115 @@ def format_insider_trading(df, ticker: str = "Unknown", requested_count: int = 8
     
     return output
 
+async def generate_follow_up_suggestions(tools_used: list, ticker: str, user_query: str) -> str:
+    """Generate intelligent follow-up question suggestions validated by LLM"""
+    # All available tools and their capabilities
+    available_tools = {
+        'get_company_overview': f'Get basic company information for {ticker}',
+        'get_analyst_ratings': f'Get analyst recommendations and price targets for {ticker}',
+        'get_company_news': f'Get recent news articles about {ticker}',
+        'get_insider_trading': f'Get insider trading activity for {ticker}'
+    }
+    
+    # Cross-domain suggestions (Stock Agent tools)
+    cross_domain_tools = {
+        'stock_price': f'Get current stock price for {ticker}',
+        'stock_comparison': f'Compare {ticker} with other stocks',
+        'price_history': f'Get price history for {ticker}',
+        'market_movers': 'Get top market gainers/losers today'
+    }
+    
+    # Find unused equity tools
+    unused_equity_tools = [tool for tool in available_tools.keys() if tool not in tools_used]
+    
+    # Create base suggestions
+    base_suggestions = []
+    
+    # Add unused equity tool suggestions
+    for tool in unused_equity_tools[:2]:  # Limit to 2 equity suggestions
+        if tool == 'get_company_overview':
+            base_suggestions.append(f"Company overview of {ticker}")
+        elif tool == 'get_analyst_ratings':
+            base_suggestions.append(f"Analyst ratings for {ticker}")
+        elif tool == 'get_company_news':
+            base_suggestions.append(f"Recent news for {ticker}")
+        elif tool == 'get_insider_trading':
+            base_suggestions.append(f"Insider trading for {ticker}")
+    
+    # Add cross-analysis if only one tool was used
+    if len(tools_used) == 1:
+        base_suggestions.append(f"Full analysis of {ticker}")
+    
+    # Add cross-domain suggestions
+    base_suggestions.extend([
+        f"What's {ticker} stock price?",
+        f"Compare {ticker} vs GOOGL vs MSFT"
+    ])
+    
+    # Use LLM to validate and refine suggestions
+    try:
+        validation_prompt = f"""Given this user query: "{user_query}"
+And the tools already used: {tools_used}
+For ticker: {ticker}
+
+From these potential follow-up suggestions:
+{chr(10).join([f"- {s}" for s in base_suggestions])}
+
+Select and refine the 3-4 most relevant, natural follow-up questions that:
+1. Are directly answerable by our tools
+2. Provide complementary information to what was already shown
+3. Sound natural and conversational
+4. Are relevant to the user's apparent interest
+
+Return ONLY a numbered list with emojis, like:
+1. 📊 What are analyst ratings for {ticker}?
+2. 📈 What's {ticker} current stock price?
+3. 📰 Show me recent news for {ticker}"""
+
+        response = await anthropic.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=200,
+            temperature=0.3,
+            messages=[{"role": "user", "content": validation_prompt}]
+        )
+        
+        llm_suggestions = response.content[0].text.strip()
+        
+        # Validate that LLM returned a proper numbered list
+        if any(char.isdigit() and '. ' in llm_suggestions for char in llm_suggestions):
+            return f"\n\n__FOLLOW_UPS_START__\n{llm_suggestions}\n__FOLLOW_UPS_END__"
+        
+    except Exception as e:
+        print(f"⚠️ LLM validation failed, using fallback suggestions: {e}")
+    
+    # Fallback to hardcoded suggestions if LLM fails
+    if not base_suggestions:
+        return ""
+    
+    # Format for frontend parsing
+    formatted_suggestions = []
+    for i, suggestion in enumerate(base_suggestions[:4], 1):
+        # Add appropriate emoji based on content
+        if 'analyst' in suggestion.lower():
+            emoji = "📊"
+        elif 'news' in suggestion.lower():
+            emoji = "📰"
+        elif 'insider' in suggestion.lower():
+            emoji = "👥"
+        elif 'price' in suggestion.lower():
+            emoji = "📈"
+        elif 'compare' in suggestion.lower():
+            emoji = "⚖️"
+        elif 'overview' in suggestion.lower():
+            emoji = "🏢"
+        else:
+            emoji = "🔍"
+        
+        formatted_suggestions.append(f"{i}. {emoji} {suggestion}")
+    
+    suggestions_text = "\n".join(formatted_suggestions)
+    return f"\n\n__FOLLOW_UPS_START__\n{suggestions_text}\n__FOLLOW_UPS_END__"
+
 def format_all_insights(overview, ratings, news, insider, ticker) -> str:
     """Format comprehensive equity insights"""
     output = f"📈 Comprehensive Analysis for {ticker}\n\n"
@@ -472,7 +587,7 @@ def format_all_insights(overview, ratings, news, insider, ticker) -> str:
     output += format_company_overview(overview) + "\n\n"
     
     output += "=" * 50 + "\n"
-    output += format_analyst_ratings(ratings) + "\n\n"
+    output += format_analyst_ratings(ratings, ticker) + "\n\n"
     
     output += "=" * 50 + "\n"
     output += format_company_news(news) + "\n\n"
@@ -555,6 +670,8 @@ async def handle_mcp(request: Request):
             output = f"📊 Equity Analysis for {symbol}\n\n"
             output += "\n\n" + "="*50 + "\n\n"
             output += f"\n\n{'='*50}\n\n".join(results)
+
+        # Note: Follow-up suggestions are handled by the frontend separately
 
         print(f"🔧 EQUITY AGENT - Final output length: {len(output)} chars")
         print(f"🎉 EQUITY AGENT - Successfully processed query using {len(plan['tools_to_call'])} tool(s)")

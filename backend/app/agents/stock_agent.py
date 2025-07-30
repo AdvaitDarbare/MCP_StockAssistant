@@ -28,38 +28,192 @@ def get_tool_description(tool_name: str) -> str:
     }
     return descriptions.get(tool_name, f'🔧 Unknown tool: {tool_name}')
 
+async def generate_stock_follow_up_suggestions(tools_used: list, symbols: list = None, user_query: str = "") -> str:
+    """Generate intelligent follow-up question suggestions for stock queries with LLM validation"""
+    # All available stock tools
+    stock_tools = {
+        'get_stock_data': 'Get current stock price and quote',
+        'get_multiple_quotes': 'Compare multiple stocks side-by-side',
+        'get_price_history': 'Get historical price performance',
+        'get_market_movers': 'Get top gainers, losers, most active',
+        'get_market_hours': 'Get trading hours and schedules'
+    }
+    
+    # Find unused stock tools
+    unused_tools = [tool for tool in stock_tools.keys() if tool not in tools_used]
+    primary_symbol = symbols[0] if symbols and len(symbols) > 0 else "AAPL"
+    
+    # Create base suggestions
+    base_suggestions = []
+    
+    # Add unused stock tool suggestions
+    for tool in unused_tools[:2]:  # Limit to 2 stock suggestions
+        if tool == 'get_stock_data' and symbols and len(symbols) > 1:
+            base_suggestions.append(f"What's {primary_symbol} current stock price?")
+        elif tool == 'get_multiple_quotes' and symbols and len(symbols) == 1:
+            base_suggestions.append(f"Compare {primary_symbol} vs GOOGL vs MSFT")
+        elif tool == 'get_price_history':
+            base_suggestions.append(f"Show me 6 month price history for {primary_symbol}")
+        elif tool == 'get_market_movers':
+            base_suggestions.append(f"Show me today's top market gainers")
+        elif tool == 'get_market_hours':
+            base_suggestions.append(f"What are market hours today?")
+    
+    # Add cross-domain suggestions (equity insights)
+    if symbols and len(symbols) > 0:
+        base_suggestions.extend([
+            f"Tell me about {primary_symbol} company",
+            f"Recent news for {primary_symbol}",
+            f"Analyst ratings for {primary_symbol}"
+        ])
+    
+    # Use LLM to validate and refine suggestions  
+    try:
+        validation_prompt = f"""Given this stock market query: "{user_query}"
+And the tools already used: {tools_used}
+For symbols: {symbols or ['general market']}
+
+From these potential follow-up suggestions:
+{chr(10).join([f"- {s}" for s in base_suggestions])}
+
+Select and refine the 3-4 most relevant, natural follow-up questions that:
+1. Are directly answerable by our stock market and equity analysis tools
+2. Provide complementary information to what was already shown  
+3. Sound natural and conversational
+4. Are relevant to the user's trading/investment interests
+
+Return ONLY a numbered list with emojis, like:
+1. 📊 Compare {primary_symbol} vs GOOGL vs MSFT
+2. 📉 Show me 6 month history for {primary_symbol}
+3. 🏢 Tell me about {primary_symbol} company"""
+
+        response = await anthropic.messages.create(
+            model="claude-3-haiku-20240307",
+            max_tokens=200,
+            temperature=0.3,
+            messages=[{"role": "user", "content": validation_prompt}]
+        )
+        
+        llm_suggestions = response.content[0].text.strip()
+        
+        # Validate that LLM returned a proper numbered list
+        if any(char.isdigit() and '. ' in llm_suggestions for char in llm_suggestions):
+            return f"\n\n__FOLLOW_UPS_START__\n{llm_suggestions}\n__FOLLOW_UPS_END__"
+            
+    except Exception as e:
+        print(f"⚠️ LLM validation failed, using fallback suggestions: {e}")
+    
+    # Fallback to hardcoded suggestions if LLM fails
+    if not base_suggestions:
+        return ""
+    
+    # Format for frontend parsing
+    formatted_suggestions = []
+    for i, suggestion in enumerate(base_suggestions[:4], 1):
+        # Add appropriate emoji based on content
+        if 'price' in suggestion.lower() and 'history' not in suggestion.lower():
+            emoji = "📈"
+        elif 'compare' in suggestion.lower():
+            emoji = "📊"
+        elif 'history' in suggestion.lower():
+            emoji = "📉"
+        elif 'movers' in suggestion.lower() or 'gainers' in suggestion.lower():
+            emoji = "🚀"
+        elif 'hours' in suggestion.lower():
+            emoji = "🕐"
+        elif 'company' in suggestion.lower():
+            emoji = "🏢"
+        elif 'news' in suggestion.lower():
+            emoji = "📰"
+        elif 'analyst' in suggestion.lower():
+            emoji = "📊"
+        else:
+            emoji = "🔍"
+        
+        formatted_suggestions.append(f"{i}. {emoji} {suggestion}")
+    
+    suggestions_text = "\n".join(formatted_suggestions)
+    return f"\n\n__FOLLOW_UPS_START__\n{suggestions_text}\n__FOLLOW_UPS_END__"
+
 async def plan_and_execute_stock_tools(user_query: str) -> dict:
     """Use Claude to plan and execute stock market tools"""
-    system_prompt = """You are a stock market assistant with access to these tools:
+    system_prompt = """You are a stock market assistant. Return ONLY ONE tool that matches the user's stock-related request.
 
 AVAILABLE TOOLS:
-1. get_stock_data(symbol) - Get real-time quote for one stock
-2. get_multiple_quotes(symbols) - Compare multiple stocks side-by-side  
-3. get_price_history(symbol, period_type, period, frequency_type, frequency) - Historical performance
-4. get_market_movers(index, sort, frequency) - Top gainers/losers/volume leaders
-5. get_market_hours(markets, date) - Trading schedules and market status
+1. get_stock_data(symbol) - For getting a single stock's current price/quote
+2. get_multiple_quotes(symbols) - For comparing 2+ stocks side-by-side  
+3. get_price_history(symbol, period_type, period, frequency_type, frequency) - For historical price data
+4. get_market_movers(index, sort, frequency) - For market-wide lists (gainers/losers/volume)
+5. get_market_hours(markets, date) - For trading schedule information
 
-Your job is to:
-1. Extract relevant parameters from the user query
-2. Determine what tools to call based on the request
-3. Return a plan with the tools to execute
+CRITICAL RULES:
+- Return ONLY ONE tool per request
+- If user asks to "compare X with Y" → get_multiple_quotes
+- If user asks for "top 5 [anything about specific stocks]" → NOT market movers
+- Market movers ONLY for market-wide requests like "top gainers in market"
 
 Return JSON:
 {
   "tools_to_call": [
-    {"tool": "get_market_movers", "params": {"index": "NASDAQ", "sort": "VOLUME", "frequency": 1}},
-    {"tool": "get_stock_data", "params": {"symbol": "AAPL"}}
-  ],
-  "reasoning": "User wants market movers and a specific stock quote"
+    {"tool": "tool_name", "params": {...}}
+  ]
 }
 
-EXAMPLES:
-- "AAPL stock price" → get_stock_data(AAPL)
-- "Compare AAPL vs TSLA" → get_multiple_quotes([AAPL, TSLA])
-- "NVDA performance last 6 months" → get_price_history(NVDA, month, 6, daily, 1)
-- "Top gainers in NASDAQ" → get_market_movers(NASDAQ, PERCENT_CHANGE_UP, 1)
-- "Most active stocks by volume" → get_market_movers($SPX, VOLUME, 1)
-- "Market hours today" → get_market_hours([equity, option])
+CORRECT EXAMPLES:
+- "Compare NVDA stock price with AMD" → get_multiple_quotes([NVDA, AMD])
+- "AAPL price" → get_stock_data(AAPL)  
+- "AMD stock over past 6 months" → get_price_history(symbol=AMD, periodType=month, period=6, frequencyType=daily, frequency=1)
+- "Why AMD performance last year" → get_price_history(symbol=AMD, periodType=year, period=1, frequencyType=daily, frequency=1)
+- "AMD past 2 weeks" → get_price_history(symbol=AMD, periodType=day, period=10, frequencyType=minute, frequency=30)
+- "AMD past 1 week" → get_price_history(symbol=AMD, periodType=day, period=5, frequencyType=minute, frequency=30)
+- "Top market gainers" → get_market_movers(NASDAQ, PERCENT_CHANGE_UP, 1)
+
+WRONG - Do NOT do this:
+- "Compare NVDA with AMD" → Do NOT call market_movers + multiple_quotes
+- "Show top 5 insider trades and compare prices" → Do NOT call market_movers
+
+SCHWAB API PRICE HISTORY PARAMETERS - CRITICAL CONSTRAINTS:
+
+periodType="day": 
+  - period: MUST be one of [1, 2, 3, 4, 5, 10]
+  - frequencyType: MUST be "minute" (ONLY option)
+  - frequency: MUST be one of [1, 5, 10, 15, 30]
+  - Use for: intraday, "past 3 days", "past week", "past 10 days"
+
+periodType="month": 
+  - period: MUST be one of [1, 2, 3, 6]
+  - frequencyType: MUST be "daily" or "weekly"
+  - frequency: MUST be 1
+  - Use for: "past month", "past 2 months", "past 3 months", "past 6 months"
+
+periodType="year": 
+  - period: MUST be one of [1, 2, 3, 5, 10, 15, 20]
+  - frequencyType: MUST be "daily", "weekly", or "monthly"
+  - frequency: MUST be 1
+  - Use for: "past year", "past 2 years", "past 5 years"
+
+periodType="ytd": 
+  - period: MUST be 1
+  - frequencyType: MUST be "daily" or "weekly"
+  - frequency: MUST be 1
+  - Use for: "year to date", "ytd", "this year"
+
+TIME RANGE MAPPING - Use exact values:
+"past 3 days" → periodType: "day", period: 3, frequencyType: "minute", frequency: 30
+"past 5 days" → periodType: "day", period: 5, frequencyType: "minute", frequency: 30
+"past week" → periodType: "day", period: 5, frequencyType: "minute", frequency: 30
+"past 10 days" → periodType: "day", period: 10, frequencyType: "minute", frequency: 30
+"past 1 month" → periodType: "month", period: 1, frequencyType: "daily", frequency: 1
+"past 2 months" → periodType: "month", period: 2, frequencyType: "daily", frequency: 1
+"past 3 months" → periodType: "month", period: 3, frequencyType: "daily", frequency: 1
+"past 6 months" → periodType: "month", period: 6, frequencyType: "daily", frequency: 1
+"year to date" or "ytd" → periodType: "ytd", period: 1, frequencyType: "daily", frequency: 1
+"past year" or "past 1 year" → periodType: "year", period: 1, frequencyType: "daily", frequency: 1
+
+INVALID COMBINATIONS TO AVOID:
+- periodType="day" with frequencyType="daily" → INVALID
+- periodType="month" with period=4, 5, or any value not in [1,2,3,6] → INVALID
+- periodType="year" with frequencyType="minute" → INVALID
 
 Extract numbers, time periods, indices, and sort preferences intelligently."""
 
@@ -103,11 +257,10 @@ Extract numbers, time periods, indices, and sort preferences intelligently."""
         
         # Common non-stock words to exclude
         exclude_words = {
-            "THE", "AND", "OR", "FOR", "WITH", "OVER", "PAST", "LAST", "THIS", "THAT", 
+            "THE", "AND", "OR", "FOR", "WITH", "PAST", "LAST", "THIS", "THAT", 
             "WHAT", "HOW", "WHEN", "WHERE", "WHY", "SHOW", "GET", "FIND", "TELL", 
             "PRICE", "STOCK", "SHARE", "MARKET", "QUOTE", "DATA", "INFO", "CHANGE",
-            "PERCENT", "MONTH", "YEAR", "DAY", "WEEK", "TIME", "HISTORY",
-            "TREND", "CHART", "GRAPH", "COMPARE", "VS"
+            "PERCENT", "TIME", "HISTORY", "TREND", "CHART", "GRAPH", "COMPARE", "VS"
         }
         
         for word in words:
@@ -120,69 +273,60 @@ Extract numbers, time periods, indices, and sort preferences intelligently."""
         
         # Simple fallback - create basic tool calls based on keywords
         query_lower = user_query.lower()
-        tools_to_call = []
         
-        # Market hours
+        # ONLY ONE TOOL - prioritize based on most specific match
+        
+        # 1. Market hours (most specific)
         if any(keyword in query_lower for keyword in ["hours", "schedule", "open", "close", "trading times", "market open", "market close"]):
-            tools_to_call.append({
-                "tool": "get_market_hours",
-                "params": {"markets": ["equity", "option"]}
-            })
+            return {"tools_to_call": [{"tool": "get_market_hours", "params": {"markets": ["equity", "option"]}}]}
         
-        # Market movers
-        elif any(keyword in query_lower for keyword in ["gainers", "losers", "movers", "trending", "top stocks", "leaders", "winners", "volume", "most active", "trades", "biggest", "worst"]):
+        # 2. Stock comparison (has multiple symbols OR comparison words)
+        if len(symbols) > 1 or any(keyword in query_lower for keyword in ["compare", "vs", "versus", "against"]):
+            if symbols and len(symbols) >= 2:
+                return {"tools_to_call": [{"tool": "get_multiple_quotes", "params": {"symbols": symbols[:5]}}]}
+        
+        # 3. Price history - Enhanced fallback with better time range detection
+        if any(keyword in query_lower for keyword in ["performance", "history", "chart", "trend", "past", "month", "months", "year", "years", "week", "weeks", "over", "day", "days", "ytd", "year-to-date", "year to date"]) and symbols:
+            # Try to detect specific time ranges
+            if "3 day" in query_lower or "three day" in query_lower:
+                params = {"symbol": symbols[0], "periodType": "day", "period": 3, "frequencyType": "minute", "frequency": 30}
+            elif "5 day" in query_lower or "five day" in query_lower or "week" in query_lower:
+                params = {"symbol": symbols[0], "periodType": "day", "period": 5, "frequencyType": "minute", "frequency": 30}
+            elif "10 day" in query_lower or "ten day" in query_lower:
+                params = {"symbol": symbols[0], "periodType": "day", "period": 10, "frequencyType": "minute", "frequency": 30}
+            elif "2 month" in query_lower or "two month" in query_lower:
+                params = {"symbol": symbols[0], "periodType": "month", "period": 2, "frequencyType": "daily", "frequency": 1}
+            elif "3 month" in query_lower or "three month" in query_lower:
+                params = {"symbol": symbols[0], "periodType": "month", "period": 3, "frequencyType": "daily", "frequency": 1}
+            elif "6 month" in query_lower or "six month" in query_lower:
+                params = {"symbol": symbols[0], "periodType": "month", "period": 6, "frequencyType": "daily", "frequency": 1}
+            elif "ytd" in query_lower or "year to date" in query_lower or "year-to-date" in query_lower:
+                params = {"symbol": symbols[0], "periodType": "ytd", "period": 1, "frequencyType": "daily", "frequency": 1}
+            elif "1 year" in query_lower or "one year" in query_lower or ("year" in query_lower and "2" not in query_lower):
+                params = {"symbol": symbols[0], "periodType": "year", "period": 1, "frequencyType": "daily", "frequency": 1}
+            else:
+                # Default fallback to 1 month
+                params = {"symbol": symbols[0], "periodType": "month", "period": 1, "frequencyType": "daily", "frequency": 1}
+            
+            return {"tools_to_call": [{"tool": "get_price_history", "params": params}]}
+        
+        # 4. Market movers (ONLY for market-wide requests WITHOUT specific symbols)
+        if (not symbols or len(symbols) == 0) and any(keyword in query_lower for keyword in ["top gainers", "top losers", "market movers", "trending stocks", "market leaders", "biggest winners", "biggest losers", "volume leaders", "most active stocks"]):
             sort_type = "VOLUME" if any(word in query_lower for word in ["volume", "most active"]) else "PERCENT_CHANGE_UP"
-            tools_to_call.append({
-                "tool": "get_market_movers", 
-                "params": {"index": "$SPX", "sort": sort_type, "frequency": 1}
-            })
+            return {"tools_to_call": [{"tool": "get_market_movers", "params": {"index": "$SPX", "sort": sort_type, "frequency": 1}}]}
         
-        # Stock comparison
-        elif len(symbols) > 1 or any(keyword in query_lower for keyword in ["compare", "vs", "versus", "against"]):
-            if symbols:
-                tools_to_call.append({
-                    "tool": "get_multiple_quotes",
-                    "params": {"symbols": symbols[:5]}
-                })
+        # 5. Single stock quote (default if we have exactly one symbol)
+        if len(symbols) == 1:
+            return {"tools_to_call": [{"tool": "get_stock_data", "params": {"symbol": symbols[0]}}]}
         
-        # Price history
-        elif any(keyword in query_lower for keyword in ["performance", "history", "chart", "trend", "past", "month", "year"]) and symbols:
-            tools_to_call.append({
-                "tool": "get_price_history",
-                "params": {"symbol": symbols[0], "period_type": "month", "period": 1, "frequency_type": "daily", "frequency": 1}
-            })
-        
-        # Single stock quote
-        elif len(symbols) == 1:
-            tools_to_call.append({
-                "tool": "get_stock_data",
-                "params": {"symbol": symbols[0]}
-            })
-        
-        return {"tools_to_call": tools_to_call}
+        # 6. No valid stock request found
+        return {"tools_to_call": []}
 
 
 class MCPRequest(BaseModel):
     input: str  # Claude sends the raw user query here
     state: dict | None = None  # Optional memory / conversation state
 
-
-def convert_period_to_api_params(period_str: str) -> dict:
-    """Convert user-friendly period to API parameters"""
-    if not period_str:
-        return {"period_type": "month", "period": 1, "frequency_type": "daily", "frequency": 1}
-    
-    period_lower = period_str.lower()
-    if "ytd" in period_lower or "year to date" in period_lower:
-        return {"period_type": "ytd", "period": 1, "frequency_type": "daily", "frequency": 1}
-    elif "year" in period_lower or "12 month" in period_lower:
-        return {"period_type": "year", "period": 1, "frequency_type": "daily", "frequency": 1}
-    elif "6 month" in period_lower:
-        return {"period_type": "month", "period": 6, "frequency_type": "daily", "frequency": 1}
-    elif "3 month" in period_lower:
-        return {"period_type": "month", "period": 3, "frequency_type": "daily", "frequency": 1}
-    else:  # Default to 1 month
-        return {"period_type": "month", "period": 1, "frequency_type": "daily", "frequency": 1}
 
 def format_single_quote(data: dict) -> str:
     """Format a single stock quote"""
@@ -232,7 +376,21 @@ def format_price_history(history_data: dict) -> str:
     period_low = min(candle['low'] for candle in candles)
     
     change_emoji = "🔴" if period_change < 0 else "🟢"
-    period_text = f"{history_data.get('period', 1)} {history_data.get('period_type', 'month')}(s)"
+    
+    # Format period text based on parameters
+    period_type = history_data.get('period_type', 'month')
+    period = history_data.get('period', 1)
+    
+    if period_type == 'ytd':
+        period_text = "Year-to-Date"
+    elif period_type == 'day':
+        period_text = f"{period} day{'s' if period > 1 else ''}"
+    elif period_type == 'month':
+        period_text = f"{period} month{'s' if period > 1 else ''}"
+    elif period_type == 'year':
+        period_text = f"{period} year{'s' if period > 1 else ''}"
+    else:
+        period_text = f"{period} {period_type}{'s' if period > 1 else ''}"
     
     return (
         f"📈 {symbol} - {period_text} Performance:\n"
@@ -240,7 +398,7 @@ def format_price_history(history_data: dict) -> str:
         f"Period High: ${period_high:.2f}\n"
         f"Period Low: ${period_low:.2f}\n"
         f"Current: ${last_candle['close']:.2f}\n"
-        f"Data Points: {len(candles)} trading days"
+        f"Data Points: {len(candles)} trading periods"
     )
 
 def format_market_movers(movers_data: dict) -> str:
@@ -367,13 +525,16 @@ async def handle_mcp(request: Request):
                         
                 elif tool_name == 'get_price_history':
                     symbol = params['symbol']
-                    period_type = params.get('period_type', 'month')
+                    period_type = params.get('periodType', 'month')  # Note: API uses camelCase
                     period = params.get('period', 1)
-                    frequency_type = params.get('frequency_type', 'daily')
+                    frequency_type = params.get('frequencyType', 'daily')  # Note: API uses camelCase
                     frequency = params.get('frequency', 1)
                     
                     data = get_price_history(symbol, period_type, period, frequency_type, frequency)
                     if data:
+                        # Add parameters to data for formatting
+                        data['period_type'] = period_type
+                        data['period'] = period
                         results.append(format_price_history(data))
                         print(f"   ✅ Tool completed successfully - Got {period} {period_type}(s) history for {symbol}")
                         
@@ -411,6 +572,17 @@ async def handle_mcp(request: Request):
             # Multiple tools, combine with separators
             output = "📊 Stock Market Analysis\n\n"
             output += f"\n\n{'='*50}\n\n".join(results)
+
+        # Extract symbols for follow-up suggestions
+        symbols = []
+        for tool_call in plan['tools_to_call']:
+            params = tool_call.get('params', {})
+            if 'symbol' in params:
+                symbols.append(params['symbol'])
+            elif 'symbols' in params:
+                symbols.extend(params['symbols'])
+        
+        # Note: Follow-up suggestions are handled by the frontend separately
 
         print(f"🔧 STOCK AGENT - Final output length: {len(output)} chars")
         print(f"🎉 STOCK AGENT - Successfully processed query using {len(plan['tools_to_call'])} tool(s)")

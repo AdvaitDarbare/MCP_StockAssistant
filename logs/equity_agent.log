@@ -1,147 +1,126 @@
 INFO:     Will watch for changes in these directories: ['/Users/advaitdarbare/Desktop/ai-stock-assistant/backend']
 INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [50816] using WatchFiles
-INFO:     Started server process [50819]
+INFO:     Started reloader process [36752] using WatchFiles
+INFO:     Started server process [36761]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-🔧 EQUITY AGENT - Input received: 'Show me recent news for Apple'
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36761]
+INFO:     Started server process [38673]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [38673]
+INFO:     Started server process [39108]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [39108]
+INFO:     Started server process [42356]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42356]
+INFO:     Started server process [42717]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [42717]
+INFO:     Started server process [44841]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44841]
+INFO:     Started server process [44926]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44926]
+INFO:     Started server process [45108]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45108]
+INFO:     Started server process [45275]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45275]
+INFO:     Started server process [51621]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51621]
+INFO:     Started server process [51651]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🔧 EQUITY AGENT - Input received: 'AAPL stock over the past year and give me the top 3 insider trading and news'
 🔧 Equity LLM Response: {
   "ticker": "AAPL",
   "tools_to_call": [
-    {
-      "tool": "get_company_news",
-      "params": {
-        "ticker": "AAPL",
-        "limit": 8
-      }
-    }
-  ],
-  "reasoning": "The user has requested recent news for Apple, so I will call the get_company_news tool with the AAPL ticker and a limit of 8 articles."
+    {"tool": "get_insider_trading", "params": {"ticker": "AAPL", "limit": 3}},
+    {"tool": "get_company_news", "params": {"ticker": "AAPL", "limit": 3}}
+  ]
 }
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'AAPL', 'tools_to_call': [{'tool': 'get_company_news', 'params': {'ticker': 'AAPL', 'limit': 8}}], 'reasoning': 'The user has requested recent news for Apple, so I will call the get_company_news tool with the AAPL ticker and a limit of 8 articles.'}
+🔧 EQUITY AGENT - Plan generated: {'ticker': 'AAPL', 'tools_to_call': [{'tool': 'get_insider_trading', 'params': {'ticker': 'AAPL', 'limit': 3}}, {'tool': 'get_company_news', 'params': {'ticker': 'AAPL', 'limit': 3}}]}
+🔧 EQUITY AGENT - Executing TOOL: get_insider_trading
+   📋 Tool Description: 👥 Get insider buy/sell activity and officer transactions
+   ⚙️  Parameters: {'ticker': 'AAPL', 'limit': 3}
+   ✅ Tool completed successfully - Got 3 insider transactions for AAPL
 🔧 EQUITY AGENT - Executing TOOL: get_company_news
    📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'AAPL', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 news articles for AAPL
-🔧 EQUITY AGENT - Final output length: 1813 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51746 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: '  Show me analyst recommendations for Tesla'
-🔧 Equity LLM Response: {
-  "ticker": "TSLA",
-  "tools_to_call": [
-    {
-      "tool": "get_analyst_ratings",
-      "params": {
-        "ticker": "TSLA"
-      }
-    }
-  ],
-  "reasoning": "The user is requesting analyst recommendations for Tesla, so we will call the get_analyst_ratings tool with the TSLA ticker."
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'TSLA', 'tools_to_call': [{'tool': 'get_analyst_ratings', 'params': {'ticker': 'TSLA'}}], 'reasoning': 'The user is requesting analyst recommendations for Tesla, so we will call the get_analyst_ratings tool with the TSLA ticker.'}
-🔧 EQUITY AGENT - Executing TOOL: get_analyst_ratings
-   📋 Tool Description: 📊 Get analyst recommendations, price targets, and rating changes
-   ⚙️  Parameters: {'ticker': 'TSLA'}
-   ✅ Tool completed successfully - Got 20 analyst ratings for TSLA
-🔧 EQUITY AGENT - Final output length: 1004 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51784 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: '  What sector is Microsoft in?'
-🔧 Equity LLM Response: Here is the plan to get the sector information for Microsoft:
-
-{
-  "ticker": "MSFT",
-  "tools_to_call": [
-    {"tool": "get_company_overview", "params": {"ticker": "MSFT"}}
-  ],
-  "reasoning": "User wants to know the sector that Microsoft is in, so we need to call the get_company_overview tool to retrieve that information."
-}
-
-The get_company_overview tool will provide the basic company information for Microsoft, including the sector it operates in.
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'MSFT', 'tools_to_call': [{'tool': 'get_company_overview', 'params': {'ticker': 'MSFT'}}], 'reasoning': 'User wants to know the sector that Microsoft is in, so we need to call the get_company_overview tool to retrieve that information.'}
-🔧 EQUITY AGENT - Executing TOOL: get_company_overview
-   📋 Tool Description: 🏢 Get basic company information, sectors, and exchange details
-   ⚙️  Parameters: {'ticker': 'MSFT'}
-   ✅ Tool completed successfully - Got overview for MSFT (Microsoft Corporation)
-🔧 EQUITY AGENT - Final output length: 147 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51798 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: '  Tell me about Apple company'
-🔧 Equity LLM Response: Here is the plan to get information about the Apple company:
-
-{
-  "ticker": "AAPL",
-  "tools_to_call": [
-    {"tool": "get_company_overview", "params": {"ticker": "AAPL"}}
-  ],
-  "reasoning": "The user requested information about the Apple company, so we will call the get_company_overview tool to retrieve basic company details like the sector, exchange, and description."
-}
-
-The get_company_overview tool will provide an overview of the Apple company, including its ticker symbol (AAPL), the sectors it operates in, the exchange it trades on, and a brief company description.
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'AAPL', 'tools_to_call': [{'tool': 'get_company_overview', 'params': {'ticker': 'AAPL'}}], 'reasoning': 'The user requested information about the Apple company, so we will call the get_company_overview tool to retrieve basic company details like the sector, exchange, and description.'}
-🔧 EQUITY AGENT - Executing TOOL: get_company_overview
-   📋 Tool Description: 🏢 Get basic company information, sectors, and exchange details
-   ⚙️  Parameters: {'ticker': 'AAPL'}
-   ✅ Tool completed successfully - Got overview for AAPL (Apple Inc)
-🔧 EQUITY AGENT - Final output length: 130 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51824 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: '  Show me insider trading for SOFI'
+   ⚙️  Parameters: {'ticker': 'AAPL', 'limit': 3}
+   ✅ Tool completed successfully - Got 3 news articles for AAPL
+🔧 EQUITY AGENT - Final output length: 1592 chars
+🎉 EQUITY AGENT - Successfully processed query using 2 tool(s)
+INFO:     127.0.0.1:59425 - "POST /mcp HTTP/1.1" 200 OK
+🔧 EQUITY AGENT - Input received: 'SOFI stock over the past year and give me the top 3 insider trading and top 5 news'
 🔧 Equity LLM Response: {
   "ticker": "SOFI",
   "tools_to_call": [
-    {
-      "tool": "get_insider_trading",
-      "params": {
-        "ticker": "SOFI",
-        "limit": 8
-      }
-    }
-  ],
-  "reasoning": "The user has requested insider trading information for the company with ticker symbol SOFI, so I will call the get_insider_trading tool with the SOFI ticker and a limit of 8 results."
+    {"tool": "get_insider_trading", "params": {"ticker": "SOFI", "limit": 3}},
+    {"tool": "get_company_news", "params": {"ticker": "SOFI", "limit": 5}}
+  ]
 }
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'SOFI', 'tools_to_call': [{'tool': 'get_insider_trading', 'params': {'ticker': 'SOFI', 'limit': 8}}], 'reasoning': 'The user has requested insider trading information for the company with ticker symbol SOFI, so I will call the get_insider_trading tool with the SOFI ticker and a limit of 8 results.'}
+🔧 EQUITY AGENT - Plan generated: {'ticker': 'SOFI', 'tools_to_call': [{'tool': 'get_insider_trading', 'params': {'ticker': 'SOFI', 'limit': 3}}, {'tool': 'get_company_news', 'params': {'ticker': 'SOFI', 'limit': 5}}]}
 🔧 EQUITY AGENT - Executing TOOL: get_insider_trading
    📋 Tool Description: 👥 Get insider buy/sell activity and officer transactions
-   ⚙️  Parameters: {'ticker': 'SOFI', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 insider transactions for SOFI
-🔧 EQUITY AGENT - Final output length: 1962 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51862 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: '  Show me 5 recent news for Microsoft'
-🔧 Equity LLM Response: {
-  "ticker": "MSFT",
-  "tools_to_call": [
-    {
-      "tool": "get_company_news",
-      "params": {
-        "ticker": "MSFT",
-        "limit": 5
-      }
-    }
-  ],
-  "reasoning": "The user requested 5 recent news articles for Microsoft, so we will call the get_company_news tool with the ticker 'MSFT' and a limit of 5 articles."
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'MSFT', 'tools_to_call': [{'tool': 'get_company_news', 'params': {'ticker': 'MSFT', 'limit': 5}}], 'reasoning': "The user requested 5 recent news articles for Microsoft, so we will call the get_company_news tool with the ticker 'MSFT' and a limit of 5 articles."}
+   ⚙️  Parameters: {'ticker': 'SOFI', 'limit': 3}
+   ✅ Tool completed successfully - Got 3 insider transactions for SOFI
 🔧 EQUITY AGENT - Executing TOOL: get_company_news
    📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'MSFT', 'limit': 5}
-   ✅ Tool completed successfully - Got 5 news articles for MSFT
-🔧 EQUITY AGENT - Final output length: 1140 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:51950 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: '  Give me a full analysis of Apple'
-🔧 Equity LLM Response: {
-  "ticker": "AAPL",
-  "tools_to_call": [
-    {"tool": "get_company_overview", "params": {"ticker": "AAPL"}},
-    {"tool": "get_analyst_ratings", "params": {"ticker": "AAPL"}},
-    {"tool": "get_company_news", "params": {"ticker": "AAPL", "limit": 8}},
-    {"tool": "get_insider_trading", "params": {"ticker": "AAPL", "limit": 8}}
-  ],
-  "reasoning": "The user has requested a full analysis of
-❌ JSON decode error: Expecting ',' delimiter: line 7 column 78 (char 331)
-❌ Could not extract valid JSON from response
-🔧 EQUITY AGENT - Plan generated: None
-INFO:     127.0.0.1:52018 - "POST /mcp HTTP/1.1" 500 Internal Server Error
+   ⚙️  Parameters: {'ticker': 'SOFI', 'limit': 5}
+   ✅ Tool completed successfully - Got 5 news articles for SOFI
+🔧 EQUITY AGENT - Final output length: 2148 chars
+🎉 EQUITY AGENT - Successfully processed query using 2 tool(s)
+INFO:     127.0.0.1:59452 - "POST /mcp HTTP/1.1" 200 OK
