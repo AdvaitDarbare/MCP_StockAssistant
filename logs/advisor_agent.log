@@ -1,0 +1,193 @@
+INFO:     Will watch for changes in these directories: ['/Users/advaitdarbare/Desktop/ai-stock-assistant/backend']
+INFO:     Uvicorn running on http://127.0.0.1:8003 (Press CTRL+C to quit)
+INFO:     Started reloader process [17377] using WatchFiles
+INFO:     Started server process [17394]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:53798 - "GET /docs HTTP/1.1" 200 OK
+🎯 ADVISOR AGENT - Input received: 'Should I buy AAPL stock?'
+🔍 ADVISOR DEBUG - Analyzing query: 'Should I buy AAPL stock?'
+🔍 ADVISOR DEBUG - Calling Claude API for query analysis
+🔍 ADVISOR DEBUG - Claude API response received for analysis
+🔍 ADVISOR DEBUG - Analysis result: {'symbols': ['AAPL'], 'advice_type': 'buy_recommendation', 'data_needed': {'stock_data': True, 'equity_insights': True}}
+🎯 ADVISOR AGENT - Analysis: {'symbols': ['AAPL'], 'advice_type': 'buy_recommendation', 'data_needed': {'stock_data': True, 'equity_insights': True}}
+🔍 ADVISOR DEBUG - Starting data gathering phase
+🔍 ADVISOR DEBUG - Adding stock task for AAPL
+🔍 ADVISOR DEBUG - Adding equity task for AAPL
+🔍 ADVISOR DEBUG - Total tasks to execute: 2
+🔍 ADVISOR DEBUG - Executing 2 tasks in parallel...
+🔍 ADVISOR DEBUG - Calling stock agent with query: 'Get current price, performance, and key metrics for AAPL'
+🔍 ADVISOR DEBUG - Making request to stock agent at localhost:8020
+🔍 ADVISOR DEBUG - Calling equity agent with query: 'Get analyst ratings, recent news, and company overview for AAPL'
+🔍 ADVISOR DEBUG - Making request to equity agent at localhost:8001
+🔍 ADVISOR DEBUG - Stock agent response status: 200
+🔍 ADVISOR DEBUG - Stock agent returned 155 chars
+🔍 ADVISOR DEBUG - Equity agent response status: 200
+🔍 ADVISOR DEBUG - Equity agent returned 3224 chars
+🔍 ADVISOR DEBUG - All tasks completed, processing results...
+✅ Got stock data: 155 chars
+✅ Got equity data: 3224 chars
+🔍 ADVISOR DEBUG - Generating investment advice...
+🔍 ADVISOR DEBUG - Entering advice generation with stock_data: 155 chars, equity_data: 3224 chars
+🔍 ADVISOR DEBUG - Calling Claude API for advice generation
+🔍 ADVISOR DEBUG - Claude API response received for advice
+🔍 ADVISOR DEBUG - Investment advice generated: 2250 chars
+🎯 ADVISOR AGENT - Generated advice: 2455 chars
+INFO:     127.0.0.1:53838 - "POST /mcp HTTP/1.1" 200 OK
+🎯 ADVISOR AGENT - Input received: 'Should I sell my NVDA shares'
+🔍 ADVISOR DEBUG - Analyzing query: 'Should I sell my NVDA shares'
+🔍 ADVISOR DEBUG - Calling Claude API for query analysis
+🔍 ADVISOR DEBUG - Claude API response received for analysis
+🔍 ADVISOR DEBUG - Analysis result: {'symbols': ['NVDA'], 'advice_type': 'buy_recommendation', 'data_needed': {'stock_data': True, 'equity_insights': True}}
+🎯 ADVISOR AGENT - Analysis: {'symbols': ['NVDA'], 'advice_type': 'buy_recommendation', 'data_needed': {'stock_data': True, 'equity_insights': True}}
+🔍 ADVISOR DEBUG - Starting data gathering phase
+🔍 ADVISOR DEBUG - Adding stock task for NVDA
+🔍 ADVISOR DEBUG - Adding equity task for NVDA
+🔍 ADVISOR DEBUG - Total tasks to execute: 2
+🔍 ADVISOR DEBUG - Executing 2 tasks in parallel...
+🔍 ADVISOR DEBUG - Calling stock agent with query: 'Get current price, performance, and key metrics for NVDA'
+🔍 ADVISOR DEBUG - Making request to stock agent at localhost:8020
+🔍 ADVISOR DEBUG - Calling equity agent with query: 'Get analyst ratings, recent news, and company overview for NVDA'
+🔍 ADVISOR DEBUG - Making request to equity agent at localhost:8001
+🔍 ADVISOR DEBUG - Stock agent response status: 200
+🔍 ADVISOR DEBUG - Stock agent returned 154 chars
+🔍 ADVISOR DEBUG - Equity agent response status: 200
+🔍 ADVISOR DEBUG - Equity agent returned 3236 chars
+🔍 ADVISOR DEBUG - All tasks completed, processing results...
+✅ Got stock data: 154 chars
+✅ Got equity data: 3236 chars
+🔍 ADVISOR DEBUG - Generating investment advice...
+🔍 ADVISOR DEBUG - Entering advice generation with stock_data: 154 chars, equity_data: 3236 chars
+🔍 ADVISOR DEBUG - Calling Claude API for advice generation
+🔍 ADVISOR DEBUG - Claude API response received for advice
+🔍 ADVISOR DEBUG - Investment advice generated: 2394 chars
+🎯 ADVISOR AGENT - Generated advice: 2597 chars
+INFO:     127.0.0.1:53951 - "POST /mcp HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [17394]
+INFO:     Started server process [24248]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24248]
+INFO:     Started server process [24457]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24457]
+INFO:     Started server process [24663]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'setup_schwab_auth.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [24663]
+INFO:     Started server process [25677]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [25677]
+INFO:     Started server process [26881]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [26881]
+INFO:     Started server process [27079]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27079]
+INFO:     Started server process [27144]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'setup_schwab_auth.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [27144]
+INFO:     Started server process [32403]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32403]
+INFO:     Started server process [33604]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33604]
+INFO:     Started server process [34458]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34458]
+INFO:     Started server process [34526]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34526]
+INFO:     Started server process [34680]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34680]
+INFO:     Started server process [34732]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34732]
+INFO:     Started server process [34908]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34908]
+INFO:     Started server process [35072]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'setup_schwab_auth.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [35072]
+INFO:     Started server process [35737]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
