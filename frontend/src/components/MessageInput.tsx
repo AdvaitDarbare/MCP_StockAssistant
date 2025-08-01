@@ -37,16 +37,19 @@ export function MessageInput({ onSendMessage, isLoading }: MessageInputProps) {
   };
 
   return (
-    <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 p-4">
+    <div className="sticky bottom-0 backdrop-blur-xl border-t p-6" style={{backgroundColor: 'var(--whisper-white)', borderColor: 'var(--misty-gray)', opacity: 0.95}}>
       <div className="max-w-4xl mx-auto">
-        <div className="relative flex items-end gap-3 bg-white rounded-xl border border-gray-300 p-2 shadow-sm focus-within:ring-2 focus-within:ring-primary-500 focus-within:border-transparent">
+        <div className="relative flex items-end gap-4 backdrop-blur-sm rounded-2xl border p-4 shadow-2xl" style={{backgroundColor: 'var(--light-fog)', borderColor: 'var(--misty-gray)'}} onFocus={(e) => {
+            e.currentTarget.style.boxShadow = '0 0 0 2px rgba(74, 85, 104, 0.2)';
+            e.currentTarget.style.borderColor = 'var(--slate-blue)';
+          }}>
           <textarea
             ref={textareaRef}
             value={message}
             onChange={handleTextareaChange}
             onKeyDown={handleKeyDown}
-            placeholder="Ask about stock prices, company info, market data..."
-            className="flex-1 resize-none bg-transparent border-none outline-none text-gray-900 placeholder-gray-500 px-2 py-2 max-h-[120px] min-h-[40px]"
+            placeholder="Real-time quotes • Historical data • Company insights • Market analysis..."
+            className="flex-1 resize-none bg-transparent border-none outline-none px-3 py-3 max-h-[120px] min-h-[40px] text-base leading-relaxed" style={{color: 'var(--graphite-gray)'}}
             rows={1}
             disabled={isLoading}
           />
@@ -54,7 +57,7 @@ export function MessageInput({ onSendMessage, isLoading }: MessageInputProps) {
           <button
             onClick={handleSubmit}
             disabled={!message.trim() || isLoading}
-            className="flex-shrink-0 p-2 bg-primary-500 hover:bg-primary-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg transition-colors duration-200"
+            className="flex-shrink-0 p-3 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50" style={{background: 'linear-gradient(to bottom right, var(--slate-blue), #667eea)'}}
           >
             {isLoading ? (
               <Loader2 className="w-5 h-5 animate-spin" />
@@ -64,9 +67,11 @@ export function MessageInput({ onSendMessage, isLoading }: MessageInputProps) {
           </button>
         </div>
         
-        <p className="text-xs text-gray-500 mt-2 text-center">
-          Press Enter to send, Shift+Enter for new line
-        </p>
+        <div className="text-center mt-3">
+          <p className="text-xs font-medium" style={{color: 'var(--misty-gray)'}}>
+            Press <kbd className="px-2 py-1 rounded text-xs border" style={{backgroundColor: 'var(--light-fog)', color: 'var(--graphite-gray)', borderColor: 'var(--misty-gray)'}}>Enter</kbd> to send • <kbd className="px-2 py-1 rounded text-xs border" style={{backgroundColor: 'var(--light-fog)', color: 'var(--graphite-gray)', borderColor: 'var(--misty-gray)'}}>Shift + Enter</kbd> for new line
+          </p>
+        </div>
       </div>
     </div>
   );

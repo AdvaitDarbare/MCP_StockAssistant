@@ -15,20 +15,28 @@ anthropic = AsyncAnthropic(api_key=os.getenv("CLAUDE_API_KEY"))
 ROUTER_SYSTEM = """You are an intelligent task detection and routing agent. You analyze queries to identify multiple tasks and route them appropriately.
 
 TASK DETECTION RULES:
-Route to 'stock' for:
+
+Route to 'advisor' for INVESTMENT ADVICE & RECOMMENDATIONS:
+- Buy/sell recommendations ("Should I buy AAPL?", "Is TSLA a good investment?")
+- Investment timing ("Is now a good time to buy?", "Should I wait?")
+- Risk analysis ("What are the risks of NVDA?", "How risky is this stock?")
+- Portfolio advice ("Should I diversify?", "What allocation?")
+- Investment comparisons ("Which is better for investment: AAPL or GOOGL?")
+- Financial outlook ("Is AMZN a good long-term investment?")
+
+Route to 'stock' for MARKET DATA & PRICES:
 - Stock PRICES, quotes, real-time data ("What's AAPL price?")
 - Historical PRICE performance ("How has Tesla performed?")
 - Market movers, gainers/losers ("Show me top gainers")
 - Trading hours and market status ("Is the market open?")
-- Multi-stock comparisons ("Compare AAPL vs MSFT")
+- Multi-stock comparisons for DATA ("Compare AAPL vs MSFT prices")
 
-Route to 'equity_insights' for:
+Route to 'equity_insights' for COMPANY INFORMATION:
 - Company PROFILES, overviews, about the company ("Tell me about Apple")
 - Company SECTORS, business details ("What sector is Tesla in?")
 - ANALYST ratings and recommendations ("What are analyst ratings for NVDA?")
 - Company NEWS and press releases ("Show me recent news for MSFT")
 - INSIDER trading activity ("Insider trading for AAPL")
-
 
 Route to 'fallback' for:
 - General knowledge questions
@@ -36,15 +44,22 @@ Route to 'fallback' for:
 - Weather, geography, science, etc.
 - Any question not about stocks/finance
 
+IMPORTANT DISTINCTION:
+- "Should I buy AAPL?" → 'advisor' (investment recommendation)
+- "What's AAPL price?" → 'stock' (market data)
+- "Tell me about Apple" → 'equity_insights' (company info)
+- "What are risks of AAPL?" → 'advisor' (risk analysis)
+- "Analyst ratings for AAPL" → 'equity_insights' (data gathering)
+
 PLANNING RULES:
 - Analyze the FULL query and identify ALL tasks needed
 - Return tasks as a comma-separated list in priority order
-- Example: "What is the price of AAPL and give me news" → "stock,equity_insights"
+- Example: "Should I buy AAPL and what's its price?" → "advisor"
 - Example: "Tell me about Apple's stock price" → "stock"
-- Example: "Give me Tesla news and price" → "equity_insights,stock"
-- Example: "Show me insider trading for NVDA and compare with AMD" → "equity_insights,stock"
+- Example: "Give me Tesla news and should I invest?" → "equity_insights,advisor"
+- Example: "Compare AAPL vs GOOGL for investment" → "advisor"
 
-Only respond with: 'stock', 'equity_insights', 'fallback', or comma-separated combinations"""
+Only respond with: 'advisor', 'stock', 'equity_insights', 'fallback', or comma-separated combinations"""
 
 async def router_node(state: Dict) -> Dict:
     query = state.get("input", "")

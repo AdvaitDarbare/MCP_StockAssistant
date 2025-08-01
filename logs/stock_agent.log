@@ -1,800 +1,182 @@
 INFO:     Will watch for changes in these directories: ['/Users/advaitdarbare/Desktop/ai-stock-assistant/backend']
 INFO:     Uvicorn running on http://127.0.0.1:8020 (Press CTRL+C to quit)
-INFO:     Started reloader process [36750] using WatchFiles
-INFO:     Started server process [36759]
+INFO:     Started reloader process [63439] using WatchFiles
+Address already in use
+Port 8182 is in use by another program. Either identify and stop that program, or start the server with a different port.
+
+***********************************************************************
+
+This is the browser-assisted login and token creation flow for
+schwab-py. This flow automatically opens the login page on your
+browser, captures the resulting OAuth callback, and creates a token
+using the result. The authorization URL is:
+
+>> https://api.schwabapi.com/v1/oauth/authorize?response_type=code&client_id=xO7QgNUrbfzuQa41kHo92DFOs91GGDj8&redirect_uri=https%3A%2F%2F127.0.0.1%3A8182&state=j0bx6um3scUMRniJMEAmg8elom87jW
+
+IMPORTANT: Your browser will give you a security warning about an
+invalid certificate prior to issuing the redirect. This is because
+schwab-py has started a server on your machine to receive the OAuth
+redirect using a self-signed SSL certificate. You can ignore that
+warning, but make sure to first check that the URL matches your
+callback URL, ignoring URL parameters. As a reminder, your callback URL
+is:
+
+>> https://127.0.0.1:8182
+
+See here to learn more about self-signed SSL certificates:
+https://schwab-py.readthedocs.io/en/latest/auth.html#ssl-errors
+
+If you encounter any issues, see here for troubleshooting:
+https://schwab-py.readthedocs.io/en/latest/auth.html#troubleshooting
+***********************************************************************
+
+Press ENTER to open the browser. Note you can call this method with interactive=False to skip this input.Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/server.py", line 66, in run
+    return asyncio.run(self.serve(sockets=sockets))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 194, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/server.py", line 70, in serve
+    await self._serve(sockets)
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/server.py", line 77, in _serve
+    config.load()
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/config.py", line 435, in load
+    self.loaded_app = import_from_string(self.app)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 995, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/Users/advaitdarbare/Desktop/ai-stock-assistant/backend/app/agents/stock_agent.py", line 10, in <module>
+    from ..services.schwab_client import get_stock_data, get_multiple_quotes, get_price_history, get_market_movers, get_market_hours
+  File "/Users/advaitdarbare/Desktop/ai-stock-assistant/backend/app/services/schwab_client.py", line 14, in <module>
+    client = easy_client(
+             ^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/schwab/auth.py", line 746, in easy_client
+    c = client_from_login_flow(
+        ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.12/lib/python3.12/site-packages/schwab/auth.py", line 340, in client_from_login_flow
+    input('Press ENTER to open the browser. Note you can call ' +
+EOFError: EOF when reading a line
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
+INFO:     Started server process [66866]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 1 week'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 5,
-        "frequencyType": "minute",
-        "frequency": 30
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}
-INFO:     127.0.0.1:58536 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 2 week'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 10,
-        "frequencyType": "minute",
-        "frequency": 30
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 10, 'frequencyType': 'minute', 'frequency': 30}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 10, 'frequencyType': 'minute', 'frequency': 30}
-INFO:     127.0.0.1:58546 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 1 month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58555 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 2 month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 2,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 2, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 2, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 2 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58563 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 3 month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 3,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 3, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 3, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 3 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 151 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58570 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 4 month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 4,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 4, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 4, 'frequencyType': 'daily', 'frequency': 1}
-INFO:     127.0.0.1:58576 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 6 month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 6,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 6, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 6, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 6 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58583 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 4 days'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 4,
-        "frequencyType": "minute",
-        "frequency": 30
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 4, 'frequencyType': 'minute', 'frequency': 30}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 4, 'frequencyType': 'minute', 'frequency': 30}
-INFO:     127.0.0.1:58591 - "POST /mcp HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [36759]
-INFO:     Started server process [38660]
+INFO:     Finished server process [66866]
+INFO:     Started server process [67100]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [38660]
-INFO:     Started server process [39106]
+INFO:     Finished server process [67100]
+INFO:     Started server process [67319]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 1 week'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 5,
-        "frequencyType": "minute",
-        "frequency": 30
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}
-INFO:     127.0.0.1:58744 - "POST /mcp HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [39106]
-INFO:     Started server process [42354]
+INFO:     Finished server process [67319]
+INFO:     Started server process [68022]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+⚠️ Schwab credentials not available or token missing - using fallback APIs only
+🔧 STOCK AGENT - Input received: 'What is AAPL stock price?'
+🔧 Stock LLM Response: {
+  "tools_to_call": [
+    {
+      "tool": "get_stock_data",
+      "params": {
+        "symbol": "AAPL"
+      }
+    }
+  ]
+}
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}]}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'AAPL'}
+INFO:     127.0.0.1:52221 - "POST /mcp HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [42354]
-INFO:     Started server process [42719]
+INFO:     Finished server process [68022]
+INFO:     Started server process [70421]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 2 weeks'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 10,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 10, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 10, 'frequencyType': 'daily', 'frequency': 1}
-INFO:     127.0.0.1:58908 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 1 weeks'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 5,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'daily', 'frequency': 1}
-INFO:     127.0.0.1:58918 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past  month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58927 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 2 month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 2,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 2, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 2, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 2 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58935 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 3 month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 3,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 3, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 3, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 3 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 151 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58941 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past 6 month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 6,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 6, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 6, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 6 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58946 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past year'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "year",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:58951 - "POST /mcp HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
+WARNING:  WatchFiles detected changes in 'app/services/schwab_client.py'. Reloading...
 INFO:     Shutting down
 INFO:     Waiting for application shutdown.
 INFO:     Application shutdown complete.
-INFO:     Finished server process [42719]
-INFO:     Started server process [44842]
+INFO:     Finished server process [70421]
+INFO:     Started server process [70881]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [44842]
-INFO:     Started server process [44925]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [44925]
-INFO:     Started server process [45109]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [45109]
-INFO:     Started server process [45274]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past year'
+⚠️ Schwab credentials not available or token missing - using fallback APIs only
+🔧 STOCK AGENT - Input received: 'What is AAPL stock price?'
 🔧 Stock LLM Response: {
   "tools_to_call": [
     {
-      "tool": "get_price_history",
+      "tool": "get_stock_data",
       "params": {
-        "symbol": "AMD",
-        "periodType": "year",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
+        "symbol": "AAPL"
       }
     }
   ]
 }
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}]}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'AAPL'}
+📊 Using fallback data for AAPL
+   ✅ Tool completed successfully - Got quote for AAPL
+🔧 STOCK AGENT - Final output length: 155 chars
 🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59115 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the 4 months'
+INFO:     127.0.0.1:52344 - "POST /mcp HTTP/1.1" 200 OK
+🔧 STOCK AGENT - Input received: 'What's AAPL stock price?'
 🔧 Stock LLM Response: {
   "tools_to_call": [
     {
-      "tool": "get_price_history",
+      "tool": "get_stock_data",
       "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 4,
-        "frequencyType": "daily",
-        "frequency": 1
+        "symbol": "AAPL"
       }
     }
   ]
 }
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 4, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 4, 'frequencyType': 'daily', 'frequency': 1}
-INFO:     127.0.0.1:59123 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the 6 months'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 6,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 6, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 6, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 6 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}]}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'AAPL'}
+📊 Using fallback data for AAPL
+   ✅ Tool completed successfully - Got quote for AAPL
+🔧 STOCK AGENT - Final output length: 155 chars
 🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59131 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the week'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 5,
-        "frequencyType": "minute",
-        "frequency": 30
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}
-INFO:     127.0.0.1:59136 - "POST /mcp HTTP/1.1" 200 OK
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [45274]
-INFO:     Started server process [51618]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-WARNING:  WatchFiles detected changes in 'app/agents/stock_agent.py'. Reloading...
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [51618]
-INFO:     Started server process [51648]
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-🔧 STOCK AGENT - Input received: 'AMD stock price over the week'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 5,
-        "frequencyType": "minute",
-        "frequency": 30
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}
-   ✅ Tool completed successfully - Got 5 day(s) history for AMD
-🔧 STOCK AGENT - Final output length: 150 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59234 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59257 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "month",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 month(s) history for AMD
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59265 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past day'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "day",
-        "period": 1,
-        "frequencyType": "minute",
-        "frequency": 30
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'day', 'period': 1, 'frequencyType': 'minute', 'frequency': 30}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'day', 'period': 1, 'frequencyType': 'minute', 'frequency': 30}
-   ✅ Tool completed successfully - Got 1 day(s) history for AMD
-🔧 STOCK AGENT - Final output length: 148 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59273 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AMD stock price over the past year'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AMD",
-        "periodType": "year",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AMD', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AMD', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 year(s) history for AMD
-🔧 STOCK AGENT - Final output length: 151 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59330 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AAPL stock over the past week'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AAPL",
-        "periodType": "day",
-        "period": 5,
-        "frequencyType": "minute",
-        "frequency": 30
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AAPL', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AAPL', 'periodType': 'day', 'period': 5, 'frequencyType': 'minute', 'frequency': 30}
-   ✅ Tool completed successfully - Got 5 day(s) history for AAPL
-🔧 STOCK AGENT - Final output length: 151 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59382 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AAPL stock over the past month'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AAPL",
-        "periodType": "month",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AAPL', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AAPL', 'periodType': 'month', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 month(s) history for AAPL
-🔧 STOCK AGENT - Final output length: 152 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59395 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AAPL stock over the 6 month'
-🔧 Stock LLM Response: Here is the tool to call to get the price history for AAPL stock over the past 6 months:
-
-{
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AAPL",
-        "periodType": "month",
-        "period": 6,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-
-The key parameters are:
-- periodType: "month" (to get monthly data)
-- period: 6 (for the past 6 months)
-- frequencyType: "daily" (to get daily price data)
-- frequency: 1 (since daily data has a frequency of 1 day)
-
-This will provide the historical price data for Apple (AAPL) stock over the past 6 months at a daily frequency.
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AAPL', 'periodType': 'month', 'period': 6, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AAPL', 'periodType': 'month', 'period': 6, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 6 month(s) history for AAPL
-🔧 STOCK AGENT - Final output length: 153 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59403 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AAPL stock over the past year'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AAPL",
-        "periodType": "year",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AAPL', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AAPL', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 year(s) history for AAPL
-🔧 STOCK AGENT - Final output length: 151 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59411 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'AAPL stock over the past year and give me the top 3 insider trading and news'
-🔧 Stock LLM Response: Here is the tool to call to get the requested information:
-
-{
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "AAPL",
-        "periodType": "year",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-
-The user is requesting historical price data for Apple (AAPL) stock over the past year. This can be accomplished using the `get_price_history` tool with the following parameters:
-
-- `symbol`: "AAPL"
-- `periodType`: "year"
-- `period`: 1 (for 1 year)
-- `frequencyType`: "daily" 
-- `frequency`: 1 (daily frequency)
-
-The request for "top 3 insider trading and news" is not a stock-specific request, so I will not return a tool for that. The user should make a separate request for that information.
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'AAPL', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'AAPL', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 year(s) history for AAPL
-🔧 STOCK AGENT - Final output length: 151 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59420 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'SOFI stock over the past year and give me the top 3 insider trading and top 5 news'
-🔧 Stock LLM Response: Here is the tool to call to get the requested information:
-
-{
-  "tools_to_call": [
-    {
-      "tool": "get_price_history",
-      "params": {
-        "symbol": "SOFI",
-        "periodType": "year",
-        "period": 1,
-        "frequencyType": "daily",
-        "frequency": 1
-      }
-    }
-  ]
-}
-
-The user is requesting historical price data for SOFI stock over the past year, which can be retrieved using the `get_price_history` tool with the appropriate parameters.
-
-The request for "top 3 insider trading and top 5 news" is not something that can be directly fulfilled by the available tools. The tools provided are focused on retrieving stock price data and market-wide information, but do not include functionality for fetching insider trading data or news articles. To get that type of information, you would need to integrate with additional data sources or services that specialize in those areas.
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_price_history', 'params': {'symbol': 'SOFI', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}}]}
-🔧 STOCK AGENT - Executing TOOL: get_price_history
-   📋 Tool Description: 📉 Get historical price performance over time periods
-   ⚙️  Parameters: {'symbol': 'SOFI', 'periodType': 'year', 'period': 1, 'frequencyType': 'daily', 'frequency': 1}
-   ✅ Tool completed successfully - Got 1 year(s) history for SOFI
-🔧 STOCK AGENT - Final output length: 150 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:59447 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52405 - "POST /mcp HTTP/1.1" 200 OK

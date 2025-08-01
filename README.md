@@ -7,7 +7,8 @@ A comprehensive AI-powered stock market assistant built with **LangGraph**, **Cl
 This AI Stock Assistant features a **multi-agent architecture** that automatically routes queries to specialized agents:
 
 - 📈 **Stock Agent**: Real-time prices, comparisons, historical data, market movers, trading hours
-- 🏢 **Equity Insights Agent**: Company overviews, analyst ratings, news, insider trading  
+- 🏢 **Equity Insights Agent**: Company overviews, analyst ratings, news, insider trading
+- 🎯 **Investment Advisor Agent**: Buy/sell recommendations, risk analysis, investment strategy
 - 🧠 **Intelligent Router**: AI-powered query classification and routing
 - 🔗 **LangGraph Integration**: Unified conversation flow and state management
 
@@ -21,6 +22,7 @@ The system intelligently handles complex multi-part queries, automatically routi
 "Tell me about Apple company" → 🏢 Equity Insights Agent  
 "Compare AAPL vs TSLA" → 📈 Stock Agent
 "Show me insider trading for NVDA" → 🏢 Equity Insights Agent
+"Should I buy Tesla stock?" → 🎯 Investment Advisor Agent
 
 🆕 MULTI-PART QUERIES:
 "Show me top 5 insider trades for NVDA and compare with AMD" 
@@ -30,6 +32,10 @@ The system intelligently handles complex multi-part queries, automatically routi
 "What's Tesla price and recent news?" 
   → 📈 Stock Agent (price) + 🏢 Equity Insights (news)
   → 🔄 Combined comprehensive analysis
+
+"Should I invest in Apple? What are the risks?"
+  → 🎯 Investment Advisor (calls Stock + Equity agents for data)
+  → 🔄 Comprehensive investment recommendation with risk analysis
 ```
 
 ### 🧠 **LLM-Powered Dynamic Routing**
@@ -38,7 +44,7 @@ The system intelligently handles complex multi-part queries, automatically routi
 - **Context-Aware Synthesis**: Combines results from multiple agents into coherent responses
 - **Precise Tool Selection**: Only calls tools explicitly requested (no extra information)
 
-### 🛠️ **Available Tools (9 Total)**
+### 🛠️ **Available Tools (11 Total)**
 
 #### 📈 **Stock Agent Tools (5 tools)**
 | Tool | Purpose | Example Queries | 🆕 Dynamic Features |
@@ -56,6 +62,12 @@ The system intelligently handles complex multi-part queries, automatically routi
 | **get_analyst_ratings** | Analyst recommendations | "Analyst ratings for NVDA", "Price targets for AMD" | Recent rating changes |
 | **get_company_news** | Recent news articles | "Recent news for Apple", "Show me 10 Tesla articles" | **🎯 Custom limits:** "top 5", "show me 15" |
 | **get_insider_trading** | Insider activity | "Insider trading for AAPL", "Show me 5 AMD insider trades" | **🎯 Custom limits:** "top 5", "show me 10" |
+
+#### 🎯 **Investment Advisor Agent Tools (2 advanced tools)**
+| Tool | Purpose | Example Queries | 🎯 Advanced Features |
+|------|---------|-----------------|-------------------|
+| **analyze_investment_query** | Query analysis & symbol extraction | "Should I invest in Apple?", "Tesla vs Google analysis" | **🤖 LLM-powered:** Auto-extracts symbols, determines advice type |
+| **generate_investment_advice** | Comprehensive recommendations | "Should I buy AAPL?", "What are TSLA risks?" | **📊 Multi-agent synthesis:** Combines stock + equity data into structured advice |
 
 ## 🎮 **Sample Queries & Responses**
 
@@ -139,6 +151,47 @@ Sector: ['Technology', 'Consumer Electronics', 'USA']
 Company Profile: Available through Finviz
 ```
 
+### 🎯 **Investment Advice & Risk Analysis**
+
+**Query**: `"Should I buy Apple stock?"`
+```
+🎯 Investment Recommendation
+💚 BUY - Confidence Level: High (8/10)
+Strong fundamentals and market position support long-term growth
+
+📊 Current Analysis 
+• Price: $230.85 (+0.94%) - Trading near strong support levels
+• Market Cap: Leading technology company with diversified revenue
+• 52W Performance: +41% showing consistent growth trajectory
+• Recent momentum: Positive sentiment following earnings beat
+
+⚖️ Risk Assessment
+Risk Level: Medium 
+• Market Risk: Technology sector volatility during economic uncertainty
+• Company Risk: iPhone dependency (~50% revenue), China market exposure
+• Regulatory Risk: Potential antitrust scrutiny, App Store policies
+• Valuation Risk: Premium valuation requires continued growth execution
+
+💡 Reasoning
+1. **Strong Ecosystem**: Services growth (20%+ annually) provides recurring revenue
+2. **Innovation Pipeline**: AI integration, AR/VR positioning for future growth
+3. **Financial Strength**: $29B quarterly revenue, strong balance sheet, shareholder returns
+
+⚠️ Important Considerations
+• Wait for pullback below $225 for better entry point
+• China tensions could impact 18% of revenue from region
+• High valuation (25x P/E) leaves little room for disappointment
+
+📈 Actionable Advice
+• Position Size: 3-5% of portfolio maximum (blue-chip allocation)
+• Entry Strategy: Dollar-cost average over 2-3 months
+• Timeline: 3-5 year investment horizon recommended
+• Stop Loss: Consider 15% below entry for risk management
+
+⚡ Risk Warning: Past performance doesn't guarantee future results. 
+Consider your risk tolerance and investment timeline before investing.
+```
+
 **Query**: `"Show me insider trading for AMD"`
 ```
 👥 Insider Trading Activity for AMD
@@ -194,22 +247,22 @@ Company Profile: Available through Finviz
       │ │ 4. Result Synthesis                │   │
       │ └────────────────────────────────────┘   │
       │                                          │
-┌─────▼──────┐                          ┌──────▼──────────┐
-│ 📈 Stock    │                          │ 🏢 Equity        │
-│   Agent     │                          │   Insights      │
-│             │                          │   Agent         │
-│ • Quotes    │                          │ • Company Info  │
-│ • History   │ ◄──── Dynamic Params ────┤ • Analyst Data  │
-│ • Movers    │       (LLM Selected)     │ • News          │
-│ • Hours     │                          │ • Insider       │
-└─────┬──────┘                          └──────┬──────────┘
-      │                                        │
-┌─────▼──────┐                          ┌──────▼──────────┐
-│ 📊 Schwab  │                          │ 📰 Finviz       │
-│   API      │                          │   API           │
-└────────────┘                          └─────────────────┘
-      │                                        │
-      └──────────┬─── Results ─────┬───────────┘
+┌─────▼──────┐              ┌──────▼──────────┐              ┌──────▼──────────┐
+│ 📈 Stock    │              │ 🏢 Equity        │              │ 🎯 Investment   │
+│   Agent     │              │   Insights      │              │   Advisor       │
+│             │              │   Agent         │              │   Agent         │
+│ • Quotes    │              │ • Company Info  │              │ • Buy/Sell Rec │
+│ • History   │◄─ Dynamic ──►│ • Analyst Data  │◄─ Synthesis ─│ • Risk Analysis │
+│ • Movers    │   Params     │ • News          │   Calls      │ • Strategy      │
+│ • Hours     │ (LLM Select) │ • Insider       │              │ • Advice        │
+└─────┬──────┘              └──────┬──────────┘              └──────┬──────────┘
+      │                            │                                │
+┌─────▼──────┐              ┌──────▼──────────┐              ┌──────▼──────────┐
+│ 📊 Schwab  │              │ 📰 Finviz       │              │ 🤖 Claude AI    │
+│   API      │              │   API           │              │   Analysis      │
+└────────────┘              └─────────────────┘              └─────────────────┘
+      │                            │                                │
+      └──────────┬─── Results ─────┼────────────────────────────────┘
                  │                 │
            ┌─────▼─────────────────▼─────┐
            │    🔄 Result Synthesizer    │
@@ -244,7 +297,8 @@ ai-stock-assistant/
 │   ├── app/
 │   │   ├── agents/
 │   │   │   ├── stock_agent.py           # 📈 Stock market data agent
-│   │   │   └── equity_insight_agent.py  # 🏢 Company insights agent
+│   │   │   ├── equity_insight_agent.py  # 🏢 Company insights agent
+│   │   │   └── advisor_agent.py         # 🎯 Investment advisor agent
 │   │   ├── services/
 │   │   │   ├── schwab_client.py         # Schwab API integration
 │   │   │   └── finviz_client.py         # Finviz data scraping
@@ -252,6 +306,7 @@ ai-stock-assistant/
 │   │   │   ├── router_node.py           # 🧠 Intelligent routing
 │   │   │   ├── stock_node.py            # Stock agent integration
 │   │   │   ├── equity_insight_node.py   # Equity agent integration
+│   │   │   ├── advisor_node.py          # Investment advisor integration
 │   │   │   └── build_graph.py           # LangGraph configuration
 │   │   └── main.py                      # FastAPI + LangGraph server
 │   └── requirements.txt
@@ -377,11 +432,12 @@ cp .env.example .env
 This script automatically:
 - Starts Stock Agent (port 8020)
 - Starts Equity Insights Agent (port 8001)
+- Starts Investment Advisor Agent (port 8003)
 - Starts React Frontend (port 3000)
 - Starts LangGraph Development Server (port 2024)
 - Opens LangGraph Studio in your browser
 
-### **Manual Setup (4 Terminals)**
+### **Manual Setup (5 Terminals)**
 ```bash
 # Terminal 1 - Stock Agent
 cd backend
@@ -391,11 +447,15 @@ uvicorn app.agents.stock_agent:app --reload --port 8020
 cd backend
 uvicorn app.agents.equity_insight_agent:app --reload --port 8001
 
-# Terminal 3 - Frontend
+# Terminal 3 - Investment Advisor Agent
+cd backend
+uvicorn app.agents.advisor_agent:app --reload --port 8003
+
+# Terminal 4 - Frontend
 cd frontend
 npm install && npm start
 
-# Terminal 4 - LangGraph Dev Server
+# Terminal 5 - LangGraph Dev Server
 langgraph dev
 ```
 
@@ -405,6 +465,7 @@ langgraph dev
 - **🔗 API Endpoint**: http://127.0.0.1:2024/runs
 - **📈 Stock Agent Direct**: http://127.0.0.1:8020
 - **🏢 Equity Agent Direct**: http://127.0.0.1:8001
+- **🎯 Advisor Agent Direct**: http://127.0.0.1:8003
 
 ## 🧪 **Test Queries**
 
@@ -457,6 +518,39 @@ langgraph dev
 "Insider trading for AAPL"
 "Show me AMD insider activity"
 "Give me 5 insider trades for Tesla"
+```
+
+### **Investment Advice & Risk Analysis (Routes to Advisor Agent)**
+```bash
+# Buy/Sell recommendations
+"Should I buy Apple stock?"
+"Is Tesla a good investment right now?"
+"Should I sell my NVDA shares?"
+"Is Amazon stock worth buying?"
+
+# Risk analysis
+"What are the risks of investing in Tesla?"
+"How risky is Apple stock?"
+"Risk analysis for NVDA investment"
+"What could go wrong with Microsoft investment?"
+
+# Investment strategy
+"How much should I invest in Apple?"
+"When is the best time to buy Tesla?"
+"Should I wait for a dip in GOOGL?"
+"Position sizing for tech stocks"
+
+# Portfolio advice
+"Should I diversify from Apple to other tech stocks?"
+"Compare Tesla vs Ford for investment"
+"Which is better: AAPL or MSFT for long-term?"
+"Tech stock allocation advice"
+
+# Market timing
+"Is now a good time to invest in stocks?"
+"Should I buy NVDA before earnings?"
+"When should I take profits on Tesla?"
+"Market timing for Apple stock"
 ```
 
 ### 🆕 **Dynamic Time Range Queries**

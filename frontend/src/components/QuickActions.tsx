@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, BarChart3, Clock, Building2, Newspaper, Users } from 'lucide-react';
+import { DollarSign, BarChart3, Clock, Building2, Newspaper, Users } from 'lucide-react';
 
 interface QuickActionsProps {
   onActionClick: (message: string) => void;
@@ -8,48 +8,60 @@ interface QuickActionsProps {
 
 const quickActions = [
   {
-    icon: TrendingUp,
+    icon: DollarSign,
+    iconColor: "text-blue-400",
     label: "Stock Price",
     message: "What's AAPL stock price?",
-    color: "text-green-600 bg-green-50 border-green-200"
+    description: "What's AAPL stock price?"
   },
   {
     icon: BarChart3,
-    label: "Compare Stocks", 
+    iconColor: "text-teal-400", 
+    label: "Compare Stocks",
     message: "Compare AAPL vs GOOGL vs MSFT",
-    color: "text-blue-600 bg-blue-50 border-blue-200"
+    description: "Compare AAPL vs GOOGL vs MSFT"
   },
   {
     icon: Clock,
+    iconColor: "text-emerald-400",
     label: "Market Hours",
     message: "What are market hours today?",
-    color: "text-purple-600 bg-purple-50 border-purple-200"
+    description: "What are market hours today?"
   },
   {
     icon: Building2,
+    iconColor: "text-cyan-400",
     label: "Company Info",
-    message: "Tell me about Apple company",
-    color: "text-orange-600 bg-orange-50 border-orange-200"
+    message: "Tell me about Apple company", 
+    description: "Tell me about Apple company"
   },
   {
     icon: Newspaper,
+    iconColor: "text-amber-400",
     label: "Latest News",
     message: "Recent news for Tesla",
-    color: "text-cyan-600 bg-cyan-50 border-cyan-200"
-  },  
+    description: "Recent news for Tesla"
+  },
   {
     icon: Users,
-    label: "Insider Trading",
+    iconColor: "text-indigo-400",
+    label: "Insider Trading", 
     message: "Show me insider trading for NVDA",
-    color: "text-pink-600 bg-pink-50 border-pink-200"
+    description: "Show me insider trading for NVDA"
   }
 ];
 
 export function QuickActions({ onActionClick, isLoading }: QuickActionsProps) {
   return (
-    <div className="mb-6">
-      <h3 className="text-sm font-medium text-gray-700 mb-3">Quick Actions</h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+    <div className="mb-12">
+      <div className="text-center mb-8">
+        <h2 className="text-3xl font-bold mb-3 tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, sans-serif', color: 'var(--graphite-gray)'}}>
+          Market Intelligence at Your Fingertips
+        </h2>
+        <p className="text-lg font-light" style={{color: 'var(--misty-gray)'}}>Explore stocks, analyze trends, and make informed decisions</p>
+      </div>
+      
+      <div className="grid grid-cols-3 gap-5">
         {quickActions.map((action, index) => {
           const Icon = action.icon;
           return (
@@ -57,19 +69,32 @@ export function QuickActions({ onActionClick, isLoading }: QuickActionsProps) {
               key={index}
               onClick={() => onActionClick(action.message)}
               disabled={isLoading}
-              className={`
-                p-3 rounded-lg border transition-all duration-200 text-left
-                hover:shadow-sm disabled:opacity-50 disabled:cursor-not-allowed
-                ${action.color}
-              `}
+              className="backdrop-blur-sm border rounded-xl p-5 text-left hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed group shadow-lg hover:shadow-xl min-h-[120px] flex flex-col justify-between"
+              style={{
+                backgroundColor: 'var(--whisper-white)',
+                borderColor: 'var(--misty-gray)',
+                opacity: 0.9
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--light-fog)';
+                e.currentTarget.style.borderColor = 'var(--slate-blue)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'var(--whisper-white)';
+                e.currentTarget.style.borderColor = 'var(--misty-gray)';
+              }}
             >
-              <div className="flex items-center gap-2 mb-1">
-                <Icon className="w-4 h-4" />
-                <span className="text-sm font-medium">{action.label}</span>
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center border" style={{background: 'linear-gradient(to bottom right, var(--light-fog), var(--whisper-white))', borderColor: 'var(--misty-gray)'}}>
+                    <Icon className={`w-4 h-4 ${action.iconColor}`} />
+                  </div>
+                  <span className="font-semibold text-base" style={{color: 'var(--graphite-gray)'}}>{action.label}</span>
+                </div>
+                <p className="text-sm leading-relaxed group-hover:opacity-80" style={{color: 'var(--misty-gray)'}}>
+                  {action.description}
+                </p>  
               </div>
-              <p className="text-xs opacity-75 line-clamp-1">
-                {action.message}
-              </p>
             </button>
           );
         })}

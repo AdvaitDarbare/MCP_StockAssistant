@@ -2,15 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 
 @layer base {
+  :root {
+    --whisper-white: #fefefe;
+    --graphite-gray: #2d3748;
+    --misty-gray: #000000;
+    --slate-blue: #4a5568;
+    --sage-green: #68d391;
+    --dusty-coral: #fc8181;
+    --light-fog: #f7fafc;
+  }
+
   html {
     font-family: Inter, system-ui, sans-serif;
   }
   
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    background: linear-gradient(to bottom right, var(--whisper-white), var(--light-fog));
+    color: var(--graphite-gray);
+    @apply antialiased;
   }
 
   /* Custom scrollbar */
@@ -19,40 +31,71 @@
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-gray-100;
+    background-color: var(--light-fog);
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
+    background-color: var(--misty-gray);
+    border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
+    background-color: var(--slate-blue);
   }
 }
 
 @layer components {
   /* Message bubbles */
   .message-user {
-    @apply bg-primary-500 text-white rounded-2xl rounded-br-md px-4 py-3 max-w-lg ml-auto animate-slide-up;
+    background: linear-gradient(to bottom right, var(--slate-blue), #667eea);
+    color: white;
+    @apply rounded-2xl rounded-br-md px-4 py-3 max-w-lg ml-auto animate-slide-up;
   }
 
   .message-assistant {
-    @apply bg-white text-gray-900 rounded-2xl rounded-bl-md px-4 py-3 max-w-4xl border border-gray-200 shadow-sm animate-slide-up;
+    background-color: var(--whisper-white);
+    color: var(--graphite-gray);
+    border-color: var(--misty-gray);
+    @apply rounded-2xl rounded-bl-md px-4 py-3 max-w-4xl border backdrop-blur-sm animate-slide-up;
   }
 
   /* Input styles */
   .input-primary {
-    @apply w-full px-4 py-3 bg-white border border-gray-300 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+    background-color: var(--light-fog);
+    color: var(--graphite-gray);
+    border-color: var(--misty-gray);
+    @apply w-full px-4 py-3 border rounded-xl focus:outline-none transition-all duration-200;
+  }
+  
+  .input-primary:focus {
+    box-shadow: 0 0 0 2px rgba(74, 85, 104, 0.2);
+    border-color: var(--slate-blue);
+  }
+  
+  .input-primary::placeholder {
+    color: var(--misty-gray);
   }
 
   /* Button styles */
   .btn-primary {
-    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium px-4 py-2 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    background: linear-gradient(to bottom right, var(--slate-blue), #667eea);
+    color: white;
+    @apply font-medium px-4 py-2 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .btn-primary:hover {
+    background: linear-gradient(to bottom right, #667eea, var(--slate-blue));
   }
 
   .btn-secondary {
-    @apply bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+    background-color: var(--light-fog);
+    color: var(--graphite-gray);
+    @apply font-medium px-4 py-2 rounded-lg transition-colors duration-200;
+  }
+  
+  .btn-secondary:hover {
+    background-color: var(--whisper-white);
+    border: 1px solid var(--misty-gray);
   }
 
   /* Loading animations */
@@ -67,12 +110,22 @@
 
   /* Stock data cards */
   .stock-card {
-    @apply bg-white rounded-lg border border-gray-200 p-4 shadow-sm hover:shadow-md transition-shadow duration-200;
+    background-color: var(--whisper-white);
+    border-color: var(--misty-gray);
+    @apply rounded-lg border p-4 backdrop-blur-sm transition-all duration-200;
+  }
+  
+  .stock-card:hover {
+    background-color: var(--light-fog);
+    border-color: var(--slate-blue);
   }
 
   /* Syntax highlighting for code blocks */
   .code-block {
-    @apply bg-gray-900 text-gray-100 rounded-lg p-4 font-mono text-sm overflow-x-auto;
+    background-color: var(--light-fog);
+    color: var(--graphite-gray);
+    border-color: var(--misty-gray);
+    @apply rounded-lg p-4 font-mono text-sm overflow-x-auto border;
   }
 }
 

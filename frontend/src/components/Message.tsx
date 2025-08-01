@@ -45,7 +45,7 @@ export function Message({ message, onFollowUpClick, isLoading = false }: Message
       // Code blocks ```code``` -> <pre><code>code</code></pre>
       .replace(/```(.*?)```/gs, '<pre class="code-block"><code>$1</code></pre>')
       // Inline code `code` -> <code>code</code>
-      .replace(/`([^`]+)`/g, '<code class="bg-gray-100 px-1 py-0.5 rounded text-sm">$1</code>')
+      .replace(/`([^`]+)`/g, '<code class="bg-gray-800 text-blue-300 px-2 py-1 rounded text-sm font-mono">$1</code>')
       // Line breaks
       .replace(/\n/g, '<br />');
 
@@ -55,7 +55,7 @@ export function Message({ message, onFollowUpClick, isLoading = false }: Message
   return (
     <div className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'} mb-6`}>
       {!isUser && (
-        <div className="flex-shrink-0 w-8 h-8 bg-primary-500 rounded-full flex items-center justify-center">
+        <div className="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
           <Bot className="w-5 h-5 text-white" />
         </div>
       )}
@@ -63,7 +63,8 @@ export function Message({ message, onFollowUpClick, isLoading = false }: Message
       <div className={`flex flex-col ${isUser ? 'items-end' : 'items-start'} max-w-4xl`}>
         <div className={isUser ? 'message-user' : 'message-assistant'}>
           <div 
-            className={`prose ${isUser ? 'prose-invert' : ''} prose-sm max-w-none`}
+            className={`prose ${isUser ? 'prose-invert' : 'prose-invert'} prose-sm max-w-none`}
+            style={{fontFamily: 'Inter, system-ui, sans-serif'}}
             dangerouslySetInnerHTML={{ __html: formatContent(cleanContent) }}
           />
         </div>
@@ -88,7 +89,7 @@ export function Message({ message, onFollowUpClick, isLoading = false }: Message
       </div>
 
       {isUser && (
-        <div className="flex-shrink-0 w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
+        <div className="flex-shrink-0 w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
           <User className="w-5 h-5 text-white" />
         </div>
       )}
