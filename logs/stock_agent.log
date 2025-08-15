@@ -1,10 +1,11 @@
 INFO:     Will watch for changes in these directories: ['/Users/advaitdarbare/Desktop/ai-stock-assistant/backend']
 INFO:     Uvicorn running on http://127.0.0.1:8020 (Press CTRL+C to quit)
-INFO:     Started reloader process [38039] using WatchFiles
-INFO:     Started server process [38148]
+INFO:     Started reloader process [22211] using WatchFiles
+INFO:     Started server process [22241]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-✅ Schwab client initialized successfully
+⚠️ Schwab credentials not available or token missing
+⚠️ Run setup_schwab_auth.py to authenticate first
 🔧 STOCK AGENT - Input received: 'What's AAPL stock price?'
 🔧 Stock LLM Response: {
   "tools_to_call": [
@@ -20,28 +21,95 @@ INFO:     Application startup complete.
 🔧 STOCK AGENT - Executing TOOL: get_stock_data
    📋 Tool Description: 📈 Get real-time quote and price data for a single stock
    ⚙️  Parameters: {'symbol': 'AAPL'}
-   ✅ Tool completed successfully - Got quote for AAPL
-🔧 STOCK AGENT - Final output length: 221 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:54901 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'NVDA stock price'
-🔧 Stock LLM Response: Here is the tool to call to get the current stock price for NVDA:
+❌ Schwab client not initialized. Run setup_schwab_auth.py first.
+INFO:     127.0.0.1:60943 - "POST /mcp HTTP/1.1" 200 OK
+🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for AAPL'
+🔧 Stock LLM Response: {
+  "tools_to_call": [
+    {
+      "tool": "get_stock_data",
+      "params": {
+        "symbol": "AAPL"
+      }
+    }
+  ]
+}
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}]}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'AAPL'}
+❌ Schwab client not initialized. Run setup_schwab_auth.py first.
+INFO:     127.0.0.1:60964 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61045 - "POST /mcp HTTP/1.1" 500 Internal Server Error
+🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for AAPL'
+🔧 Stock LLM Response: {
+  "tools_to_call": [
+    {
+      "tool": "get_stock_data",
+      "params": {
+        "symbol": "AAPL"
+      }
+    }
+  ]
+}
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}]}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'AAPL'}
+❌ Schwab client not initialized. Run setup_schwab_auth.py first.
+INFO:     127.0.0.1:61322 - "POST /mcp HTTP/1.1" 200 OK
+🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for INTC'
+🔧 Stock LLM Response: Here is the tool to call to get the current price, performance, and key metrics for the INTC stock:
 
 {
   "tools_to_call": [
     {
       "tool": "get_stock_data",
       "params": {
-        "symbol": "NVDA"
+        "symbol": "INTC"
       }
     }
   ]
 }
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'NVDA'}}]}
+
+This will retrieve the current quote and key metrics for the Intel (INTC) stock.
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'INTC'}}]}
 🔧 STOCK AGENT - Executing TOOL: get_stock_data
    📋 Tool Description: 📈 Get real-time quote and price data for a single stock
-   ⚙️  Parameters: {'symbol': 'NVDA'}
-   ✅ Tool completed successfully - Got quote for NVDA
-🔧 STOCK AGENT - Final output length: 220 chars
-🎉 STOCK AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:54911 - "POST /mcp HTTP/1.1" 200 OK
+   ⚙️  Parameters: {'symbol': 'INTC'}
+❌ Schwab client not initialized. Run setup_schwab_auth.py first.
+INFO:     127.0.0.1:61419 - "POST /mcp HTTP/1.1" 200 OK
+🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for BOFA'
+🔧 Stock LLM Response: {
+  "tools_to_call": [
+    {
+      "tool": "get_stock_data",
+      "params": {
+        "symbol": "BOFA"
+      }
+    }
+  ]
+}
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'BOFA'}}]}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'BOFA'}
+❌ Schwab client not initialized. Run setup_schwab_auth.py first.
+INFO:     127.0.0.1:61470 - "POST /mcp HTTP/1.1" 200 OK
+🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for BOFA'
+🔧 Stock LLM Response: {
+  "tools_to_call": [
+    {
+      "tool": "get_stock_data",
+      "params": {
+        "symbol": "BOFA"
+      }
+    }
+  ]
+}
+🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'BOFA'}}]}
+🔧 STOCK AGENT - Executing TOOL: get_stock_data
+   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
+   ⚙️  Parameters: {'symbol': 'BOFA'}
+❌ Schwab client not initialized. Run setup_schwab_auth.py first.
+INFO:     127.0.0.1:61483 - "POST /mcp HTTP/1.1" 200 OK

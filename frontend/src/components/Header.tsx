@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, RefreshCw, Trash2 } from 'lucide-react';
 
-interface HeaderProps {
-  onClearChat: () => void;
-}
+interface HeaderProps {}
 
-export function Header({ onClearChat }: HeaderProps) {
+export function Header({}: HeaderProps) {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [isMarketOpen, setIsMarketOpen] = useState(false);
 
@@ -42,36 +39,22 @@ export function Header({ onClearChat }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-10 backdrop-blur-xl border-b px-4 py-3" style={{backgroundColor: 'var(--whisper-white)', borderColor: 'var(--misty-gray)', opacity: 0.95}}>
-      <div className="max-w-4xl mx-auto flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg" style={{background: 'linear-gradient(to bottom right, var(--slate-blue), #667eea)'}}>
-            <BarChart3 className="w-6 h-6 text-white" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight" style={{fontFamily: 'Space Grotesk, Inter, system-ui, sans-serif', color: 'var(--graphite-gray)'}}>
-              AI Stock Assistant
-            </h1>
-            <p className="text-sm font-medium" style={{color: 'var(--misty-gray)'}}>Market Intelligence Platform</p>
+    <header className="sticky top-0 z-10 backdrop-blur-xl border-b px-6 py-3" style={{backgroundColor: 'var(--whisper-white)', borderColor: 'var(--misty-gray)', opacity: 0.95}}>
+      <div className="flex items-center justify-end gap-4">
+        <div className="text-right">
+          <div className="font-mono text-sm font-medium" style={{color: 'var(--graphite-gray)'}}>{formatTime(currentTime)}</div>
+          <div className="text-xs px-2 py-1 rounded-md font-medium border" style={{
+            backgroundColor: isMarketOpen ? 'rgba(104, 211, 145, 0.2)' : 'rgba(252, 129, 129, 0.2)',
+            color: isMarketOpen ? 'var(--sage-green)' : 'var(--dusty-coral)',
+            borderColor: isMarketOpen ? 'var(--sage-green)' : 'var(--dusty-coral)'
+          }}>
+            Market {isMarketOpen ? 'Open' : 'Closed'}
           </div>
         </div>
-        
-        <div className="flex items-center gap-4">
-          <div className="text-right">
-            <div className="font-mono text-lg font-semibold" style={{color: 'var(--graphite-gray)'}}>{formatTime(currentTime)}</div>
-            <div className="text-xs px-2 py-1 rounded-md font-medium border" style={{
-              backgroundColor: isMarketOpen ? 'rgba(104, 211, 145, 0.2)' : 'rgba(252, 129, 129, 0.2)',
-              color: isMarketOpen ? 'var(--sage-green)' : 'var(--dusty-coral)',
-              borderColor: isMarketOpen ? 'var(--sage-green)' : 'var(--dusty-coral)'
-            }}>
-              Market {isMarketOpen ? 'Open' : 'Closed'}
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2 px-3 py-1.5 border rounded-lg text-sm font-medium" style={{backgroundColor: 'rgba(74, 85, 104, 0.1)', color: 'var(--slate-blue)', borderColor: 'var(--slate-blue)'}}>
-            <div className="w-2 h-2 rounded-full animate-pulse shadow-sm" style={{backgroundColor: 'var(--slate-blue)', boxShadow: '0 0 4px rgba(74, 85, 104, 0.5)'}}></div>
-            Live
-          </div>
+
+        <div className="flex items-center gap-2 px-2 py-1 border rounded-md text-xs font-medium" style={{backgroundColor: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', borderColor: '#22c55e'}}>
+          <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{backgroundColor: '#22c55e'}}></div>
+          Live
         </div>
       </div>
     </header>

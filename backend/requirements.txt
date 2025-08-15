@@ -8,3 +8,4 @@ httpx==0.25.2
 langgraph==0.0.55
 pyfinviz==0.1.4
 pandas==2.1.4
+praw==7.7.1

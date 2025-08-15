@@ -191,3 +191,205 @@ INFO:     Finished server process [35072]
 INFO:     Started server process [35737]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [35737]
+INFO:     Started server process [44577]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/reddit.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44577]
+INFO:     Started server process [44978]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44978]
+INFO:     Started server process [45076]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/main.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45076]
+INFO:     Started server process [45222]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'test_reddit.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45222]
+INFO:     Started server process [49515]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client_mock.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [49515]
+INFO:     Started server process [50248]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50248]
+INFO:     Started server process [50646]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50646]
+INFO:     Started server process [50710]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50710]
+INFO:     Started server process [50875]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50875]
+INFO:     Started server process [50932]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50932]
+INFO:     Started server process [51107]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51107]
+INFO:     Started server process [51161]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51161]
+INFO:     Started server process [51799]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51799]
+INFO:     Started server process [51978]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51978]
+INFO:     Started server process [52035]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52035]
+INFO:     Started server process [52088]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52088]
+INFO:     Started server process [52246]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [52246]
+INFO:     Started server process [53740]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/reddit_client_mock.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [53740]
+INFO:     Started server process [53918]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/reddit.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [53918]
+INFO:     Started server process [64028]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/api/reddit.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64028]
+INFO:     Started server process [64091]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+🎯 ADVISOR AGENT - Input received: 'Should I buy NVDA stock?'
+🔍 ADVISOR DEBUG - Analyzing query: 'Should I buy NVDA stock?'
+🔍 ADVISOR DEBUG - Calling Claude API for query analysis
+🔍 ADVISOR DEBUG - Claude API response received for analysis
+🔍 ADVISOR DEBUG - Analysis result: {'symbols': ['NVDA'], 'advice_type': 'buy_recommendation', 'data_needed': {'stock_data': True, 'equity_insights': True}}
+🎯 ADVISOR AGENT - Analysis: {'symbols': ['NVDA'], 'advice_type': 'buy_recommendation', 'data_needed': {'stock_data': True, 'equity_insights': True}}
+🔍 ADVISOR DEBUG - Starting data gathering phase
+🔍 ADVISOR DEBUG - Adding stock task for NVDA
+🔍 ADVISOR DEBUG - Adding equity task for NVDA
+🔍 ADVISOR DEBUG - Total tasks to execute: 2
+🔍 ADVISOR DEBUG - Executing 2 tasks in parallel...
+🔍 ADVISOR DEBUG - Calling stock agent with query: 'Get current price, performance, and key metrics for NVDA'
+🔍 ADVISOR DEBUG - Making request to stock agent at localhost:8020
+🔍 ADVISOR DEBUG - Calling equity agent with query: 'Get analyst ratings, recent news, and company overview for NVDA'
+🔍 ADVISOR DEBUG - Making request to equity agent at localhost:8001
+🔍 ADVISOR DEBUG - Stock agent response status: 200
+🔍 ADVISOR DEBUG - Stock agent returned 220 chars
+🔍 ADVISOR DEBUG - Equity agent response status: 200
+🔍 ADVISOR DEBUG - Equity agent returned 3228 chars
+🔍 ADVISOR DEBUG - All tasks completed, processing results...
+✅ Got stock data: 220 chars
+✅ Got equity data: 3228 chars
+🔍 ADVISOR DEBUG - Generating investment advice...
+🔍 ADVISOR DEBUG - Entering advice generation with stock_data: 220 chars, equity_data: 3228 chars
+🔍 ADVISOR DEBUG - Calling Claude API for advice generation
+🔍 ADVISOR DEBUG - Claude API response received for advice
+🔍 ADVISOR DEBUG - Investment advice generated: 2549 chars
+🎯 ADVISOR AGENT - Generated advice: 2754 chars
+INFO:     127.0.0.1:58545 - "POST /mcp HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64091]
+INFO:     Stopping reloader process [17377]

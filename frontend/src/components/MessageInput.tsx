@@ -1,12 +1,13 @@
 import React, { useState, useRef, KeyboardEvent } from 'react';
-import { Send, Loader2 } from 'lucide-react';
+import { Send, Loader2, MessageCircle } from 'lucide-react';
 
 interface MessageInputProps {
   onSendMessage: (message: string) => void;
   isLoading: boolean;
+  onOpenRedditDashboard?: () => void;
 }
 
-export function MessageInput({ onSendMessage, isLoading }: MessageInputProps) {
+export function MessageInput({ onSendMessage, isLoading, onOpenRedditDashboard }: MessageInputProps) {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -54,17 +55,33 @@ export function MessageInput({ onSendMessage, isLoading }: MessageInputProps) {
             disabled={isLoading}
           />
           
-          <button
-            onClick={handleSubmit}
-            disabled={!message.trim() || isLoading}
-            className="flex-shrink-0 p-3 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50" style={{background: 'linear-gradient(to bottom right, var(--slate-blue), #667eea)'}}
-          >
-            {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <Send className="w-5 h-5" />
+          <div className="flex items-center gap-2">
+            {onOpenRedditDashboard && (
+              <button
+                onClick={onOpenRedditDashboard}
+                className="flex-shrink-0 p-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105"
+                style={{
+                  background: 'linear-gradient(135deg, #9333ea, #3b82f6)',
+                  color: 'white'
+                }}
+                title="Open Reddit Market Pulse"
+              >
+                <MessageCircle className="w-5 h-5" />
+              </button>
             )}
-          </button>
+            
+            <button
+              onClick={handleSubmit}
+              disabled={!message.trim() || isLoading}
+              className="flex-shrink-0 p-3 text-white rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50" style={{background: 'linear-gradient(to bottom right, var(--slate-blue), #667eea)'}}
+            >
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Send className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </div>
         
         <div className="text-center mt-3">

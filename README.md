@@ -11,6 +11,7 @@ This AI Stock Assistant features a **multi-agent architecture** that automatical
 - 🎯 **Investment Advisor Agent**: Buy/sell recommendations, risk analysis, investment strategy
 - 🧠 **Intelligent Router**: AI-powered query classification and routing
 - 🔗 **LangGraph Integration**: Unified conversation flow and state management
+- 📱 **Reddit Pulse**: Live market discussions and sentiment from Reddit communities
 
 ## 🚀 **Key Features**
 
@@ -44,7 +45,15 @@ The system intelligently handles complex multi-part queries, automatically routi
 - **Context-Aware Synthesis**: Combines results from multiple agents into coherent responses
 - **Precise Tool Selection**: Only calls tools explicitly requested (no extra information)
 
-### 🛠️ **Available Tools (11 Total)**
+### 🛠️ **Available Tools (15 Total)**
+
+#### 📱 **Reddit Pulse (4 tools)**
+| Tool | Purpose | Example Queries | Features |
+|------|---------|-----------------|----------|
+| **get_trending_posts** | Hot stock discussions | "Show trending Reddit posts", "What's hot on Reddit?" | Real-time trending analysis |
+| **get_stock_discussions** | Symbol-specific threads | "Reddit sentiment on AAPL", "Tesla discussions on Reddit" | Stock-focused community insights |
+| **get_market_sentiment** | Overall market mood | "Reddit market sentiment", "How bullish is Reddit?" | Aggregated sentiment scoring |
+| **get_subreddit_activity** | Community metrics | "Active investment subreddits", "Reddit community stats" | Subscriber and activity tracking |
 
 #### 📈 **Stock Agent Tools (5 tools)**
 | Tool | Purpose | Example Queries | 🆕 Dynamic Features |
@@ -139,6 +148,48 @@ Trade Time: 2025-07-23T21:00:00
 1. 🟢 NVDA: $167.03 (+12.45, +8.05%) Vol: 192,489,403
 2. 🟢 TSLA: $332.11 (+8.62, +2.67%) Vol: 77,130,475
 3. 🟢 AAPL: $214.40 (+1.92, +0.90%) Vol: 46,348,818
+```
+
+### 📱 **Reddit Pulse**
+
+**Query**: `"What's trending on Reddit?"`
+```
+📱 Reddit Pulse - Trending Stock Discussions:
+
+🔥 r/wallstreetbets
+📈 "NVDA to the moon after AI announcement"
+↑ 2.3K 💬 412 • 2h ago
+Symbols: $NVDA
+Sentiment: 🟢 Bullish (85% confidence)
+
+🔥 r/investing  
+📊 "Tesla Q3 earnings analysis - time to buy?"
+↑ 1.8K 💬 298 • 4h ago  
+Symbols: $TSLA
+Sentiment: 🟡 Neutral (72% confidence)
+
+🔥 r/stocks
+💰 "Apple dividend increase expectations"
+↑ 1.2K 💬 156 • 6h ago
+Symbols: $AAPL  
+Sentiment: 🟢 Bullish (78% confidence)
+```
+
+**Query**: `"Reddit sentiment on AAPL"`
+```
+📱 Reddit Discussions for AAPL:
+
+🔥 r/investing • 3h ago
+"Apple's services revenue growth looks strong"
+↑ 892 💬 134 | Sentiment: 🟢 Bullish
+
+🔥 r/stocks • 5h ago  
+"AAPL vs MSFT: which tech giant wins long-term?"
+↑ 645 💬 89 | Sentiment: 🟡 Neutral
+
+📊 Overall AAPL Sentiment: 🟢 Bullish (74% confidence)
+📈 Discussion Volume: High (142 mentions today)
+🏆 Most Active Communities: r/investing, r/stocks, r/apple
 ```
 
 ### 🏢 **Company Insights**
@@ -284,6 +335,8 @@ ai-stock-assistant/
 │   │   │   ├── Message.tsx             # Chat message bubbles
 │   │   │   ├── MessageInput.tsx        # Text input component
 │   │   │   ├── QuickActions.tsx        # Suggested action buttons
+│   │   │   ├── RedditDashboard.tsx     # 📱 Reddit Pulse sidebar
+│   │   │   ├── Sidebar.tsx             # Navigation sidebar
 │   │   │   └── TypingIndicator.tsx     # Loading animation
 │   │   ├── hooks/
 │   │   │   └── useChat.ts              # Chat state management
@@ -299,9 +352,12 @@ ai-stock-assistant/
 │   │   │   ├── stock_agent.py           # 📈 Stock market data agent
 │   │   │   ├── equity_insight_agent.py  # 🏢 Company insights agent
 │   │   │   └── advisor_agent.py         # 🎯 Investment advisor agent
-│   │   ├── services/
+│   │   ├── api/
+│   │   │   └── reddit.py                # 📱 Reddit API endpoints
+│   ├── services/
 │   │   │   ├── schwab_client.py         # Schwab API integration
-│   │   │   └── finviz_client.py         # Finviz data scraping
+│   │   │   ├── finviz_client.py         # Finviz data scraping
+│   │   │   └── reddit_client.py         # Reddit data processing
 │   │   ├── graph/
 │   │   │   ├── router_node.py           # 🧠 Intelligent routing
 │   │   │   ├── stock_node.py            # Stock agent integration
@@ -553,6 +609,29 @@ langgraph dev
 "Market timing for Apple stock"
 ```
 
+### 📱 **Reddit Pulse & Sentiment Analysis (Routes to Reddit API)**
+```bash
+# Trending discussions
+"What's trending on Reddit?"
+"Show me hot stock discussions"
+"Reddit market buzz"
+
+# Stock-specific sentiment
+"Reddit sentiment on AAPL"
+"What's Reddit saying about Tesla?"
+"NVDA discussions on Reddit"
+
+# Market sentiment
+"Overall Reddit market sentiment"
+"How bullish is Reddit today?"
+"Reddit investor mood"
+
+# Community activity
+"Most active investing subreddits"
+"Reddit community stats"
+"Which subreddits are discussing AAPL?"
+```
+
 ### 🆕 **Dynamic Time Range Queries**
 ```bash
 # ANY time period supported - LLM selects optimal API parameters
@@ -587,6 +666,7 @@ langgraph dev
 ### **Data Sources**
 - **Charles Schwab Market Data API**: Real-time quotes, historical data, market movers, trading hours
 - **Finviz**: Company overviews, analyst ratings, news, insider trading
+- **Reddit API**: Community discussions, sentiment analysis, trending posts, subreddit activity
 - **Claude AI**: Query understanding and tool orchestration
 
 ### **Supported Assets**
@@ -602,12 +682,14 @@ langgraph dev
 - Company research and due diligence
 - Market trend monitoring
 - Trading schedule awareness
+- Community sentiment tracking
 
 ### **Financial Professionals**
 - Multi-stock analysis and screening
 - Client portfolio reviews
 - Market intelligence gathering
 - Real-time market monitoring
+- Social sentiment analysis
 
 ### **Developers**
 - Financial API integration examples
@@ -624,6 +706,7 @@ langgraph dev
 - **Alerts System**: Price alerts and news notifications
 - **Fundamental Analysis**: Financial ratios, earnings data
 - **Sector Analysis**: Industry comparisons and trends
+- **Enhanced Reddit Features**: Historical sentiment tracking, sentiment alerts, cross-platform social analysis
 
 ### **Technical Improvements**
 - **Caching Layer**: Redis caching for frequently accessed data

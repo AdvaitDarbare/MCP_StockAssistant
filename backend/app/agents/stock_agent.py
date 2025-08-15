@@ -335,8 +335,7 @@ def format_single_quote(data: dict) -> str:
         f"Price: ${data['price']:.2f} ({data['change']:+.2f}, {data['percent_change']:+.2f}%)\n"
         f"High: ${data['high']:.2f}, Low: ${data['low']:.2f}, Open: ${data['open']:.2f}\n"
         f"52W Range: ${data['week_52_low']:.2f} - ${data['week_52_high']:.2f}\n"
-        f"Trade Time: {data['trade_time']}\n"
-        f"⚠️ Note: Using fallback data - Schwab API requires authentication"
+        f"Trade Time: {data['trade_time']}"
     )
 
 def format_multiple_quotes(quotes_data: dict) -> str:
@@ -352,7 +351,6 @@ def format_multiple_quotes(quotes_data: dict) -> str:
             f"({data['change']:+.2f}, {data['percent_change']:+.2f}%) "
             f"Vol: {data['volume']:,}\n"
         )
-    output += "\n⚠️ Note: Using fallback data - Schwab API requires authentication"
     return output.strip()
 
 def format_price_history(history_data: dict) -> str:

@@ -3,7 +3,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
-from .api import stock
+from .api import stock, reddit
 from .graph.build_graph import build_app_graph
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -25,6 +25,7 @@ app.add_middleware(
 )
 
 app.include_router(stock.router)
+app.include_router(reddit.router, prefix="/reddit", tags=["reddit"])
 
 # Build the LangGraph application
 graph_app = build_app_graph()
