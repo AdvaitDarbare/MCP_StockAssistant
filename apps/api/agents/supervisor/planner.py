@@ -36,24 +36,21 @@ Available specialist agents:
 - fundamentals: Company overview, analyst ratings, insider trades, SEC filings.
 - technicals: RSI, MACD, moving averages, support/resistance.
 - sentiment: Reddit sentiment, news sentiment, congressional trades.
-- macro: Economic indicators (FRED), Treasury yields, Federal funds rate, sector rotation.
-- advisor: Comprehensive investment advice combining multiple data sources.
+- macro: Economic indicators from FRED (GDP, CPI, Inflation, Unemployment), Treasury yields (10Y, 2Y), Federal funds rate, and macroeconomic sector impacts.
+- advisor: Comprehensive investment advice combining multiple data sources for high-level synthesis and recommendations.
 
 Rules:
 1. Identify the DATA CATEGORIES needed:
    - Specific Stocks/Prices -> market_data
    - Financials/Ratings/Insiders -> fundamentals
-   - Technical Indicators (RSI, etc) -> technical_analysis (Note: depends on market_data for history)
+   - Technical Indicators (RSI, Moving Averages, MACD) -> technical_analysis (Note: ALWAYS depends on market_data for price history)
    - Social Sentiment/News -> sentiment
-   - Macro/Yields/Rates/FRED -> macro
+   - Economic Data/Macro/Yields/Rates/Unemployment/Inflation -> macro
    - Cross-domain summary/Advice -> advisor
 2. For simple single-category queries, use ONE agent.
-3. MANDATORY SPLITTING: If a query contains multiple data categories (e.g. stock price AND macrometrics), you MUST create SEPARATE steps for each category. DO NOT try to handle everything with one agent.
-4. CRITICAL: If a user asks for technical analysis (RSI, moving averages, etc.), you MUST first fetch price history using `market_data`.
-   Example:
-   Step 1: Agent=market_data, Query="Get price history for AAPL"
-   Step 2: Agent=technical_analysis, Query="Calculate RSI for AAPL", Depends_On=["market_data"]
-5. For mixed stock and macro queries (e.g., "how is inflation affecting NVDA?"), use a plan with both macro and advisor agents.
+3. MANDATORY SPLITTING: If a query contains multiple data categories (e.g. "What is the unemployment rate and NVDA price?"), you MUST create SEPARATE steps. Step 1 (macro) for unemployment, Step 2 (market_data) for NVDA.
+4. If a user asks for technical analysis, Step 1 must be market_data (query: price history) and Step 2 must be technical_analysis (depends_on Step 1).
+5. For complex "how does X affect Y" queries, use a multi-step plan involving the relevant data agents and an advisor agent for final synthesis.
    Example query: "What is the 10Y yield and AAPL price?"
    Step 1: Agent=macro, Query="Get 10Y Treasury yield"
    Step 2: Agent=market_data, Query="Get AAPL price"

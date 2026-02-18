@@ -67,80 +67,51 @@ We classify our agents into four distinct patterns based on their cognitive load
 
 ---
 
-```mermaid
-graph TD
-    User([User])
-    
-    subgraph Frontend [apps/web - Next.js]
-        Web[Web UI]
-        Proxy[/api/py/* Proxy]
-    end
-
-    subgraph Backend [apps/api - FastAPI]
-        Gateway["FastAPI Gateway<br/>(Gateway / Stream)"]
-        
-        subgraph Agents [LangGraph Multi-Agent System]
-            Supervisor[StateGraph Supervisor]
-            Planner[Planner LLM]
-            Router[Pure Python Router]
-            
-            subgraph ResearchTier [Tier 1: Parallel Research]
-                MD[Market Data]
-                FU[Fundamentals]
-                SE[Sentiment]
-                MA[Macro]
-            end
-            
-            subgraph SynthesisTier [Tier 2: Synthesis]
-                TA[Technical Analysis]
-                AD[Advisor]
-            end
-            
-            Aggregator[Aggregator / Memory]
-        end
-        
-        subgraph Engine [Specialist Engine]
-            RE[Report Engine Orchestrator]
-            Builders[10 Report Builders]
-        end
-    end
-
-    subgraph Data [Data Layer]
-        Redis[(Redis Cache)]
-        Postgres[(PostgreSQL)]
-        Qdrant[(Qdrant Memory)]
-    end
-
-    subgraph Providers [External APIs]
-        Schwab[Schwab API]
-        Alpaca[Alpaca API]
-        FRED[FRED]
-        Reddit[Reddit / Tavily]
-    end
-
-    %% Interactions
-    User --> Web
-    Web --> Proxy
-    Proxy --> Gateway
-    
-    Gateway --> Supervisor
-    Gateway --> RE
-    
-    Supervisor --> Planner
-    Planner --> Router
-    Router --> ResearchTier
-    ResearchTier --> Gate{Gate}
-    Gate --> SynthesisTier
-    SynthesisTier --> Aggregator
-    
-    RE --> Builders
-    
-    %% Data Flow
-    Agents & Engine --> Redis
-    Agents & Engine --> Postgres
-    Agents & Engine --> Qdrant
-    
-    Redis & Postgres & Qdrant --> Providers
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                        apps/web  (Next.js 14)                       │
+│   Browser  ──►  Web UI  ──►  /api/py/* Proxy                        │
+└──────────────────────────────────┬──────────────────────────────────┘
+                                   │ SSE / HTTP
+┌──────────────────────────────────▼──────────────────────────────────┐
+│                    apps/api  (FastAPI + Uvicorn)                     │
+│                                                                      │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │              LangGraph Multi-Agent Supervisor                │    │
+│  │                                                              │    │
+│  │  Planner LLM ──► Router ──► ┌─────────────────────────┐    │    │
+│  │                              │  Tier 1  (parallel)     │    │    │
+│  │                              │  market_data            │    │    │
+│  │                              │  fundamentals           │    │    │
+│  │                              │  sentiment              │    │    │
+│  │                              │  macro                  │    │    │
+│  │                              └──────────┬──────────────┘    │    │
+│  │                              Research Gate                  │    │
+│  │                              ┌──────────▼──────────────┐    │    │
+│  │                              │  Tier 2  (sequential)   │    │    │
+│  │                              │  technical_analysis     │    │    │
+│  │                              │  advisor                │    │    │
+│  │                              └──────────┬──────────────┘    │    │
+│  │                              Aggregator / Memory Save       │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │              Report Engine  (10 specialist builders)         │    │
+│  │  goldman · morgan · bridgewater · jpm · citadel · harvard   │    │
+│  │  bain · renaissance · blackrock · mckinsey                  │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────┬──────────────────────────────────┘
+                                   │
+          ┌────────────────────────┼────────────────────────┐
+          ▼                        ▼                        ▼
+   ┌─────────────┐        ┌──────────────┐        ┌──────────────┐
+   │    Redis     │        │  PostgreSQL   │        │    Qdrant    │
+   │   (cache)    │        │  (portfolio)  │        │   (memory)   │
+   └─────────────┘        └──────────────┘        └──────────────┘
+          │
+   ┌──────┴──────────────────────────────────────────────────────┐
+   │  External APIs: Schwab · Alpaca · FRED · Reddit · Tavily    │
+   └─────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -155,48 +126,54 @@ The core of the system is a **two-tier LangGraph StateGraph** with a dependency-
 
 This diagram illustrates how the Supervisor manages the shared state and orchestrates autonomous specialist agents based on the dynamic execution plan.
 
-```mermaid
-flowchart TD
-    Start([Start]) --> Init[Initialize SupervisorState]
-    Init --> Planner{Planner LLM}
-    
-    subgraph StateLoop [LangGraph State Loop]
-        Planner -->|ExecutionPlan| Router{RouterNode}
-        Router -->|Ready Tasks| Tier1[Tier 1: Research Agents]
-        
-        subgraph Tier1Agents [Autonomous Research]
-            MD[market_data]
-            FU[fundamentals]
-            SE[sentiment]
-            MA[macro]
-        end
-        
-        Tier1 --> Tier1Agents
-        Tier1Agents -->|Merge agent_results| Gate{Research Gate}
-        
-        Gate -->|Waiting| Router
-        Gate -->|Tier 1 Complete| Tier2[Tier 2: Synthesis Agents]
-        
-        subgraph Tier2Agents [Dependent Synthesis]
-            TA[technical_analysis]
-            AD[advisor]
-        end
-        
-        Tier2 --> Tier2Agents
-        Tier2Agents -->|Merge final_response| Aggregator[Aggregator Node]
-    end
-
-    Aggregator --> Save[Save to Qdrant Memory]
-    Save --> End([Stream Response])
-
-    %% Styling
-    classDef state fill:#f9f,stroke:#333,stroke-width:2px;
-    classDef agent fill:#bbf,stroke:#333,stroke-width:2px;
-    classDef gate fill:#ffb,stroke:#333,stroke-width:2px;
-    
-    class Init,Aggregator state;
-    class MD,FU,SE,MA,TA,AD agent;
-    class Gate,Router gate;
+```
+  User Query
+      │
+      ▼
+  ┌──────────┐
+  │  Planner │  (Claude LLM → ExecutionPlan)
+  └────┬─────┘
+       │ ExecutionPlan
+       ▼
+  ┌──────────┐
+  │  Router  │  (pure Python, dependency-aware)
+  └────┬─────┘
+       │ dispatch ready Tier-1 tasks
+       ▼
+  ┌─────────────────────────────────────────┐
+  │         Tier 1 — Parallel Research      │
+  │  ┌────────────┐  ┌────────────────────┐ │
+  │  │ market_data│  │   fundamentals     │ │
+  │  └────────────┘  └────────────────────┘ │
+  │  ┌────────────┐  ┌────────────────────┐ │
+  │  │ sentiment  │  │      macro         │ │
+  │  └────────────┘  └────────────────────┘ │
+  └──────────────────────┬──────────────────┘
+                         │ agent_results merged into state
+                         ▼
+                  ┌─────────────┐
+                  │ Research    │  (enforces Tier-1 completion)
+                  │    Gate     │
+                  └──────┬──────┘
+                         │ dispatch Tier-2 tasks
+                         ▼
+  ┌─────────────────────────────────────────┐
+  │         Tier 2 — Sequential Synthesis   │
+  │  ┌──────────────────────┐               │
+  │  │  technical_analysis  │  (needs t1)   │
+  │  └──────────────────────┘               │
+  │  ┌──────────────────────┐               │
+  │  │       advisor        │  (needs all)  │
+  │  └──────────────────────┘               │
+  └──────────────────────┬──────────────────┘
+                         │
+                         ▼
+                  ┌─────────────┐
+                  │ Aggregator  │  → Save to Qdrant
+                  └──────┬──────┘
+                         │
+                         ▼
+                  SSE Stream → User
 ```
 
 ### State
@@ -220,47 +197,23 @@ class SupervisorState(TypedDict):
 
 ### Graph Nodes & Flow
 
-```mermaid
-sequenceDiagram
-    participant U as User Query
-    participant P as Planner
-    participant R as Router
-    participant T1 as Tier 1 (Research)
-    participant G as Research Gate
-    participant T2 as Tier 2 (Synthesis)
-    participant A as Aggregator
-
-    U->>P: Natural Language Query
-    P->>P: Decompose into Tasks
-    P->>R: Execution Plan
-    
-    rect rgb(240, 240, 240)
-    Note over R,T1: Parallel Execution
-    par Market Data
-        R->>T1: market_data
-    and Fundamentals
-        R->>T1: fundamentals
-    and Sentiment
-        R->>T1: sentiment
-    and Macro
-        R->>T1: macro
-    end
-    end
-    
-    T1-->>G: Results Stored in State
-    G->>G: Verify Dependencies
-    
-    rect rgb(240, 240, 255)
-    Note over G,T2: Sequential/Dependent
-    G->>T2: technical_analysis (needs market_data)
-    T2-->>G: Indicators Computed
-    G->>T2: advisor (needs ALL)
-    end
-    
-    T2-->>A: Context Snapshots
-    A->>A: Synthesize Final Markdown
-    A->>A: Update Qdrant Memory
-    A-->>U: SSE Stream (JSON + Text)
+```
+  User          Planner       Router     Tier 1 (parallel)    Gate      Tier 2 (sequential)   Aggregator
+   │               │             │       md  fu  se  ma        │        ta        adv            │
+   │──── query ───►│             │        │   │   │   │        │         │         │             │
+   │               │─ plan ─────►│        │   │   │   │        │         │         │             │
+   │               │             │──md───►│   │   │   │        │         │         │             │
+   │               │             │──fu───►│   │   │   │        │         │         │             │
+   │               │             │──se───►│   │   │   │        │         │         │             │
+   │               │             │──ma───►│   │   │   │        │         │         │             │
+   │               │             │        │◄──┘◄──┘◄──┘        │         │         │             │
+   │               │             │        │── results ─────────►│         │         │             │
+   │               │             │        │                     │──ta────►│         │             │
+   │               │             │        │                     │◄─done───┘         │             │
+   │               │             │        │                     │──adv──────────────►│             │
+   │               │             │        │                     │◄─done──────────────┘             │
+   │               │             │        │                     │──────── final ──────────────────►│
+   │◄──────────────────────────────────────────────────── SSE stream ─────────────────────────────┘
 ```
 
 ### Execution Plan Example
@@ -467,34 +420,35 @@ When the user requests a named report (e.g. *"Run a Goldman Screener for AAPL"*)
 
 ### Report Pipeline
 
-```mermaid
-graph LR
-    Req[Report Request] --> Det{Detection}
-    Det -->|Regex Match| Orch[Orchestrator]
-    Orch --> Prompt[Prompt Selection]
-    Prompt --> Build[Report Builders]
-    
-    subgraph Builders [10 Specialist Builders]
-        GS[Goldman Screener]
-        MD[Morgan DCF]
-        BR[Bridgewater Risk]
-        JP[JPM Earnings]
-        CT[Citadel Technical]
-        HD[Harvard Dividend]
-        BC[Bain Competitive]
-        RP[Renaissance Pattern]
-        BB[Blackrock Builder]
-        MM[McKinsey Macro]
-    end
-    
-    Build --> Quality{Quality Gate}
-    Quality -->|Pass > 0.75| Synth[Synthesizer]
-    Quality -->|Low Score| Repair[Auto-Repair Agent]
-    Repair --> Synth
-    
-    Synth --> Trace[MLflow Tracking]
-    Synth --> DB[(PostgreSQL)]
-    Synth --> User([Final Markdown])
+```
+  Chat / API Request
+        │
+        ▼
+  _detect_report_request()  ──── regex match ────►  (None → agent graph)
+        │
+        │ (report_type, payload)
+        ▼
+  report_orchestrator.py
+        │
+        ├── select prompt template  (PROMPT_TEMPLATES[report_type])
+        │
+        ├── run builder  ──────────────────────────────────────────────┐
+        │   goldman_screener   │ morgan_dcf        │ bridgewater_risk  │
+        │   jpm_earnings       │ citadel_technical │ harvard_dividend  │
+        │   bain_competitive   │ renaissance_pattern│ blackrock_builder│
+        │   mckinsey_macro                                             │
+        │                                                              │
+        ▼                                                              │
+  Quality Gate  (score 0.0 – 1.0)  ◄─────────────────────────────────┘
+        │
+        ├── score ≥ 0.75  ──►  Synthesizer  ──►  Final Markdown
+        │
+        └── score < 0.75  ──►  Auto-Repair  ──►  Synthesizer  ──►  Final Markdown
+                                                       │
+                                              ┌────────┴────────┐
+                                              ▼                 ▼
+                                         PostgreSQL         MLflow
+                                        (thread log)      (run trace)
 ```
 
 ### Quality Gate

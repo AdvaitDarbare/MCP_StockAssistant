@@ -22,6 +22,7 @@ from apps.api.services.market_data_provider import (
     get_unified_history,
     get_unified_market_movers,
     get_unified_quote,
+    get_unified_quotes,
 )
 from apps.api.services.tavily_client import get_news_sentiment, search_financial_news
 from apps.api.services.report_prompts import PROMPT_TEMPLATES
@@ -158,6 +159,10 @@ def _extract_ticker(payload: dict[str, Any]) -> str | None:
     for key in ("ticker", "symbol"):
         if payload.get(key):
             return str(payload[key]).upper()
+    # Accept a list under 'tickers' — use the first entry
+    tickers_list = payload.get("tickers")
+    if isinstance(tickers_list, list) and tickers_list:
+        return str(tickers_list[0]).upper()
     stock = payload.get("stock") or payload.get("company")
     if isinstance(stock, str):
         token = stock.strip().split()[0].upper()

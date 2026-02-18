@@ -74,8 +74,8 @@ class Settings:
     LANGSMITH_PROJECT: str = os.getenv("LANGSMITH_PROJECT", "StockAssistant-v2")
 
     # Models
-    SUPERVISOR_MODEL: str = "claude-3-5-sonnet-latest"
-    ROUTING_MODEL: str = "claude-3-5-sonnet-latest"
+    SUPERVISOR_MODEL: str = "claude-3-5-sonnet-20241022"
+    ROUTING_MODEL: str = "claude-3-5-sonnet-20241022"
     ANALYSIS_MODEL: str = "claude-3-haiku-20240307"
     DEFAULT_MODEL: str = "claude-3-haiku-20240307"
 
