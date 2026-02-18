@@ -2,7 +2,7 @@
 A platform independent file lock that supports the with-statement.
 
 .. autodata:: filelock.__version__
-   :no-value:
+    :no-value:
 
 """
 
@@ -14,6 +14,12 @@ from typing import TYPE_CHECKING
 
 from ._api import AcquireReturnProxy, BaseFileLock
 from ._error import Timeout
+
+try:
+    from ._read_write import ReadWriteLock
+except ImportError:  # sqlite3 may be unavailable if Python was built without it or the C library is missing
+    ReadWriteLock = None  # type: ignore[assignment, misc]
+
 from ._soft import SoftFileLock
 from ._unix import UnixFileLock, has_fcntl
 from ._windows import WindowsFileLock
@@ -62,6 +68,7 @@ __all__ = [
     "BaseAsyncFileLock",
     "BaseFileLock",
     "FileLock",
+    "ReadWriteLock",
     "SoftFileLock",
     "Timeout",
     "UnixFileLock",

@@ -1,1 +1,34 @@
 .env
+.env.local
+.env.*.local
+
+# OS/editor noise
+.DS_Store
+.idea/
+.vscode/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node / Next.js
+node_modules/
+apps/web/.next/
+apps/web/out/
+.turbo/
+
+# Runtime artifacts
+logs/
+mlruns/
+*.log
+*.pid
+
+# Local state
+.langgraph_api/
