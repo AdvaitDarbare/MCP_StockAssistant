@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #f4f7fb;
+  --color-foreground: #0f172a;
+  --color-primary: #1e66f5;
+  --color-border-subtle: #d7e0ef;
+  --font-display: var(--font-manrope), "Manrope", sans-serif;
+  --font-mono: var(--font-space-grotesk), "Space Grotesk", monospace;
+}
+
+@layer base {
+
+  html,
+  body {
+    @apply h-full overflow-hidden;
+  }
+
+  body {
+    @apply bg-background text-foreground font-display selection:bg-primary/20;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) #e7edf8;
+  }
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(148, 163, 184, 0.28);
+}
+
+.chart-gradient {
+  background: linear-gradient(180deg, rgba(30, 102, 245, 0.14) 0%, rgba(30, 102, 245, 0.02) 100%);
+}

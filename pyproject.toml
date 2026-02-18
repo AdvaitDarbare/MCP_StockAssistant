@@ -9,7 +9,7 @@ license = {text = "MIT"}
 readme = "README.md"
 requires-python = "^3.10"
 dependencies = [
-    "langgraph (>=0.5.4,<0.6.0)",
+    "langgraph (>=1.0.8)",
     "claude-code (>=0.0.1,<0.0.2)",
     "requests (>=2.32.4,<3.0.0)",
     "pandas (>=2.3.1,<3.0.0)",
@@ -17,9 +17,27 @@ dependencies = [
     "pyfinviz (>=1.2,<2.0)",
     "flask (>=3.1.1,<4.0.0)",
     "python-dotenv (>=1.1.1,<2.0.0)",
-    "httpx (>=0.28.1,<0.29.0)"
+    "httpx (>=0.28.1,<0.29.0)",
+    "langchain-anthropic (>=1.3.3,<2.0.0)",
+    "langchain-core (>=1.2.13,<2.0.0)",
+    "fastapi (>=0.129.0,<0.130.0)",
+    "uvicorn (>=0.40.0,<0.41.0)",
+    "anthropic (>=0.40.0)",
+    "qdrant-client (>=1.16.2,<2.0.0)",
+    "asyncpg (>=0.31.0,<0.32.0)",
+    "redis[hiredis] (>=7.1.1,<8.0.0)",
+    "fastembed (>=0.7.4,<0.8.0)",
+    "loguru (>=0.7.0,<1.0.0)",
+    "mlflow (>=2.17.2,<3.0.0)",
+    "praw (>=7.8.1,<8.0.0)",
+    "aiohttp (>=3.11.0,<4.0.0)",
+    "alembic (>=1.14.0,<2.0.0)",
+    "pandas-ta (>=0.3.14b,<1.0.0)"
 ]
 
+
+[tool.poetry]
+package-mode = false
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
@@ -29,4 +47,3 @@ build-backend = "poetry.core.masonry.api"
 black = "^25.1.0"
 isort = "^6.0.1"
 claude-code = "^0.0.1"
-

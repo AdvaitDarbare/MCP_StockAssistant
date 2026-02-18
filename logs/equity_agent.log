@@ -1,210 +1,243 @@
 INFO:     Will watch for changes in these directories: ['/Users/advaitdarbare/Desktop/ai-stock-assistant/backend']
 INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
-INFO:     Started reloader process [22212] using WatchFiles
-INFO:     Started server process [22243]
+INFO:     Started reloader process [38876] using WatchFiles
+INFO:     Started server process [38883]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-🔧 EQUITY AGENT - Input received: 'Get analyst ratings, recent news, and company overview for AAPL'
-🔧 Equity LLM Response: {
-  "ticker": "AAPL",
-  "tools_to_call": [
-    {"tool": "get_analyst_ratings", "params": {"ticker": "AAPL"}},
-    {"tool": "get_company_news", "params": {"ticker": "AAPL", "limit": 8}},
-    {"tool": "get_company_overview", "params": {"ticker": "AAPL"}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'AAPL', 'tools_to_call': [{'tool': 'get_analyst_ratings', 'params': {'ticker': 'AAPL'}}, {'tool': 'get_company_news', 'params': {'ticker': 'AAPL', 'limit': 8}}, {'tool': 'get_company_overview', 'params': {'ticker': 'AAPL'}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_analyst_ratings
-   📋 Tool Description: 📊 Get analyst recommendations, price targets, and rating changes
-   ⚙️  Parameters: {'ticker': 'AAPL'}
-   ✅ Tool completed successfully - Got 20 analyst ratings for AAPL
-🔧 EQUITY AGENT - Executing TOOL: get_company_news
-   📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'AAPL', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 news articles for AAPL
-🔧 EQUITY AGENT - Executing TOOL: get_company_overview
-   📋 Tool Description: 🏢 Get basic company information, sectors, and exchange details
-   ⚙️  Parameters: {'ticker': 'AAPL'}
-   ✅ Tool completed successfully - Got overview for AAPL (Apple Inc)
-🔧 EQUITY AGENT - Final output length: 3365 chars
-🎉 EQUITY AGENT - Successfully processed query using 3 tool(s)
-INFO:     127.0.0.1:60965 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'Compare AAPL vs GOOGL vs MSFT'
-🔧 Equity LLM Response: {
-  "ticker": "AAPL",
-  "tools_to_call": [
-    {"tool": "get_company_overview", "params": {"ticker": "AAPL"}}
-  ]
-},
-{
-  "ticker": "GOOGL",
-  "tools_to_call": [
-    {"tool": "get_company_overview", "params": {"ticker": "GOOGL"}}
-  ]
-},
-{
-  "ticker": "MSFT",
-  "tools_to_call": [
-    {"tool": "get_company_overview", "params": {"ticker": "MSFT"}}
-  ]
-}
-❌ JSON decode error: Extra data: line 6 column 2 (char 115)
-❌ Could not extract valid JSON from response
-🔧 EQUITY AGENT - Plan generated: None
-INFO:     127.0.0.1:60994 - "POST /mcp HTTP/1.1" 500 Internal Server Error
-🔧 EQUITY AGENT - Input received: 'Recent news for Tesla'
-🔧 Equity LLM Response: {
-  "ticker": "TSLA",
-  "tools_to_call": [
-    {"tool": "get_company_news", "params": {"ticker": "TSLA", "limit": 8}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'TSLA', 'tools_to_call': [{'tool': 'get_company_news', 'params': {'ticker': 'TSLA', 'limit': 8}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_company_news
-   📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'TSLA', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 news articles for TSLA
-🔧 EQUITY AGENT - Final output length: 1750 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:61149 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'Reddit sentiment on AAPL'
-🔧 Equity LLM Response: {
-  "ticker": "AAPL",
-  "tools_to_call": [
-    {"tool": "get_company_news", "params": {"ticker": "AAPL", "limit": 8}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'AAPL', 'tools_to_call': [{'tool': 'get_company_news', 'params': {'ticker': 'AAPL', 'limit': 8}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_company_news
-   📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'AAPL', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 news articles for AAPL
-🔧 EQUITY AGENT - Final output length: 1941 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:61290 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'Get analyst ratings, recent news, and company overview for AAPL'
-🔧 Equity LLM Response: {
-  "ticker": "AAPL",
-  "tools_to_call": [
-    {"tool": "get_analyst_ratings", "params": {"ticker": "AAPL"}},
-    {"tool": "get_company_news", "params": {"ticker": "AAPL", "limit": 8}},
-    {"tool": "get_company_overview", "params": {"ticker": "AAPL"}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'AAPL', 'tools_to_call': [{'tool': 'get_analyst_ratings', 'params': {'ticker': 'AAPL'}}, {'tool': 'get_company_news', 'params': {'ticker': 'AAPL', 'limit': 8}}, {'tool': 'get_company_overview', 'params': {'ticker': 'AAPL'}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_analyst_ratings
-   📋 Tool Description: 📊 Get analyst recommendations, price targets, and rating changes
-   ⚙️  Parameters: {'ticker': 'AAPL'}
-   ✅ Tool completed successfully - Got 20 analyst ratings for AAPL
-🔧 EQUITY AGENT - Executing TOOL: get_company_news
-   📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'AAPL', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 news articles for AAPL
-🔧 EQUITY AGENT - Executing TOOL: get_company_overview
-   📋 Tool Description: 🏢 Get basic company information, sectors, and exchange details
-   ⚙️  Parameters: {'ticker': 'AAPL'}
-   ✅ Tool completed successfully - Got overview for AAPL (Apple Inc)
-🔧 EQUITY AGENT - Final output length: 3365 chars
-🎉 EQUITY AGENT - Successfully processed query using 3 tool(s)
-INFO:     127.0.0.1:61323 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'Get analyst ratings, recent news, and company overview for INTC'
-🔧 Equity LLM Response: {
-  "ticker": "INTC",
-  "tools_to_call": [
-    {"tool": "get_analyst_ratings", "params": {"ticker": "INTC"}},
-    {"tool": "get_company_news", "params": {"ticker": "INTC", "limit": 8}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'INTC', 'tools_to_call': [{'tool': 'get_analyst_ratings', 'params': {'ticker': 'INTC'}}, {'tool': 'get_company_news', 'params': {'ticker': 'INTC', 'limit': 8}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_analyst_ratings
-   📋 Tool Description: 📊 Get analyst recommendations, price targets, and rating changes
-   ⚙️  Parameters: {'ticker': 'INTC'}
-   ✅ Tool completed successfully - Got 20 analyst ratings for INTC
-🔧 EQUITY AGENT - Executing TOOL: get_company_news
-   📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'INTC', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 news articles for INTC
-🔧 EQUITY AGENT - Final output length: 3069 chars
-🎉 EQUITY AGENT - Successfully processed query using 2 tool(s)
-INFO:     127.0.0.1:61418 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'news on intel'
-🔧 Equity LLM Response: {
-  "ticker": "INTC",
-  "tools_to_call": [
-    {"tool": "get_company_news", "params": {"ticker": "INTC", "limit": 8}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'INTC', 'tools_to_call': [{'tool': 'get_company_news', 'params': {'ticker': 'INTC', 'limit': 8}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_company_news
-   📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'INTC', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 news articles for INTC
-🔧 EQUITY AGENT - Final output length: 1938 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:61446 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'Get analyst ratings, recent news, and company overview for BOFA'
-🔧 Equity LLM Response: {
-  "ticker": "BOFA",
-  "tools_to_call": [
-    {"tool": "get_analyst_ratings", "params": {"ticker": "BOFA"}},
-    {"tool": "get_company_news", "params": {"ticker": "BOFA", "limit": 8}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'BOFA', 'tools_to_call': [{'tool': 'get_analyst_ratings', 'params': {'ticker': 'BOFA'}}, {'tool': 'get_company_news', 'params': {'ticker': 'BOFA', 'limit': 8}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_analyst_ratings
-   📋 Tool Description: 📊 Get analyst recommendations, price targets, and rating changes
-   ⚙️  Parameters: {'ticker': 'BOFA'}
-❌ Ticker BOFA not found
-🔧 EQUITY AGENT - Executing TOOL: get_company_news
-   📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'BOFA', 'limit': 8}
-❌ Ticker BOFA not found
-INFO:     127.0.0.1:61469 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'Get analyst ratings, recent news, and company overview for BOFA'
-🔧 Equity LLM Response: {
-  "ticker": "BOFA",
-  "tools_to_call": [
-    {"tool": "get_analyst_ratings", "params": {"ticker": "BOFA"}},
-    {"tool": "get_company_news", "params": {"ticker": "BOFA", "limit": 8}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'BOFA', 'tools_to_call': [{'tool': 'get_analyst_ratings', 'params': {'ticker': 'BOFA'}}, {'tool': 'get_company_news', 'params': {'ticker': 'BOFA', 'limit': 8}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_analyst_ratings
-   📋 Tool Description: 📊 Get analyst recommendations, price targets, and rating changes
-   ⚙️  Parameters: {'ticker': 'BOFA'}
-❌ Ticker BOFA not found
-🔧 EQUITY AGENT - Executing TOOL: get_company_news
-   📋 Tool Description: 📰 Get recent news articles and press releases for the company
-   ⚙️  Parameters: {'ticker': 'BOFA', 'limit': 8}
-❌ Ticker BOFA not found
-INFO:     127.0.0.1:61484 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'insider trading of BOFA'
-🔧 Equity LLM Response: {
-  "ticker": "BAC",
-  "tools_to_call": [
-    {"tool": "get_insider_trading", "params": {"ticker": "BAC", "limit": 8}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'BAC', 'tools_to_call': [{'tool': 'get_insider_trading', 'params': {'ticker': 'BAC', 'limit': 8}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_insider_trading
-   📋 Tool Description: 👥 Get insider buy/sell activity and officer transactions
-   ⚙️  Parameters: {'ticker': 'BAC', 'limit': 8}
-   ✅ Tool completed successfully - Got 8 insider transactions for BAC
-🔧 EQUITY AGENT - Final output length: 1916 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:61499 - "POST /mcp HTTP/1.1" 200 OK
-🔧 EQUITY AGENT - Input received: 'analyst ratings BOFA'
-🔧 Equity LLM Response: {
-  "ticker": "BAC",
-  "tools_to_call": [
-    {"tool": "get_analyst_ratings", "params": {"ticker": "BAC"}}
-  ]
-}
-🔧 EQUITY AGENT - Plan generated: {'ticker': 'BAC', 'tools_to_call': [{'tool': 'get_analyst_ratings', 'params': {'ticker': 'BAC'}}]}
-🔧 EQUITY AGENT - Executing TOOL: get_analyst_ratings
-   📋 Tool Description: 📊 Get analyst recommendations, price targets, and rating changes
-   ⚙️  Parameters: {'ticker': 'BAC'}
-   ✅ Tool completed successfully - Got 20 analyst ratings for BAC
-🔧 EQUITY AGENT - Final output length: 1049 chars
-🎉 EQUITY AGENT - Successfully processed query using 1 tool(s)
-INFO:     127.0.0.1:61515 - "POST /mcp HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [38883]
+INFO:     Started server process [40368]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [40368]
+INFO:     Started server process [44437]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44437]
+INFO:     Started server process [44618]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44618]
+INFO:     Started server process [44799]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44799]
+INFO:     Started server process [44868]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44868]
+INFO:     Started server process [44920]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44920]
+INFO:     Started server process [45079]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45079]
+INFO:     Started server process [45131]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45131]
+INFO:     Started server process [45281]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45281]
+INFO:     Started server process [45339]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45339]
+INFO:     Started server process [45381]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45381]
+INFO:     Started server process [45580]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45580]
+INFO:     Started server process [45749]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45749]
+INFO:     Started server process [45800]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45800]
+INFO:     Started server process [45853]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45853]
+INFO:     Started server process [50876]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50876]
+INFO:     Started server process [51219]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51219]
+INFO:     Started server process [51669]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51669]
+INFO:     Started server process [57815]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [57815]
+INFO:     Started server process [58008]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58008]
+INFO:     Started server process [58197]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58197]
+INFO:     Started server process [58401]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58401]
+INFO:     Started server process [58669]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58669]
+INFO:     Started server process [58852]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58852]
+INFO:     Started server process [59041]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [59041]
+INFO:     Started server process [66433]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66433]
+INFO:     Started server process [66781]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66781]
+INFO:     Started server process [66962]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66962]
+INFO:     Started server process [67541]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67541]
+INFO:     Stopping reloader process [38876]

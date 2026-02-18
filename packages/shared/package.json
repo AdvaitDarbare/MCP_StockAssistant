@@ -1,0 +1,15 @@
+{
+    "name": "@ai-stock/shared",
+    "version": "0.0.0",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "build": "tsc",
+        "lint": "eslint \"src/**/*.ts*\"",
+        "dev": "tsc -w"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "eslint": "^8.0.0"
+    }
+}

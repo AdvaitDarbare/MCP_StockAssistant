@@ -1,115 +1,243 @@
 INFO:     Will watch for changes in these directories: ['/Users/advaitdarbare/Desktop/ai-stock-assistant/backend']
 INFO:     Uvicorn running on http://127.0.0.1:8020 (Press CTRL+C to quit)
-INFO:     Started reloader process [22211] using WatchFiles
-INFO:     Started server process [22241]
+INFO:     Started reloader process [38874] using WatchFiles
+INFO:     Started server process [38884]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
-⚠️ Schwab credentials not available or token missing
-⚠️ Run setup_schwab_auth.py to authenticate first
-🔧 STOCK AGENT - Input received: 'What's AAPL stock price?'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_stock_data",
-      "params": {
-        "symbol": "AAPL"
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}]}
-🔧 STOCK AGENT - Executing TOOL: get_stock_data
-   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
-   ⚙️  Parameters: {'symbol': 'AAPL'}
-❌ Schwab client not initialized. Run setup_schwab_auth.py first.
-INFO:     127.0.0.1:60943 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for AAPL'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_stock_data",
-      "params": {
-        "symbol": "AAPL"
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}]}
-🔧 STOCK AGENT - Executing TOOL: get_stock_data
-   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
-   ⚙️  Parameters: {'symbol': 'AAPL'}
-❌ Schwab client not initialized. Run setup_schwab_auth.py first.
-INFO:     127.0.0.1:60964 - "POST /mcp HTTP/1.1" 200 OK
-INFO:     127.0.0.1:61045 - "POST /mcp HTTP/1.1" 500 Internal Server Error
-🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for AAPL'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_stock_data",
-      "params": {
-        "symbol": "AAPL"
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'AAPL'}}]}
-🔧 STOCK AGENT - Executing TOOL: get_stock_data
-   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
-   ⚙️  Parameters: {'symbol': 'AAPL'}
-❌ Schwab client not initialized. Run setup_schwab_auth.py first.
-INFO:     127.0.0.1:61322 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for INTC'
-🔧 Stock LLM Response: Here is the tool to call to get the current price, performance, and key metrics for the INTC stock:
-
-{
-  "tools_to_call": [
-    {
-      "tool": "get_stock_data",
-      "params": {
-        "symbol": "INTC"
-      }
-    }
-  ]
-}
-
-This will retrieve the current quote and key metrics for the Intel (INTC) stock.
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'INTC'}}]}
-🔧 STOCK AGENT - Executing TOOL: get_stock_data
-   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
-   ⚙️  Parameters: {'symbol': 'INTC'}
-❌ Schwab client not initialized. Run setup_schwab_auth.py first.
-INFO:     127.0.0.1:61419 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for BOFA'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_stock_data",
-      "params": {
-        "symbol": "BOFA"
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'BOFA'}}]}
-🔧 STOCK AGENT - Executing TOOL: get_stock_data
-   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
-   ⚙️  Parameters: {'symbol': 'BOFA'}
-❌ Schwab client not initialized. Run setup_schwab_auth.py first.
-INFO:     127.0.0.1:61470 - "POST /mcp HTTP/1.1" 200 OK
-🔧 STOCK AGENT - Input received: 'Get current price, performance, and key metrics for BOFA'
-🔧 Stock LLM Response: {
-  "tools_to_call": [
-    {
-      "tool": "get_stock_data",
-      "params": {
-        "symbol": "BOFA"
-      }
-    }
-  ]
-}
-🔧 STOCK AGENT - Plan generated: {'tools_to_call': [{'tool': 'get_stock_data', 'params': {'symbol': 'BOFA'}}]}
-🔧 STOCK AGENT - Executing TOOL: get_stock_data
-   📋 Tool Description: 📈 Get real-time quote and price data for a single stock
-   ⚙️  Parameters: {'symbol': 'BOFA'}
-❌ Schwab client not initialized. Run setup_schwab_auth.py first.
-INFO:     127.0.0.1:61483 - "POST /mcp HTTP/1.1" 200 OK
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [38884]
+INFO:     Started server process [40366]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [40366]
+INFO:     Started server process [44436]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44436]
+INFO:     Started server process [44617]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44617]
+INFO:     Started server process [44800]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44800]
+INFO:     Started server process [44866]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44866]
+INFO:     Started server process [44922]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [44922]
+INFO:     Started server process [45080]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45080]
+INFO:     Started server process [45130]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45130]
+INFO:     Started server process [45269]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45269]
+INFO:     Started server process [45326]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45326]
+INFO:     Started server process [45378]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/services/capitol_client.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45378]
+INFO:     Started server process [45578]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45578]
+INFO:     Started server process [45748]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45748]
+INFO:     Started server process [45801]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45801]
+INFO:     Started server process [45850]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [45850]
+INFO:     Started server process [50877]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [50877]
+INFO:     Started server process [51217]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51217]
+INFO:     Started server process [51701]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [51701]
+INFO:     Started server process [57802]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [57802]
+INFO:     Started server process [58007]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58007]
+INFO:     Started server process [58199]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58199]
+INFO:     Started server process [58402]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58402]
+INFO:     Started server process [58668]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58668]
+INFO:     Started server process [58849]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [58849]
+INFO:     Started server process [59040]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [59040]
+INFO:     Started server process [66431]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66431]
+INFO:     Started server process [66780]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66780]
+INFO:     Started server process [66961]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  WatchFiles detected changes in 'app/graph/capitol_node.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [66961]
+INFO:     Started server process [67540]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [67540]
+INFO:     Stopping reloader process [38874]

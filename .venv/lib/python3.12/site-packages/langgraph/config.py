@@ -4,9 +4,9 @@ from typing import Any
 
 from langchain_core.runnables import RunnableConfig
 from langchain_core.runnables.config import var_child_runnable_config
-
-from langgraph.constants import CONF, CONFIG_KEY_STORE, CONFIG_KEY_STREAM_WRITER
 from langgraph.store.base import BaseStore
+
+from langgraph._internal._constants import CONF, CONFIG_KEY_RUNTIME
 from langgraph.types import StreamWriter
 
 
@@ -32,8 +32,8 @@ def get_config() -> RunnableConfig:
 def get_store() -> BaseStore:
     """Access LangGraph store from inside a graph node or entrypoint task at runtime.
 
-    Can be called from inside any [StateGraph][langgraph.graph.StateGraph] node or
-    functional API [task][langgraph.func.task], as long as the StateGraph or the [entrypoint][langgraph.func.entrypoint]
+    Can be called from inside any [`StateGraph`][langgraph.graph.StateGraph] node or
+    functional API [`task`][langgraph.func.task], as long as the `StateGraph` or the [`entrypoint`][langgraph.func.entrypoint]
     was initialized with a store, e.g.:
 
     ```python
@@ -53,10 +53,10 @@ def get_store() -> BaseStore:
     !!! warning "Async with Python < 3.11"
 
         If you are using Python < 3.11 and are running LangGraph asynchronously,
-        `get_store()` won't work since it uses [contextvar](https://docs.python.org/3/library/contextvars.html) propagation (only available in [Python >= 3.11](https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task)).
+        `get_store()` won't work since it uses [`contextvar`](https://docs.python.org/3/library/contextvars.html) propagation (only available in [Python >= 3.11](https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task)).
 
 
-    Example: Using with StateGraph
+    Example: Using with `StateGraph`
         ```python
         from typing_extensions import TypedDict
         from langgraph.graph import StateGraph, START
@@ -66,13 +66,16 @@ def get_store() -> BaseStore:
         store = InMemoryStore()
         store.put(("values",), "foo", {"bar": 2})
 
+
         class State(TypedDict):
             foo: int
+
 
         def my_node(state: State):
             my_store = get_store()
             stored_value = my_store.get(("values",), "foo").value["bar"]
             return {"foo": stored_value + 1}
+
 
         graph = (
             StateGraph(State)
@@ -85,7 +88,7 @@ def get_store() -> BaseStore:
         ```
 
         ```pycon
-        {'foo': 3}
+        {"foo": 3}
         ```
 
     Example: Using with functional API
@@ -97,15 +100,18 @@ def get_store() -> BaseStore:
         store = InMemoryStore()
         store.put(("values",), "foo", {"bar": 2})
 
+
         @task
         def my_task(value: int):
             my_store = get_store()
             stored_value = my_store.get(("values",), "foo").value["bar"]
             return stored_value + 1
 
+
         @entrypoint(store=store)
         def workflow(value: int):
             return my_task(value).result()
+
 
         workflow.invoke(1)
         ```
@@ -114,34 +120,36 @@ def get_store() -> BaseStore:
         3
         ```
     """
-    config = get_config()
-    return config[CONF][CONFIG_KEY_STORE]
+    return get_config()[CONF][CONFIG_KEY_RUNTIME].store
 
 
 def get_stream_writer() -> StreamWriter:
-    """Access LangGraph [StreamWriter][langgraph.types.StreamWriter] from inside a graph node or entrypoint task at runtime.
+    """Access LangGraph [`StreamWriter`][langgraph.types.StreamWriter] from inside a graph node or entrypoint task at runtime.
 
-    Can be called from inside any [StateGraph][langgraph.graph.StateGraph] node or
-    functional API [task][langgraph.func.task].
+    Can be called from inside any [`StateGraph`][langgraph.graph.StateGraph] node or
+    functional API [`task`][langgraph.func.task].
 
     !!! warning "Async with Python < 3.11"
 
         If you are using Python < 3.11 and are running LangGraph asynchronously,
-        `get_stream_writer()` won't work since it uses [contextvar](https://docs.python.org/3/library/contextvars.html) propagation (only available in [Python >= 3.11](https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task)).
+        `get_stream_writer()` won't work since it uses [`contextvar`](https://docs.python.org/3/library/contextvars.html) propagation (only available in [Python >= 3.11](https://docs.python.org/3/library/asyncio-task.html#asyncio.create_task)).
 
-    Example: Using with StateGraph
+    Example: Using with `StateGraph`
         ```python
         from typing_extensions import TypedDict
         from langgraph.graph import StateGraph, START
         from langgraph.config import get_stream_writer
 
+
         class State(TypedDict):
             foo: int
+
 
         def my_node(state: State):
             my_stream_writer = get_stream_writer()
             my_stream_writer({"custom_data": "Hello!"})
             return {"foo": state["foo"] + 1}
+
 
         graph = (
             StateGraph(State)
@@ -155,7 +163,7 @@ def get_stream_writer() -> StreamWriter:
         ```
 
         ```pycon
-        {'custom_data': 'Hello!'}
+        {"custom_data": "Hello!"}
         ```
 
     Example: Using with functional API
@@ -163,23 +171,26 @@ def get_stream_writer() -> StreamWriter:
         from langgraph.func import entrypoint, task
         from langgraph.config import get_stream_writer
 
+
         @task
         def my_task(value: int):
             my_stream_writer = get_stream_writer()
             my_stream_writer({"custom_data": "Hello!"})
             return value + 1
 
+
         @entrypoint(store=store)
         def workflow(value: int):
             return my_task(value).result()
+
 
         for chunk in workflow.stream(1, stream_mode="custom"):
             print(chunk)
         ```
 
         ```pycon
-        {'custom_data': 'Hello!'}
+        {"custom_data": "Hello!"}
         ```
     """
-    config = get_config()
-    return config[CONF].get(CONFIG_KEY_STREAM_WRITER, _no_op_stream_writer)
+    runtime = get_config()[CONF][CONFIG_KEY_RUNTIME]
+    return runtime.stream_writer

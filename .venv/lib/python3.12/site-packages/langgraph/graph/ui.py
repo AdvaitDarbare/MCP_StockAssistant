@@ -1,13 +1,22 @@
 from __future__ import annotations
 
-from typing import Any, Literal, Union, cast
+from typing import Any, Literal, cast
 from uuid import uuid4
 
 from langchain_core.messages import AnyMessage
 from typing_extensions import TypedDict
 
-from langgraph.constants import CONF, CONFIG_KEY_SEND
-from langgraph.utils.config import get_config, get_stream_writer
+from langgraph.config import get_config, get_stream_writer
+from langgraph.constants import CONF
+
+__all__ = (
+    "UIMessage",
+    "RemoveUIMessage",
+    "AnyUIMessage",
+    "push_ui_message",
+    "delete_ui_message",
+    "ui_message_reducer",
+)
 
 
 class UIMessage(TypedDict):
@@ -46,7 +55,7 @@ class RemoveUIMessage(TypedDict):
     id: str
 
 
-AnyUIMessage = Union[UIMessage, RemoveUIMessage]
+AnyUIMessage = UIMessage | RemoveUIMessage
 
 
 def push_ui_message(
@@ -72,21 +81,23 @@ def push_ui_message(
         metadata: Optional additional metadata about the UI message.
         message: Optional message object to associate with the UI message.
         state_key: Key in the graph state where the UI messages are stored.
-            Defaults to "ui".
+        merge: Whether to merge props with existing UI message (True) or replace
+            them (False).
 
     Returns:
         The created UI message.
 
     Example:
-
-    .. code-block:: python
-
+        ```python
         push_ui_message(
             name="component-name",
             props={"content": "Hello world"},
         )
+        ```
 
     """
+    from langgraph._internal._constants import CONFIG_KEY_SEND
+
     writer = get_stream_writer()
     config = get_config()
 
@@ -133,12 +144,13 @@ def delete_ui_message(id: str, *, state_key: str = "ui") -> RemoveUIMessage:
         The remove UI message.
 
     Example:
-
-    .. code-block:: python
-
+        ```python
         delete_ui_message("message-123")
+        ```
 
     """
+    from langgraph._internal._constants import CONFIG_KEY_SEND
+
     writer = get_stream_writer()
     config = get_config()
 
@@ -168,13 +180,12 @@ def ui_message_reducer(
         Combined list of UI messages with removals applied.
 
     Example:
-
-    .. code-block:: python
-
+        ```python
         messages = ui_message_reducer(
             [{"type": "ui", "id": "1", "name": "Chat", "props": {}}],
-            {"type": "remove-ui", "id": "1"}
+            {"type": "remove-ui", "id": "1"},
         )
+        ```
 
     """
     if not isinstance(left, list):
