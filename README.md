@@ -747,6 +747,39 @@ The HITL flow:
 
 ---
 
+## Reference Test Queries
+
+The system is validated using a comprehensive integration suite in `scripts/comprehensive_test_v4.py`. Below are the primary interaction patterns supported:
+
+### 1. Institutional Reports
+- **Goldman Sachs Screener**: "Run a Goldman style stock screen with a limit of 5."
+- **Morgan Stanley DCF**: "Generate a Morgan Stanley DCF report for AAPL."
+- **Bridgewater Risk**: "Perform a Bridgewater style risk assessment for NVDA."
+- **JPMorgan Earnings**: "Analyze TSLA's earnings quality like JPMorgan."
+- **Citadel Technical**: "Give me a Citadel style technical report card for MSFT."
+- **Harvard Dividend**: "Run a Harvard style dividend strategy analysis for JNJ, KO, and PG."
+- **Bain Competitive**: "Perform a Bain style competitive analysis for the technology sector."
+- **Renaissance Pattern**: "Identify Renaissance style patterns for AAPL, MSFT, and NVDA."
+- **BlackRock Builder**: "Build a BlackRock style moderate risk portfolio."
+- **McKinsey Macro**: "Run a McKinsey style macro impact report for technology and energy."
+
+### 2. Multi-Agent Chat Queries
+- **Cross-Domain Reasoning**: "How does the current US unemployment rate and Fed rate policy affect NVDA's valuation?"
+- **Multi-Question**: "Give me AAPL's P/E ratio and its current stock price."
+- **Technical Synthesis**: "Get MSFT's price history and compute its RSI."
+- **Multi-Turn Context**:
+  - *User*: "Tell me about AAPL's current stock price and recent news."
+  - *User*: "Compare that to MSFT's current valuation." (Context-aware)
+- **Deep Analysis**: "Should I buy or sell AMD right now? Give me a full analysis."
+- **Portfolio Assessment**: "I hold AAPL, MSFT, and NVDA equally. What's my portfolio risk?"
+
+### 3. Edge Case Handling
+- **Non-Existent Tickers**: "What is the stock price of ZZZZZ?"
+- **Ambiguous Market Queries**: "What do you think about the market?"
+- **Minimal Input**: "AAPL?"
+
+---
+
 ## Documentation Index
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — detailed component diagrams
