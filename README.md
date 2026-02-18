@@ -80,25 +80,25 @@ We classify our agents into four distinct patterns based on their cognitive load
 │  │              LangGraph Multi-Agent Supervisor                │    │
 │  │                                                              │    │
 │  │  Planner LLM ──► Router ──► ┌─────────────────────────┐    │    │
-│  │                              │  Tier 1  (parallel)     │    │    │
-│  │                              │  market_data            │    │    │
-│  │                              │  fundamentals           │    │    │
-│  │                              │  sentiment              │    │    │
-│  │                              │  macro                  │    │    │
-│  │                              └──────────┬──────────────┘    │    │
-│  │                              Research Gate                  │    │
-│  │                              ┌──────────▼──────────────┐    │    │
-│  │                              │  Tier 2  (sequential)   │    │    │
-│  │                              │  technical_analysis     │    │    │
-│  │                              │  advisor                │    │    │
-│  │                              └──────────┬──────────────┘    │    │
-│  │                              Aggregator / Memory Save       │    │
+│  │                             │ Tier 1: Data Reseachers │    │    │
+│  │                             │ [market_data]           │    │    │
+│  │                             │ [fundamentals]          │    │    │
+│  │                             │ [sentiment]             │    │    │
+│  │                             │ [macro]                 │    │    │
+│  │                             └──────────┬──────────────┘    │    │
+│  │                             Research Gate                  │    │
+│  │                             ┌──────────▼──────────────┐    │    │
+│  │                             │ Tier 2: Synthesizers    │    │    │
+│  │                             │ [technical_analysis]    │    │    │
+│  │                             │ [advisor]               │    │    │
+│  │                             └──────────┬──────────────┘    │    │
+│  │                             Aggregator / Memory Save       │    │
 │  └─────────────────────────────────────────────────────────────┘    │
 │                                                                      │
 │  ┌─────────────────────────────────────────────────────────────┐    │
-│  │              Report Engine  (10 specialist builders)         │    │
-│  │  goldman · morgan · bridgewater · jpm · citadel · harvard   │    │
-│  │  bain · renaissance · blackrock · mckinsey                  │    │
+│  │              Report Engine  (Specialist Builders)            │    │
+│  │  [goldman] [morgan] [bridgewater] [jpm] [citadel] [harvard] │    │
+│  │  [bain] [renaissance] [blackrock] [mckinsey]                │    │
 │  └─────────────────────────────────────────────────────────────┘    │
 └──────────────────────────────────┬──────────────────────────────────┘
                                    │
@@ -113,6 +113,18 @@ We classify our agents into four distinct patterns based on their cognitive load
    │  External APIs: Schwab · Alpaca · FRED · Reddit · Tavily    │
    └─────────────────────────────────────────────────────────────┘
 ```
+
+### Sub-Agent Quick Reference
+
+| Agent Type | Full Name | Domain |
+|---|---|---|
+| Tier 1 | `market_data` | Prices, volume, news, profile |
+| Tier 1 | `fundamentals` | Ratings, Pe/Margin, Insider trades |
+| Tier 1 | `sentiment` | Reddit, news sentiment, congress |
+| Tier 1 | `macro` | FRED indicators (GDP, CPI, Rates) |
+| Tier 2 | `technical_analysis` | Indicators (RSI, MACD, etc.) |
+| Tier 2 | `advisor` | Full buy/sell/hold synthesis |
+
 
 ---
 
@@ -130,51 +142,50 @@ This diagram illustrates how the Supervisor manages the shared state and orchest
   User Query
       │
       ▼
-  ┌──────────┐
-  │  Planner │  (Claude LLM → ExecutionPlan)
-  └────┬─────┘
+  ┌─────────────┐
+  │  Planner    │  (Claude LLM → Multi-Step ExecutionPlan)
+  └────┬────────┘
        │ ExecutionPlan
        ▼
-  ┌──────────┐
-  │  Router  │  (pure Python, dependency-aware)
-  └────┬─────┘
-       │ dispatch ready Tier-1 tasks
+  ┌─────────────┐
+  │  Router     │  (Pure Python Dispatcher)
+  └────┬────────┘
+       │ Dispatch ready Tier 1 researcher tasks
        ▼
-  ┌─────────────────────────────────────────┐
-  │         Tier 1 — Parallel Research      │
-  │  ┌────────────┐  ┌────────────────────┐ │
-  │  │ market_data│  │   fundamentals     │ │
-  │  └────────────┘  └────────────────────┘ │
-  │  ┌────────────┐  ┌────────────────────┐ │
-  │  │ sentiment  │  │      macro         │ │
-  │  └────────────┘  └────────────────────┘ │
-  └──────────────────────┬──────────────────┘
-                         │ agent_results merged into state
-                         ▼
-                  ┌─────────────┐
-                  │ Research    │  (enforces Tier-1 completion)
-                  │    Gate     │
-                  └──────┬──────┘
-                         │ dispatch Tier-2 tasks
-                         ▼
-  ┌─────────────────────────────────────────┐
-  │         Tier 2 — Sequential Synthesis   │
-  │  ┌──────────────────────┐               │
-  │  │  technical_analysis  │  (needs t1)   │
-  │  └──────────────────────┘               │
-  │  ┌──────────────────────┐               │
-  │  │       advisor        │  (needs all)  │
-  │  └──────────────────────┘               │
-  └──────────────────────┬──────────────────┘
-                         │
-                         ▼
-                  ┌─────────────┐
-                  │ Aggregator  │  → Save to Qdrant
-                  └──────┬──────┘
-                         │
-                         ▼
-                  SSE Stream → User
+  ┌─────────────────────────────────────────────────────────┐
+  │         Tier 1: Parallel Specialist Researchers         │
+  │                                                         │
+  │  ┌──────────────┐          ┌─────────────────────────┐  │
+  │  │ [market_data]│          │ [fundamentals] (ReAct)  │  │
+  │  └──────────────┘          └─────────────────────────┘  │
+  │  ┌──────────────┐          ┌─────────────────────────┐  │
+  │  │ [sentiment]  │          │ [macro]        (FRED)   │  │
+  │  └──────────────┘          └─────────────────────────┘  │
+  └────────────────────────┬────────────────────────────────┘
+                           │ agent_results merged into state
+                           ▼
+                   ┌───────────────┐
+                   │ Research Gate │  (Synchronizes Tier 1 output)
+                   └───────┬───────┘
+                           │ Dispatch synthesis tasks
+                           ▼
+  ┌─────────────────────────────────────────────────────────┐
+  │         Tier 2: High-Level Synthesis Agents             │
+  │                                                         │
+  │  ┌──────────────────────┐      ┌─────────────────────┐  │
+  │  │ [technical_analysis] │ ───► │ [advisor] (Summary) │  │
+  │  └──────────────────────┘      └─────────────────────┘  │
+  └────────────────────────┬────────────────────────────────┘
+                           │
+                           ▼
+                   ┌───────────────┐
+                   │ Aggregator    │  → Save to Qdrant Memory
+                   └───────┬───────┘
+                           │
+                           ▼
+                    SSE Stream Out ──► User
 ```
+
 
 ### State
 
