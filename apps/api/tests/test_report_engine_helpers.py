@@ -14,7 +14,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from apps.api.services.report_engine import (  # noqa: E402
+from apps.api.services.builders.helpers import (  # noqa: E402
     _safe_float,
     _safe_pct,
     _moat_rating,
